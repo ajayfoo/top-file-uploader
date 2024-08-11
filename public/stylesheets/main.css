@@ -1,0 +1,141 @@
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/InterVariable.woff2") format("woff2");
+}
+@font-face {
+  font-family: Inter;
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/InterVariable-Italic.woff2") format("woff2");
+}
+
+:root {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+  box-sizing: border-box;
+  font-size: 16px;
+  color-scheme: light dark;
+}
+
+@media screen and (prefers-color-scheme: light) {
+  :root {
+    --primary: rgb(119 79 131);
+    --surface-tint: rgb(119 79 131);
+    --on-primary: rgb(255 255 255);
+    --primary-container: rgb(250 215 255);
+    --on-primary-container: rgb(46 10 59);
+    --secondary: rgb(106 89 108);
+    --on-secondary: rgb(255 255 255);
+    --secondary-container: rgb(242 220 243);
+    --on-secondary-container: rgb(36 23 39);
+    --tertiary: rgb(130 82 78);
+    --on-tertiary: rgb(255 255 255);
+    --tertiary-container: rgb(255 218 215);
+    --on-tertiary-container: rgb(51 17 15);
+    --error: rgb(186 26 26);
+    --on-error: rgb(255 255 255);
+    --error-container: rgb(255 218 214);
+    --on-error-container: rgb(65 0 2);
+    --background: rgb(255 247 251);
+    --on-background: rgb(31 26 31);
+    --surface: rgb(255 247 251);
+    --on-surface: rgb(31 26 31);
+    --surface-variant: rgb(235 223 233);
+    --on-surface-variant: rgb(76 68 76);
+    --outline: rgb(126 116 125);
+    --outline-variant: rgb(207 195 205);
+    --shadow: rgb(0 0 0);
+    --scrim: rgb(0 0 0);
+    --inverse-surface: rgb(52 47 52);
+    --inverse-on-surface: rgb(248 238 245);
+    --inverse-primary: rgb(230 182 241);
+    --primary-fixed: rgb(250 215 255);
+    --on-primary-fixed: rgb(46 10 59);
+    --primary-fixed-dim: rgb(230 182 241);
+    --on-primary-fixed-variant: rgb(94 56 106);
+    --secondary-fixed: rgb(242 220 243);
+    --on-secondary-fixed: rgb(36 23 39);
+    --secondary-fixed-dim: rgb(213 192 215);
+    --on-secondary-fixed-variant: rgb(81 66 84);
+    --tertiary-fixed: rgb(255 218 215);
+    --on-tertiary-fixed: rgb(51 17 15);
+    --tertiary-fixed-dim: rgb(245 183 179);
+    --on-tertiary-fixed-variant: rgb(102 59 56);
+    --surface-dim: rgb(225 215 222);
+    --surface-bright: rgb(255 247 251);
+    --surface-container-lowest: rgb(255 255 255);
+    --surface-container-low: rgb(251 241 248);
+    --surface-container: rgb(245 235 242);
+    --surface-container-high: rgb(239 229 237);
+    --surface-container-highest: rgb(234 224 231);
+  }
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --primary: rgb(230 182 241);
+    --surface-tint: rgb(230 182 241);
+    --on-primary: rgb(69 33 82);
+    --primary-container: rgb(94 56 106);
+    --on-primary-container: rgb(250 215 255);
+    --secondary: rgb(213 192 215);
+    --on-secondary: rgb(58 43 61);
+    --secondary-container: rgb(81 66 84);
+    --on-secondary-container: rgb(242 220 243);
+    --tertiary: rgb(245 183 179);
+    --on-tertiary: rgb(76 37 35);
+    --tertiary-container: rgb(102 59 56);
+    --on-tertiary-container: rgb(255 218 215);
+    --error: rgb(255 180 171);
+    --on-error: rgb(105 0 5);
+    --error-container: rgb(147 0 10);
+    --on-error-container: rgb(255 218 214);
+    --background: rgb(22 18 23);
+    --on-background: rgb(234 224 231);
+    --surface: rgb(22 18 23);
+    --on-surface: rgb(234 224 231);
+    --surface-variant: rgb(76 68 76);
+    --on-surface-variant: rgb(207 195 205);
+    --outline: rgb(152 142 151);
+    --outline-variant: rgb(76 68 76);
+    --shadow: rgb(0 0 0);
+    --scrim: rgb(0 0 0);
+    --inverse-surface: rgb(234 224 231);
+    --inverse-on-surface: rgb(52 47 52);
+    --inverse-primary: rgb(119 79 131);
+    --primary-fixed: rgb(250 215 255);
+    --on-primary-fixed: rgb(46 10 59);
+    --primary-fixed-dim: rgb(230 182 241);
+    --on-primary-fixed-variant: rgb(94 56 106);
+    --secondary-fixed: rgb(242 220 243);
+    --on-secondary-fixed: rgb(36 23 39);
+    --secondary-fixed-dim: rgb(213 192 215);
+    --on-secondary-fixed-variant: rgb(81 66 84);
+    --tertiary-fixed: rgb(255 218 215);
+    --on-tertiary-fixed: rgb(51 17 15);
+    --tertiary-fixed-dim: rgb(245 183 179);
+    --on-tertiary-fixed-variant: rgb(102 59 56);
+    --surface-dim: rgb(22 18 23);
+    --surface-bright: rgb(61 55 61);
+    --surface-container-lowest: rgb(17 13 18);
+    --surface-container-low: rgb(31 26 31);
+    --surface-container: rgb(35 30 35);
+    --surface-container-high: rgb(45 40 46);
+    --surface-container-highest: rgb(57 51 57);
+  }
+}
