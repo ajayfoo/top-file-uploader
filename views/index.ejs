@@ -4,8 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
+    <script src="/javascripts/index.js" defer></script>
   </head>
   <body>
     <h1>Home</h1>
+    <div class="files">
+      <button id="add-files-button">Add file(s)</button>
+    </div>
+    <div class="dialogs">
+      <dialog id="add-files-dialog">
+        <form method="dialog">
+          <label for="file">File</label>
+          <input type="file" name="file" id="file" />
+          <button
+            formenctype="multipart/form-data"
+            formmethod="post"
+            formaction="/file"
+          >
+            Submit
+          </button>
+          <button>Close</button>
+        </form>
+      </dialog>
+    </div>
   </body>
 </html>

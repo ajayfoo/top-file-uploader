@@ -2,14 +2,15 @@ import express from "express";
 import "dotenv/config";
 import configuredSession from "./middlewares/session.js";
 import authRouter from "./routes/auth.js";
+import indexRouter from "./routes/index.js";
 import auth from "./middlewares/auth.js";
-import bodyParser from "body-parser";
 
 const app = express();
 
+app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(configuredSession);
 app.use(auth.session());
@@ -21,10 +22,7 @@ app.use((req, res, next) => {
     res.redirect("/auth/login");
   }
 });
-app.get("/", (req, res) => {
-  res.render("index");
-});
-
+app.use("/", indexRouter);
 app.listen(process.env.PORT, () => {
   console.log("Listening on PORT: " + process.env.PORT);
 });
