@@ -9,7 +9,6 @@ const getExt = (fileName) => {
 };
 const getFileName = async (file) => {
   const originalname = file.originalname;
-  console.log(file);
   const result = await fileTypeFromBuffer(file.buffer);
   const ext = result.ext;
   const possibleExts = mime.getAllExtensions(result.mime);
@@ -18,10 +17,12 @@ const getFileName = async (file) => {
   }
   return originalname + "." + ext;
 };
-
 const saveFile = async (file) => {
   const fileName = await getFileName(file);
   await fs.writeFile("uploads/" + fileName, file.buffer);
 };
+const saveFiles = async (files) => {
+  await Promise.all(files.map(saveFile));
+};
 
-export { saveFile };
+export { saveFiles };

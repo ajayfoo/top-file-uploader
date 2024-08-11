@@ -1,5 +1,5 @@
 import multer from "multer";
-import { saveFile } from "../utils.js";
+import { saveFiles } from "../utils.js";
 
 const renderIndex = (req, res) => {
   res.render("index");
@@ -9,9 +9,9 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 const fileUploadMiddlewares = [
-  upload.single("file"),
+  upload.array("files"),
   async (req, res) => {
-    await saveFile(req.file);
+    await saveFiles(req.files);
     res.status(200).end();
   },
 ];
