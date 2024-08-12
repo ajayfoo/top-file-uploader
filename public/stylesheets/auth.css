@@ -53,3 +53,13 @@ section.field :last-child,
   background-color: var(--primary);
   color: var(--on-primary);
 }
+.action-buttons > button:hover {
+  cursor: pointer;
+}
+
+form > .action-buttons > :hover {
+  filter: brightness(1.05);
+}
+form > .action-buttons > :active {
+  filter: brightness(1.1);
+}
