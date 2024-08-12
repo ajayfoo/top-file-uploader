@@ -58,6 +58,9 @@ section.field > .error > .icon {
   max-height: 1em;
   max-width: 1em;
 }
+section.field > .error > .message {
+  max-width: 35ch;
+}
 
 @media screen and (prefers-color-scheme: light) {
   section.field > .error > .icon {
