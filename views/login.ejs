@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <link rel="stylesheet" href="/stylesheets/auth.css" />
+    <script src="/javascripts/auth/login.js" defer></script>
   </head>
   <body>
     <main>
-      <form method="post" action="/auth/login">
+      <form id="login-form" method="post" action="/auth/login">
         <section class="field">
           <label for="username">Username</label>
           <input
@@ -17,21 +18,39 @@
             name="username"
             autocomplete="username"
             required
-            minlength="3"
             maxlength="25"
+            aria-describedby="username-error"
           />
+          <span class="error" id="username-error" aria-live="polite">
+            <img src="/images/error-cross.svg" alt="" class="icon" />
+            <span class="message">Required</span>
+          </span>
         </section>
         <section class="field">
           <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            autocomplete="current-password"
-            required
-            minlength="8"
-            maxlength="128"
-          />
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="new-password"
+              required
+              maxlength="128"
+              aria-describedby="password-error"
+            />
+            <button
+              aria-label="show password"
+              title="show password"
+              type="button"
+              id="show-password-button"
+            >
+              <img src="/images/eye-closed.svg" alt="" />
+            </button>
+          </div>
+          <span class="error" id="password-error" aria-live="polite">
+            <img src="/images/error-cross.svg" alt="" class="icon" />
+            <span class="message">Required</span>
+          </span>
         </section>
         <div class="action-buttons">
           <button>Login</button>
