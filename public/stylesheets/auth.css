@@ -43,6 +43,14 @@ section.field > .error > .icon {
   max-height: 1em;
   max-width: 1em;
 }
+
+@media screen and (prefers-color-scheme: light) {
+  section.field > .error > .icon {
+    filter: brightness(0) saturate(100%) invert(13%) sepia(83%) saturate(3451%)
+      hue-rotate(349deg) brightness(106%) contrast(98%);
+  }
+}
+
 section.field > input,
 .action-buttons > button {
   font-family: inherit;

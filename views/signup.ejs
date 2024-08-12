@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <link rel="stylesheet" href="/stylesheets/signup.css" />
+    <script src="/javascripts/auth/signUp.js" defer></script>
   </head>
   <body>
     <main>
-      <form method="post" action="/auth/signup">
+      <form novalidate id="sign-up-form" method="post" action="/auth/signup">
         <section class="field">
           <label for="username">Username</label>
           <input
@@ -17,6 +18,8 @@
             name="username"
             autocomplete="username"
             required
+            minlength="3"
+            maxlength="25"
             aria-describedby="username-error"
           />
           <span class="error" id="username-error" aria-live="polite">
@@ -32,6 +35,8 @@
             name="password"
             autocomplete="new-password"
             required
+            minlength="8"
+            maxlength="128"
             aria-describedby="password-error"
           />
           <span class="error" id="password-error" aria-live="polite">
