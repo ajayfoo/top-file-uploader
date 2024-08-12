@@ -53,7 +53,8 @@
   --fs-x-sm: clamp(0.7rem, 0.85rem - 0.2vw, 0.85rem);
 }
 
-body {
+body,
+button {
   margin: 0;
   padding: 0;
 }

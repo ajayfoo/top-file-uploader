@@ -23,7 +23,20 @@ section.field {
   gap: var(--size-rev-100);
 }
 
-section.field > input {
+section.field > .input-wrapper {
+  background-color: var(--surface-container-highest);
+  color: var(--on-surface);
+}
+
+section.field > .input-wrapper > button {
+  background-color: transparent;
+  border: none;
+}
+section.field > .input-wrapper > button > img {
+  width: 1em;
+  height: 1em;
+}
+section.field input {
   background-color: var(--surface-container-highest);
   color: var(--on-surface);
   min-inline-size: 8ch;
@@ -31,16 +44,36 @@ section.field > input {
   border-inline-start-width: 5px;
 }
 
-section.field > input:focus {
+section.field input:focus {
   border-color: var(--outline);
   outline: none;
 }
 
-section.field > input.invalid {
+section.field .input-wrapper > input {
+  border: none;
+  padding-inline-end: var(--size-rev-100);
+}
+
+.input-wrapper:has(input) {
+  border: 1px solid transparent;
+  border-inline-start-width: 5px;
+}
+
+.input-wrapper:has(input:focus) {
+  border-color: var(--outline);
+  outline: none;
+}
+
+.input-wrapper:has(input.invalid) {
   border-color: var(--error);
 }
 
-section.field > input.invalid + .error {
+.input-wrapper {
+  border-radius: var(--size-100);
+  padding-inline-end: var(--size-rev-200);
+}
+
+section.field input.invalid + .error {
   visibility: visible;
 }
 
@@ -69,7 +102,7 @@ section.field > .error > .message {
   }
 }
 
-section.field > input,
+section.field input,
 .action-buttons > button {
   font-family: inherit;
   font-size: inherit;

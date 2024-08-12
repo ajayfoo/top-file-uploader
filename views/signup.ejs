@@ -29,17 +29,26 @@
         </section>
         <section class="field">
           <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            autocomplete="new-password"
-            required
-            minlength="8"
-            maxlength="128"
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-            aria-describedby="password-error"
-          />
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="new-password"
+              required
+              minlength="8"
+              maxlength="128"
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+              aria-describedby="password-error"
+            />
+            <button
+              aria-label="show password"
+              title="show password"
+              type="button"
+            >
+              <img src="/images/eye-closed.svg" alt="" />
+            </button>
+          </div>
           <span class="error" id="password-error" aria-live="polite">
             <img src="/images/error-cross.svg" alt="" class="icon" />
             <span class="message">Required</span>
