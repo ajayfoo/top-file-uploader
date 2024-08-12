@@ -54,6 +54,8 @@
 
   --br-xxx-sm: var(--size-100);
   --br-md: var(--size-600);
+
+  --fs-x-sm: clamp(0.7rem, 0.85rem - 0.2vw, 0.85rem);
 }
 
 body {

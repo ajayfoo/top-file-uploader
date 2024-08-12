@@ -15,7 +15,7 @@ main {
 }
 main > form {
   display: grid;
-  gap: var(--pd-rev-base);
+  gap: var(--pd-rev-xxx-sm);
 }
 
 section.field {
@@ -23,23 +23,27 @@ section.field {
   gap: var(--pd-rev-xxx-sm);
 }
 
-form > .action-buttons {
-  display: flex;
-  align-items: center;
-  gap: var(--pd-rev-x-sm);
-  justify-self: center;
-}
-form > .action-buttons > a:hover {
-  text-decoration: none;
-}
-
-section.field :last-child {
+section.field > input {
   background-color: var(--surface-container-highest);
   color: var(--on-surface);
   min-inline-size: 8ch;
 }
 
-section.field :last-child,
+section.field > .error {
+  font-size: var(--fs-x-sm);
+  color: var(--error);
+  display: flex;
+  align-items: center;
+  gap: var(--pd-rev-xxx-sm);
+  margin-inline-start: var(--pd-rev-xx-sm);
+  visibility: hidden;
+}
+
+section.field > .error > .icon {
+  max-height: 1em;
+  max-width: 1em;
+}
+section.field > input,
 .action-buttons > button {
   font-family: inherit;
   font-size: inherit;
@@ -48,12 +52,22 @@ section.field :last-child,
   border: none;
 }
 
-.action-buttons > button {
+form > .action-buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--pd-rev-x-sm);
+  justify-self: center;
+}
+
+form > .action-buttons > a:hover {
+  text-decoration: none;
+}
+form > .action-buttons > button {
   padding: var(--pd-rev-xxx-sm) var(--pd-rev-x-sm);
   background-color: var(--primary);
   color: var(--on-primary);
 }
-.action-buttons > button:hover {
+form > .action-buttons > button:hover {
   cursor: pointer;
 }
 

@@ -17,7 +17,12 @@
             name="username"
             autocomplete="username"
             required
+            aria-describedby="username-error"
           />
+          <span class="error" id="username-error" aria-live="polite">
+            <img src="/images/error-cross.svg" alt="" class="icon" />
+            <span class="message">Required</span>
+          </span>
         </section>
         <section class="field">
           <label for="password">Password</label>
@@ -27,7 +32,12 @@
             name="password"
             autocomplete="new-password"
             required
+            aria-describedby="password-error"
           />
+          <span class="error" id="password-error" aria-live="polite">
+            <img src="/images/error-cross.svg" alt="" class="icon" />
+            <span class="message">Required</span>
+          </span>
         </section>
         <section class="field">
           <label for="confirm-password">Confirm Password</label>
@@ -37,7 +47,12 @@
             name="confirm_password"
             autocomplete="new-password"
             required
+            aria-describedby="confirm-password-error"
           />
+          <span class="error" id="confirm-password-error" aria-live="polite">
+            <img src="/images/error-cross.svg" alt="" class="icon" />
+            <span class="message">Required</span>
+          </span>
         </section>
         <div class="action-buttons">
           <button>Sign Up</button>
