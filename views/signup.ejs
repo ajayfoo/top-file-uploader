@@ -45,6 +45,7 @@
               aria-label="show password"
               title="show password"
               type="button"
+              id="show-password-button"
             >
               <img src="/images/eye-closed.svg" alt="" />
             </button>
@@ -56,14 +57,24 @@
         </section>
         <section class="field">
           <label for="confirm-password">Confirm Password</label>
-          <input
-            type="password"
-            id="confirm-password"
-            name="confirm_password"
-            autocomplete="new-password"
-            required
-            aria-describedby="confirm-password-error"
-          />
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="confirm-password"
+              name="confirm_password"
+              autocomplete="new-password"
+              required
+              aria-describedby="confirm-password-error"
+            />
+            <button
+              aria-label="show confirm password"
+              title="show confirm password"
+              type="button"
+              id="show-confirm-password-button"
+            >
+              <img src="/images/eye-closed.svg" alt="" />
+            </button>
+          </div>
           <span class="error" id="confirm-password-error" aria-live="polite">
             <img src="/images/error-cross.svg" alt="" class="icon" />
             <span class="message">Required</span>

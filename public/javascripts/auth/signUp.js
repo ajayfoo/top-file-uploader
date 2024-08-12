@@ -9,7 +9,7 @@ const validateInput = (input) => {
   input.classList.add("invalid");
   const { valueMissing, tooShort, patternMismatch, customError } =
     input.validity;
-  const messageEle = input.parentElement.querySelector(".error>.message");
+  const messageEle = document.querySelector("#" + input.id + "-error>.message");
   if (valueMissing) {
     messageEle.textContent = "Required";
   } else if (tooShort) {
@@ -77,7 +77,45 @@ const validateAllInputs = () => {
   }
 };
 
+const handleShowPassword = () => {
+  const showPasswordBtn = document.getElementById("show-password-button");
+  const passwordEle = document.getElementById("password");
+  const img = showPasswordBtn.querySelector("img");
+  let isHidden = true;
+  showPasswordBtn.addEventListener("click", () => {
+    if (isHidden) {
+      passwordEle.type = "text";
+      img.src = "/images/eye-opened.svg";
+    } else {
+      passwordEle.type = "password";
+      img.src = "/images/eye-closed.svg";
+    }
+    isHidden = !isHidden;
+  });
+};
+
+const handleShowConfirmPassword = () => {
+  const showConfirmPasswordBtn = document.getElementById(
+    "show-confirm-password-button",
+  );
+  const confirmPasswordEle = document.getElementById("confirm-password");
+  const img = showConfirmPasswordBtn.querySelector("img");
+  let isHidden = true;
+  showConfirmPasswordBtn.addEventListener("click", () => {
+    if (isHidden) {
+      confirmPasswordEle.type = "text";
+      img.src = "/images/eye-opened.svg";
+    } else {
+      confirmPasswordEle.type = "password";
+      img.src = "/images/eye-closed.svg";
+    }
+    isHidden = !isHidden;
+  });
+};
+
 populateInputMap();
+handleShowPassword();
+handleShowConfirmPassword();
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   if (!form.checkValidity()) {

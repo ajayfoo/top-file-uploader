@@ -26,11 +26,18 @@ section.field {
 section.field > .input-wrapper {
   background-color: var(--surface-container-highest);
   color: var(--on-surface);
+  border-radius: var(--size-100);
+  padding-inline-end: var(--size-rev-200);
+  min-width: 8ch;
+  display: flex;
 }
 
 section.field > .input-wrapper > button {
   background-color: transparent;
   border: none;
+  font-size: inherit;
+  display: flex;
+  align-items: center;
 }
 section.field > .input-wrapper > button > img {
   width: 1em;
@@ -64,16 +71,13 @@ section.field .input-wrapper > input {
   outline: none;
 }
 
-.input-wrapper:has(input.invalid) {
+.input-wrapper:has(input.invalid),
+section.field input.invalid {
   border-color: var(--error);
 }
 
-.input-wrapper {
-  border-radius: var(--size-100);
-  padding-inline-end: var(--size-rev-200);
-}
-
-section.field input.invalid + .error {
+section.field input.invalid + .error,
+.input-wrapper:has(input.invalid) + .error {
   visibility: visible;
 }
 
@@ -126,7 +130,8 @@ form > .action-buttons > button {
   color: var(--on-primary);
   border: none;
 }
-form > .action-buttons > button:hover {
+form > .action-buttons > button:hover,
+.input-wrapper > button {
   cursor: pointer;
 }
 
