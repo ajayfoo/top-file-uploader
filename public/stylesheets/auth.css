@@ -27,6 +27,21 @@ section.field > input {
   background-color: var(--surface-container-highest);
   color: var(--on-surface);
   min-inline-size: 8ch;
+  border: 1px solid transparent;
+  border-inline-start-width: 5px;
+}
+
+section.field > input:focus {
+  border-color: var(--outline);
+  outline: none;
+}
+
+section.field > input.invalid {
+  border-color: var(--error);
+}
+
+section.field > input.invalid + .error {
+  visibility: visible;
 }
 
 section.field > .error {
@@ -57,7 +72,6 @@ section.field > input,
   font-size: inherit;
   border-radius: var(--size-100);
   padding: var(--size-rev-100) var(--size-rev-200);
-  border: none;
 }
 
 form > .action-buttons {
@@ -74,6 +88,7 @@ form > .action-buttons > button {
   padding: var(--size-rev-100) var(--size-rev-300);
   background-color: var(--primary);
   color: var(--on-primary);
+  border: none;
 }
 form > .action-buttons > button:hover {
   cursor: pointer;

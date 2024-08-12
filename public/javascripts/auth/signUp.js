@@ -3,11 +3,20 @@ const allInputs = Array.from(form).filter((ele) => ele.tagName !== "BUTTON");
 
 const validateInput = (input) => {
   const { showValidationMessage } = inputMap.get(input);
-  const errorEle = input.parentElement.querySelector(".error");
-  if (showValidationMessage) {
-    errorEle.style.visibility = "visible";
+  if (!showValidationMessage) {
+    input.classList.remove("invalid");
+    return;
+  }
+  input.classList.add("invalid");
+  const { valueMissing, tooShort } = input.validity;
+  const messageEle = input.parentElement.querySelector(".error>.message");
+  if (valueMissing) {
+    messageEle.textContent = "Required";
+  } else if (tooShort) {
+    messageEle.textContent =
+      "Must be at least " + input.minLength + " character(s) long";
   } else {
-    errorEle.style.visibility = "hidden";
+    messageEle.textContent = "Invalid input";
   }
 };
 
@@ -30,17 +39,16 @@ allInputs.forEach((i) => {
   });
 });
 
-const showValidationMessages = () => {
-  for (const input of inputMap.keys()) {
-    if (input.checkValidity()) return;
-    const errorEle = input.parentElement.querySelector(".error");
-    errorEle.style.visibility = "visible";
+const validateAllInputs = () => {
+  for (const [input, value] of inputMap.entries()) {
+    value.showValidationMessage = !input.checkValidity();
+    validateInput(input);
   }
 };
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   if (!form.checkValidity()) {
-    showValidationMessages();
+    validateAllInputs();
   }
 });
