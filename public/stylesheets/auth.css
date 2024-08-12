@@ -10,17 +10,17 @@ body {
 }
 main {
   background-color: var(--surface-container);
-  padding: var(--pd-md);
-  border-radius: var(--br-md);
+  padding: var(--size-600);
+  border-radius: var(--size-600);
 }
 main > form {
   display: grid;
-  gap: var(--pd-rev-xxx-sm);
+  gap: var(--size-rev-100);
 }
 
 section.field {
   display: grid;
-  gap: var(--pd-rev-xxx-sm);
+  gap: var(--size-rev-100);
 }
 
 section.field > input {
@@ -34,8 +34,8 @@ section.field > .error {
   color: var(--error);
   display: flex;
   align-items: center;
-  gap: var(--pd-rev-xxx-sm);
-  margin-inline-start: var(--pd-rev-xx-sm);
+  gap: var(--size-rev-100);
+  margin-inline-start: var(--size-rev-100);
   visibility: hidden;
 }
 
@@ -47,15 +47,15 @@ section.field > input,
 .action-buttons > button {
   font-family: inherit;
   font-size: inherit;
-  border-radius: var(--br-xxx-sm);
-  padding: var(--pd-rev-xxx-sm) var(--pd-rev-xx-sm);
+  border-radius: var(--size-100);
+  padding: var(--size-rev-100) var(--size-rev-200);
   border: none;
 }
 
 form > .action-buttons {
   display: flex;
   align-items: center;
-  gap: var(--pd-rev-x-sm);
+  gap: var(--size-rev-300);
   justify-self: center;
 }
 
@@ -63,7 +63,7 @@ form > .action-buttons > a:hover {
   text-decoration: none;
 }
 form > .action-buttons > button {
-  padding: var(--pd-rev-xxx-sm) var(--pd-rev-x-sm);
+  padding: var(--size-rev-100) var(--size-rev-300);
   background-color: var(--primary);
   color: var(--on-primary);
 }
