@@ -1,0 +1,55 @@
+@import url("/stylesheets/main.css");
+
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background-color: var(--surface);
+  color: var(--on-surface);
+  margin-inline: var(--mr-xxx-sm);
+}
+main {
+  background-color: var(--surface-container);
+  padding: var(--pd-md);
+  border-radius: var(--br-md);
+}
+main > form {
+  display: grid;
+  gap: var(--pd-rev-base);
+}
+
+section.field {
+  display: grid;
+  gap: var(--pd-rev-xxx-sm);
+}
+
+form > .action-buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--pd-rev-x-sm);
+  justify-self: center;
+}
+form > .action-buttons > a:hover {
+  text-decoration: none;
+}
+
+section.field :last-child {
+  background-color: var(--surface-container-highest);
+  color: var(--on-surface);
+  min-inline-size: 8ch;
+}
+
+section.field :last-child,
+.action-buttons > button {
+  font-family: inherit;
+  font-size: inherit;
+  border-radius: var(--br-xxx-sm);
+  padding: var(--pd-rev-xxx-sm) var(--pd-rev-xx-sm);
+  border: none;
+}
+
+.action-buttons > button {
+  padding: var(--pd-rev-xxx-sm) var(--pd-rev-x-sm);
+  background-color: var(--primary);
+  color: var(--on-primary);
+}

@@ -30,6 +30,35 @@
   box-sizing: border-box;
   font-size: 16px;
   color-scheme: light dark;
+  --size-100: clamp(0.38rem, 0.44rem + 0.12vw, 0.48rem);
+  --size-200: clamp(0.54rem, 0.59rem + 0.16vw, 0.64rem);
+  --size-300: clamp(0.7rem, 0.66rem + 0.2vw, 0.8rem);
+  --size-400: clamp(0.88rem, 0.83rem + 0.24vw, 1rem);
+  --size-500: clamp(1.09rem, 1rem + 0.47vw, 1.33rem);
+  --size-600: clamp(1.37rem, 1.21rem + 0.8vw, 1.78rem);
+  --size-700: clamp(1.71rem, 1.45rem + 1.29vw, 2.37rem);
+  --size-800: clamp(2.14rem, 1.74rem + 1.99vw, 3.16rem);
+  --size-900: clamp(2.67rem, 2.07rem + 3vw, 4.21rem);
+  --size-1000: clamp(3.34rem, 2.45rem + 4.43vw, 5.61rem);
+
+  --mr-xxx-sm: var(--size-100);
+
+  --pd-md: var(--size-600);
+
+  --pd-rev-xxx-sm: clamp(0.38rem, 0.48rem - 0.12vw, 0.48rem);
+  --pd-rev-xx-sm: clamp(0.54rem, 0.64rem - 0.16vw, 0.64rem);
+  --pd-rev-x-sm: clamp(0.7rem, 0.8rem - 0.2vw, 0.8rem);
+  --pd-rev-sm: clamp(0.88rem, 1rem - 0.24vw, 1rem);
+  --pd-rev-base: clamp(1.09rem, 1.33rem - 0.47vw, 1.33rem);
+  --pd-rev-md: clamp(1.37rem, 1.78rem - 0.8vw, 1.78rem);
+
+  --br-xxx-sm: var(--size-100);
+  --br-md: var(--size-600);
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
 
 @media screen and (prefers-color-scheme: light) {

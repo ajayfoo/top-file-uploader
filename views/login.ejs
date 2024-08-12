@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="/stylesheets/login.css" />
+    <link rel="stylesheet" href="/stylesheets/auth.css" />
   </head>
   <body>
     <main>
@@ -17,6 +17,8 @@
             name="username"
             autocomplete="username"
             required
+            minlength="3"
+            maxlength="25"
           />
         </section>
         <section class="field">
@@ -27,10 +29,14 @@
             name="password"
             autocomplete="current-password"
             required
+            minlength="8"
+            maxlength="128"
           />
         </section>
-        <button>Login</button>
-        <a href="/auth/signup">Sign Up</a>
+        <div class="action-buttons">
+          <button>Login</button>
+          <a href="/auth/signup">Create an account</a>
+        </div>
       </form>
     </main>
   </body>
