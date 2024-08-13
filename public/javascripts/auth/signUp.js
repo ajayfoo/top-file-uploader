@@ -7,18 +7,21 @@ const validateInput = (input) => {
     return;
   }
   input.classList.add("invalid");
-  const { valueMissing, tooShort, patternMismatch, customError } =
+  const { valueMissing, tooLong, tooShort, patternMismatch, customError } =
     input.validity;
   const messageEle = document.querySelector("#" + input.id + "-error>.message");
   if (valueMissing) {
     messageEle.textContent = "Required";
+  } else if (tooLong) {
+    messageEle.textContent =
+      "Must be at most " + input.maxLength + " character(s) long";
   } else if (tooShort) {
     messageEle.textContent =
       "Must be at least " + input.minLength + " character(s) long";
   } else if (patternMismatch) {
     messageEle.textContent = messages.patternMismatch;
   } else if (customError) {
-    messageEle.textContent = messages.customError;
+    messageEle.textContent = input.validationMessage;
   } else {
     messageEle.textContent = "Invalid input";
   }
@@ -65,9 +68,7 @@ const populateInputMap = () => {
     patternMismatch:
       "Must contain at least one uppercase and lowercase letter, number and special symbol",
   };
-  inputMap.get(confirmPasswordEle).messages = {
-    customError: "Passwords must match",
-  };
+  inputMap.get(confirmPasswordEle).messages;
 };
 
 const validateAllInputs = () => {
@@ -122,13 +123,15 @@ const usernameIsAvailable = async (username) => {
   return !response.ok;
 };
 
-const setUsernameAvailabilityIndicator = (isAvailable) => {
+const setUsernameAvailabilityIndicator = (availability) => {
   const indicator = document.getElementById("username-availability-indicator");
   indicator.style.visibility = "visible";
-  if (isAvailable) {
+  if (availability === "available") {
     indicator.src = "/images/tick.svg";
-  } else {
+  } else if (availability === "unavailable") {
     indicator.src = "/images/close-cross.svg";
+  } else {
+    indicator.style.visibility = "hidden";
   }
 };
 
@@ -137,10 +140,23 @@ const checkUsernameAvailability = () => {
   let timeoutId = null;
   username.addEventListener("input", () => {
     clearTimeout(timeoutId);
-    if (username.value === "") return;
+    const { valueMissing, tooLong, tooShort } = username.validity;
+    if (valueMissing || tooLong || tooShort) {
+      setUsernameAvailabilityIndicator(null);
+      return;
+    }
     timeoutId = setTimeout(async () => {
       const isAvailable = await usernameIsAvailable(username.value);
-      setUsernameAvailabilityIndicator(isAvailable);
+      setUsernameAvailabilityIndicator(
+        isAvailable ? "available" : "unavailable",
+      );
+      if (!isAvailable) {
+        username.setCustomValidity("Username unavailable");
+      } else {
+        username.setCustomValidity("");
+      }
+      inputMap.get(username).showValidationMessage = !isAvailable;
+      validateInput(username);
     }, 1000);
   });
 };
@@ -150,8 +166,8 @@ checkUsernameAvailability();
 handleShowPassword();
 handleShowConfirmPassword();
 form.addEventListener("submit", (e) => {
-  e.preventDefault();
   if (!form.checkValidity()) {
+    e.preventDefault();
     validateAllInputs();
   } else {
     console.log("ready to submit");
