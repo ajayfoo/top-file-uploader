@@ -12,16 +12,24 @@
       <form novalidate id="sign-up-form" method="post" action="/auth/signup">
         <section class="field">
           <label for="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            autocomplete="username"
-            required
-            minlength="3"
-            maxlength="25"
-            aria-describedby="username-error"
-          />
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="username"
+              name="username"
+              autocomplete="username"
+              required
+              minlength="3"
+              maxlength="25"
+              aria-describedby="username-error"
+            />
+            <img
+              class="input-helper-icon username-availability"
+              alt="username unavailable"
+              id="username-availability-indicator"
+              src="/images/close-cross.svg"
+            />
+          </div>
           <span class="error" id="username-error" aria-live="polite">
             <img src="/images/error-cross.svg" alt="" class="icon" />
             <span class="message">Required</span>
@@ -47,7 +55,11 @@
               type="button"
               id="show-password-button"
             >
-              <img src="/images/eye-closed.svg" alt="" />
+              <img
+                class="input-helper-icon"
+                src="/images/eye-closed.svg"
+                alt=""
+              />
             </button>
           </div>
           <span class="error" id="password-error" aria-live="polite">
@@ -72,7 +84,11 @@
               type="button"
               id="show-confirm-password-button"
             >
-              <img src="/images/eye-closed.svg" alt="" />
+              <img
+                class="input-helper-icon"
+                src="/images/eye-closed.svg"
+                alt=""
+              />
             </button>
           </div>
           <span class="error" id="confirm-password-error" aria-live="polite">

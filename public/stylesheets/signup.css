@@ -1,1 +1,7 @@
 @import url("/stylesheets/auth.css");
+
+section.field > .input-wrapper .input-helper-icon.username-availability {
+  visibility: hidden;
+  width: 1em;
+  height: 1em;
+}

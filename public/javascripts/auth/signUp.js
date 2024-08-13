@@ -122,6 +122,16 @@ const usernameIsAvailable = async (username) => {
   return !response.ok;
 };
 
+const setUsernameAvailabilityIndicator = (isAvailable) => {
+  const indicator = document.getElementById("username-availability-indicator");
+  indicator.style.visibility = "visible";
+  if (isAvailable) {
+    indicator.src = "/images/tick.svg";
+  } else {
+    indicator.src = "/images/close-cross.svg";
+  }
+};
+
 const checkUsernameAvailability = () => {
   const username = document.getElementById("username");
   let timeoutId = null;
@@ -130,11 +140,7 @@ const checkUsernameAvailability = () => {
     if (username.value === "") return;
     timeoutId = setTimeout(async () => {
       const isAvailable = await usernameIsAvailable(username.value);
-      if (isAvailable) {
-        console.log("available");
-      } else {
-        console.log("unavailable");
-      }
+      setUsernameAvailabilityIndicator(isAvailable);
     }, 1000);
   });
 };

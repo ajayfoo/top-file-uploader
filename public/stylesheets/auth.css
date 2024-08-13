@@ -30,6 +30,8 @@ section.field > .input-wrapper {
   padding-inline-end: var(--size-rev-200);
   min-width: 8ch;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 section.field > .input-wrapper > button {
@@ -39,10 +41,12 @@ section.field > .input-wrapper > button {
   display: flex;
   align-items: center;
 }
-section.field > .input-wrapper > button > img {
-  width: 1em;
-  height: 1em;
+
+section.field > .input-wrapper .input-helper-icon {
+  width: 1.25em;
+  height: 1.25em;
 }
+
 section.field input {
   background-color: var(--surface-container-highest);
   color: var(--on-surface);
@@ -104,7 +108,7 @@ section.field > .error > .message {
     filter: brightness(0) saturate(100%) invert(13%) sepia(83%) saturate(3451%)
       hue-rotate(349deg) brightness(106%) contrast(98%);
   }
-  section.field > .input-wrapper > button > img {
+  section.field > .input-wrapper .input-helper-icon {
     filter: brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(1796%)
       hue-rotate(251deg) brightness(95%) contrast(90%);
   }
