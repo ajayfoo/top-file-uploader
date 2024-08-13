@@ -24,4 +24,12 @@ section.field > .input-wrapper .input-helper-icon.username-availability {
     filter: brightness(0) saturate(100%) invert(7%) sepia(6%) saturate(1796%)
       hue-rotate(251deg) brightness(95%) contrast(90%);
   }
+  .username-availability.available {
+    filter: brightness(0) saturate(100%) invert(35%) sepia(11%) saturate(2247%)
+      hue-rotate(241deg) brightness(90%) contrast(81%);
+  }
+  .username-availability.unavailable {
+    filter: brightness(0) saturate(100%) invert(14%) sepia(77%) saturate(3535%)
+      hue-rotate(349deg) brightness(101%) contrast(101%);
+  }
 }

@@ -1,5 +1,3 @@
-const form = document.getElementById("sign-up-form");
-
 const validateInput = (input) => {
   const { showValidationMessage, messages } = inputMap.get(input);
   if (!showValidationMessage) {
@@ -131,9 +129,11 @@ const getNewUsernameAvailabilityIndicator = (forAvailable) => {
   if (forAvailable) {
     indicator.src = "/images/tick.svg";
     indicator.alt = "username available";
+    indicator.classList.add("available");
   } else {
     indicator.src = "/images/close-cross.svg";
     indicator.alt = "username unavailable";
+    indicator.classList.add("unavailable");
   }
   return indicator;
 };
@@ -192,11 +192,10 @@ populateInputMap();
 checkUsernameAvailability();
 handleShowPassword();
 handleShowConfirmPassword();
+
+const form = document.getElementById("sign-up-form");
 form.addEventListener("submit", (e) => {
-  if (!form.checkValidity()) {
-    e.preventDefault();
-    validateAllInputs();
-  } else {
-    console.log("ready to submit");
-  }
+  if (form.checkValidity()) return;
+  e.preventDefault();
+  validateAllInputs();
 });
