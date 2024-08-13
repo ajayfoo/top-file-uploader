@@ -123,15 +123,40 @@ const usernameIsAvailable = async (username) => {
   return !response.ok;
 };
 
-const setUsernameAvailabilityIndicator = (availability) => {
-  const indicator = document.getElementById("username-availability-indicator");
+const getNewUsernameAvailabilityIndicator = (forAvailable) => {
+  const indicator = document.createElement("img");
+  indicator.id = "username-availability-indicator";
+  indicator.classList.add("input-helper-icon", "username-availability");
   indicator.style.visibility = "visible";
-  if (availability === "available") {
+  if (forAvailable) {
     indicator.src = "/images/tick.svg";
-  } else if (availability === "unavailable") {
-    indicator.src = "/images/close-cross.svg";
+    indicator.alt = "username available";
   } else {
-    indicator.style.visibility = "hidden";
+    indicator.src = "/images/close-cross.svg";
+    indicator.alt = "username unavailable";
+  }
+  return indicator;
+};
+
+const getNewLoadingImg = () => {
+  const img = document.createElement("img");
+  img.src = "/images/loading.svg";
+  img.classList.add("loading");
+  img.alt = "Checking username availability";
+  return img;
+};
+
+const toggleUsernameAvailabilityIndicator = (parent, state) => {
+  const currentImg = parent.querySelector("img");
+  currentImg.style.visibility = "visible";
+  if (state === "loading") {
+    parent.replaceChild(getNewLoadingImg(), currentImg);
+  } else if (state === "available") {
+    parent.replaceChild(getNewUsernameAvailabilityIndicator(true), currentImg);
+  } else if (state === "unavailable") {
+    parent.replaceChild(getNewUsernameAvailabilityIndicator(false), currentImg);
+  } else if (currentImg !== null) {
+    currentImg.style.visibility = "hidden";
   }
 };
 
@@ -142,19 +167,21 @@ const checkUsernameAvailability = () => {
     clearTimeout(timeoutId);
     const { valueMissing, tooLong, tooShort } = username.validity;
     if (valueMissing || tooLong || tooShort) {
-      setUsernameAvailabilityIndicator(null);
+      toggleUsernameAvailabilityIndicator(username.parentElement, null);
       return;
     }
     timeoutId = setTimeout(async () => {
+      toggleUsernameAvailabilityIndicator(username.parentElement, "loading");
       const isAvailable = await usernameIsAvailable(username.value);
-      setUsernameAvailabilityIndicator(
-        isAvailable ? "available" : "unavailable",
-      );
       if (!isAvailable) {
         username.setCustomValidity("Username unavailable");
       } else {
         username.setCustomValidity("");
       }
+      toggleUsernameAvailabilityIndicator(
+        username.parentElement,
+        isAvailable ? "available" : "unavailable",
+      );
       inputMap.get(username).showValidationMessage = !isAvailable;
       validateInput(username);
     }, 1000);
