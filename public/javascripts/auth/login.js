@@ -1,4 +1,4 @@
-const form = document.getElementById("sign-up-form");
+const form = document.getElementById("login-form");
 
 const validateInput = (input) => {
   const { showValidationMessage } = inputMap.get(input);
