@@ -113,7 +113,34 @@ const handleShowConfirmPassword = () => {
   });
 };
 
+const usernameIsAvailable = async (username) => {
+  const url = location.origin + "/users/" + username;
+  const response = await fetch(url, {
+    method: "HEAD",
+  });
+  console.log(response.status);
+  return !response.ok;
+};
+
+const checkUsernameAvailability = () => {
+  const username = document.getElementById("username");
+  let timeoutId = null;
+  username.addEventListener("input", () => {
+    clearTimeout(timeoutId);
+    if (username.value === "") return;
+    timeoutId = setTimeout(async () => {
+      const isAvailable = await usernameIsAvailable(username.value);
+      if (isAvailable) {
+        console.log("available");
+      } else {
+        console.log("unavailable");
+      }
+    }, 1000);
+  });
+};
+
 populateInputMap();
+checkUsernameAvailability();
 handleShowPassword();
 handleShowConfirmPassword();
 form.addEventListener("submit", (e) => {

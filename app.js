@@ -4,6 +4,7 @@ import configuredSession from "./middlewares/session.js";
 import authRouter from "./routes/auth.js";
 import indexRouter from "./routes/index.js";
 import auth from "./middlewares/auth.js";
+import { checkUsernameExistance } from "./controllers/username.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use(configuredSession);
 app.use(auth.session());
+app.head("/users/:username", checkUsernameExistance);
 app.use("/auth", authRouter);
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {
