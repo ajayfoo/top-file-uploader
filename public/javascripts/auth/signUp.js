@@ -120,7 +120,7 @@ const usernameIsAvailable = async (username) => {
     method: "HEAD",
   });
   console.log(response.status);
-  return !response.ok;
+  return response.ok;
 };
 
 const getNewUsernameAvailabilityIndicator = (forAvailable) => {
