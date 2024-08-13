@@ -70,7 +70,8 @@ section.field .input-wrapper > input {
   border-inline-start-width: 5px;
 }
 
-.input-wrapper:has(input:focus) {
+.input-wrapper:has(input:focus),
+.input-wrapper:has(.input-helper-button:focus) {
   border-color: var(--outline);
   outline: none;
 }
