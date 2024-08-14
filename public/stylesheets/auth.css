@@ -86,7 +86,7 @@ section.field input.invalid + .error,
   visibility: visible;
 }
 
-section.field > .error {
+section.field .error {
   font-size: var(--fs-x-sm);
   color: var(--error);
   display: flex;
@@ -95,17 +95,24 @@ section.field > .error {
   margin-inline-start: var(--size-rev-100);
   visibility: hidden;
 }
+section.field .error.visible {
+  visibility: visible;
+}
+section.field .errors {
+  display: grid;
+  gap: var(--size-rev-100);
+}
 
-section.field > .error > .icon {
+section.field .error > .icon {
   max-height: 1em;
   max-width: 1em;
 }
-section.field > .error > .message {
+section.field .error > .message {
   max-width: 35ch;
 }
 
 @media screen and (prefers-color-scheme: light) {
-  section.field > .error > .icon {
+  section.field .error > .icon {
     filter: brightness(0) saturate(100%) invert(13%) sepia(83%) saturate(3451%)
       hue-rotate(349deg) brightness(106%) contrast(98%);
   }

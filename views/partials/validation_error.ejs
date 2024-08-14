@@ -1,0 +1,17 @@
+<%if(errors[name]){%>
+    <div class='errors' id="<%=id%>" aria-live="polite">
+    <%for(const error of errors[name]){%>
+        <span class="error visible" aria-live="polite">
+            <img src="/images/error-cross.svg" alt="" class="icon" />
+            <span class="message"><%=error%></span>
+        </span>
+    <%}%>
+    </div>
+<%}else{%>
+<span class="error" id="<%=id%>" aria-live="polite">
+  <img src="/images/error-cross.svg" alt="" class="icon" />
+  <span class="message">Required</span>
+</span>
+
+<%}%>
+

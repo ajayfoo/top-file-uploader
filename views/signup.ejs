@@ -36,10 +36,7 @@
               src="/images/close-cross.svg"
             />
           </div>
-          <span class="error" id="username-error" aria-live="polite">
-            <img src="/images/error-cross.svg" alt="" class="icon" />
-            <span class="message">Required</span>
-          </span>
+          <%- include('partials/validation_error',{errors,id:'username-error',name:'username'}) %>
         </section>
         <section class="field">
           <label for="password">Password</label>
@@ -69,10 +66,7 @@
               />
             </button>
           </div>
-          <span class="error" id="password-error" aria-live="polite">
-            <img src="/images/error-cross.svg" alt="" class="icon" />
-            <span class="message">Required</span>
-          </span>
+          <%- include('partials/validation_error',{errors,id:'password-error',name:'password'}) %>
         </section>
         <section class="field">
           <label for="confirm-password">Confirm Password</label>
@@ -99,10 +93,7 @@
               />
             </button>
           </div>
-          <span class="error" id="confirm-password-error" aria-live="polite">
-            <img src="/images/error-cross.svg" alt="" class="icon" />
-            <span class="message">Required</span>
-          </span>
+          <%- include('partials/validation_error',{errors,id:'confirm-password-error',name:'confirm_password'}) %>
         </section>
         <div class="action-buttons">
           <button>Sign Up</button>
