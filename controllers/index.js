@@ -4,40 +4,59 @@ import db from "../db.js";
 
 const renderIndex = async (req, res) => {
   const { id, rootFolderId } = req.session.passport.user;
-  const user = await db.user.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      folders: {
-        where: {
-          NOT: {
-            id: rootFolderId,
+  const [user, parentFolder] = await Promise.all([
+    db.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        folders: {
+          where: {
+            parentId: rootFolderId,
           },
         },
       },
-    },
-  });
+    }),
+    db.folder.findUnique({
+      where: {
+        id: rootFolderId,
+      },
+    }),
+  ]);
   res.render("index", {
     username: user.username,
     folders: user.folders,
-    parentFolder: { id: rootFolderId, name: "root" },
+    parentFolder: { id: rootFolderId, name: parentFolder.name },
   });
 };
 
 const renderNonRootFolderPage = async (req, res) => {
-  const { id } = req.params;
-  const [{ username }, folder] = await Promise.all([
+  const parentId = parseInt(req.params.id);
+  const { id } = req.session.passport.user;
+  const [user, parentFolder] = await Promise.all([
     db.user.findUnique({
       where: {
-        id: req.session.passport.user.id,
+        id,
+      },
+      include: {
+        folders: {
+          where: {
+            parentId,
+          },
+        },
       },
     }),
-    db.folder.findUnique({ where: { id } }),
+    db.folder.findUnique({
+      where: {
+        id: parentId,
+      },
+    }),
   ]);
-  console.log(username);
-  console.log(folder);
-  res.render("index", { username, folder });
+  res.render("index", {
+    username: user.username,
+    folders: user.folders,
+    parentFolder: { id: parentId, name: parentFolder.name },
+  });
 };
 
 const storage = multer.memoryStorage();
