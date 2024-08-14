@@ -3,6 +3,7 @@ import "dotenv/config";
 import configuredSession from "./middlewares/session.js";
 import authRouter from "./routes/auth.js";
 import indexRouter from "./routes/index.js";
+import folderRouter from "./routes/folder.js";
 import auth from "./middlewares/auth.js";
 import { checkUsernameAvailability } from "./controllers/username.js";
 
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
   }
 });
 app.use("/", indexRouter);
+app.use("/folders", folderRouter);
 app.listen(process.env.PORT, () => {
   console.log("Listening on PORT: " + process.env.PORT);
 });
