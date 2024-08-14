@@ -21,7 +21,7 @@ const renderIndex = async (req, res) => {
   res.render("index", {
     username: user.username,
     folders: user.folders,
-    parentId: rootFolderId,
+    parentFolder: { id: rootFolderId, name: "root" },
   });
 };
 
@@ -56,7 +56,7 @@ const createFolder = async (req, res) => {
   const { name, parentId } = req.body;
   console.log("Owner ID: " + id + ", Parent ID: " + parentId);
   try {
-    const newFolder = await db.folder.create({
+    await db.folder.create({
       data: {
         name,
         parent: {
@@ -71,7 +71,7 @@ const createFolder = async (req, res) => {
         },
       },
     });
-    res.json(newFolder);
+    res.redirect("../");
   } catch (err) {
     console.error(err);
     res.status(500).end();
