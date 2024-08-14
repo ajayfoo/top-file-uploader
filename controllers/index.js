@@ -43,10 +43,31 @@ const fileUploadMiddlewares = [
   },
 ];
 
-const createFolder = (req, res) => {
-  const { name } = req.body;
-  console.log("Folder name: " + name);
-  res.redirect("../");
+const createFolder = async (req, res) => {
+  const { id } = req.session.passport.user;
+  const { name, parentId } = req.body;
+  console.log("Owner ID: " + id + ", Parent ID: " + parentId);
+  try {
+    const newFolder = await db.folder.create({
+      data: {
+        name,
+        parent: {
+          connect: {
+            id: parseInt(parentId),
+          },
+        },
+        owner: {
+          connect: {
+            id: parseInt(id),
+          },
+        },
+      },
+    });
+    res.json(newFolder);
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
 };
 
 export {

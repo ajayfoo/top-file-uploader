@@ -28,3 +28,8 @@ const addFolderDialog = document.getElementById("add-folder-dialog");
 addFolderButton.addEventListener("click", () => {
   addFolderDialog.showModal();
 });
+
+// addFolderDialog.addEventListener("submit", (e) => {
+//   e.preventDefault();
+//   console.log("submit");
+// });
