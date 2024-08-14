@@ -9,6 +9,13 @@ const localStrategy = new LocalStrategy(async (username, password, done) => {
       where: {
         username,
       },
+      include: {
+        folders: {
+          where: {
+            parentId: null,
+          },
+        },
+      },
     });
     if (!targetUser) {
       return done(null, false, { message: "Incorrect username or password" });
@@ -17,25 +24,35 @@ const localStrategy = new LocalStrategy(async (username, password, done) => {
     if (!isAMatch) {
       return done(null, false, { message: "Incorrect username or password" });
     }
-    return done(null, { id: targetUser.id });
+    return done(null, {
+      id: targetUser.id,
+      rootFolderId: targetUser.folders[0].id,
+    });
   } catch (err) {
     return done(err);
   }
 });
 passport.use(localStrategy);
 passport.serializeUser((user, done) => {
-  done(null, { id: user.id });
+  done(null, { id: user.id, rootFolderId: user.rootFolderId });
 });
 passport.deserializeUser(async (user, done) => {
   try {
     const targetUser = await db.user.findUnique({
       where: { id: user.id },
+      include: {
+        folders: {
+          where: {
+            id: user.rootFolderId,
+          },
+        },
+      },
     });
     if (!targetUser) {
       done(new Error("User not found"));
       return;
     }
-    done(null, { id: targetUser.id });
+    done(null, { id: targetUser.id, rootFolderId: targetUser.folders[0].id });
   } catch (err) {
     done(err);
   }

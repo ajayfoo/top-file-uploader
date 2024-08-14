@@ -3,17 +3,25 @@ import { saveFiles } from "../utils.js";
 import db from "../db.js";
 
 const renderIndex = async (req, res) => {
+  const { id, rootFolderId } = req.session.passport.user;
   const user = await db.user.findUnique({
     where: {
-      id: req.session.passport.user.id,
+      id,
     },
     include: {
-      rootFolder: true,
+      folders: {
+        where: {
+          NOT: {
+            id: rootFolderId,
+          },
+        },
+      },
     },
   });
   res.render("index", {
     username: user.username,
-    folder: user.rootFolder,
+    folders: user.folders,
+    parentId: rootFolderId,
   });
 };
 
