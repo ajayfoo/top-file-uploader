@@ -67,10 +67,7 @@ const handleShowPassword = () => {
 populateInputMap();
 handleShowPassword();
 form.addEventListener("submit", (e) => {
+  if (form.checkValidity()) return;
   e.preventDefault();
-  if (!form.checkValidity()) {
-    validateAllInputs();
-  } else {
-    console.log("ready to submit");
-  }
+  validateAllInputs();
 });

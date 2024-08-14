@@ -1,0 +1,22 @@
+@import url("/stylesheets/auth.css");
+
+.invalid-credential {
+  background-color: var(--error-container);
+  color: var(--on-error-container);
+  border-radius: var(--size-100);
+  padding: var(--size-rev-100) var(--size-rev-200);
+  margin-block-start: var(--size-400);
+  display: flex;
+  gap: var(--size-rev-100);
+  align-items: center;
+}
+.invalid-credential > img {
+  width: 1.5em;
+  height: 1.5em;
+}
+@media screen and (prefers-color-scheme) {
+  .invalid-credential > img {
+    filter: brightness(0) saturate(100%) invert(6%) sepia(86%) saturate(5648%)
+      hue-rotate(345deg) brightness(56%) contrast(109%);
+  }
+}

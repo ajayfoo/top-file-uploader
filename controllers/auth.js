@@ -73,7 +73,7 @@ const signUp = async (req, res, next) => {
     id: newUser.id,
   };
   console.log(newUser);
-  req.logIn(userForSession, (err) => {
+  req.login(userForSession, (err) => {
     if (err) {
       return next(err);
     }
@@ -88,7 +88,7 @@ const validaionAndSignUpMiddlewares = [
 ];
 
 const renderLoginPage = (req, res) => {
-  res.render("login", { errors: {} });
+  res.render("login", { errors: {}, invalidCredential: false });
 };
 
 const validateLoginFormFields = [
@@ -112,13 +112,33 @@ const handleLoginFromValidationErrors = (req, res, next) => {
     return next();
   }
   const errors = getFormattedValidationErrors(result);
-  res.render("login", { errors });
+  res.render("login", { errors, invalidCredential: false });
 };
 
-const login = auth.authenticate("local", {
-  successRedirect: "../../",
-  failureRedirect: "/auth/login",
-});
+// const login = auth.authenticate("local", {
+//   successRedirect: "../../",
+//   failureRedirect: "/auth/login",
+// });
+
+const login = (req, res, next) => {
+  auth.authenticate("local", (err, user) => {
+    console.log(user);
+    if (err) return next(err);
+    if (!user) {
+      res.render("login", { errors: {}, invalidCredential: true });
+      return;
+    }
+    const userForSession = {
+      id: user.id,
+    };
+    req.login(userForSession, (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("../../");
+    });
+  })(req, res, next);
+};
 
 const validaionAndLoginMiddlewares = [
   ...validateLoginFormFields,

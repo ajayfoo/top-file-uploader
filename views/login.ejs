@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="/stylesheets/auth.css" />
+    <link rel="stylesheet" href="/stylesheets/login.css" />
     <script src="/javascripts/auth/login.js" defer></script>
     <link rel="prefetch" href="/images/error-cross.svg" as="image" />
     <link rel="prefetch" href="/images/eye-closed.svg" as="image" />
@@ -59,6 +59,12 @@
           <a href="/auth/signup">Create an account</a>
         </div>
       </form>
+      <%if(invalidCredential){%>
+        <div class="invalid-credential">
+          <img src="/images/error.svg" alt="">
+          <p>Invalid username or password</p>
+        </div>
+      <%}%>
     </main>
   </body>
 </html>
