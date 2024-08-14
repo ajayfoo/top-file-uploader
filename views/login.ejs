@@ -24,10 +24,7 @@
             maxlength="25"
             aria-describedby="username-error"
           />
-          <span class="error" id="username-error" aria-live="polite">
-            <img src="/images/error-cross.svg" alt="" class="icon" />
-            <span class="message">Required</span>
-          </span>
+          <%- include('partials/validation_error',{errors,id:'username-error',name:'username'}) %>
         </section>
         <section class="field">
           <label for="password">Password</label>
@@ -55,10 +52,7 @@
               />
             </button>
           </div>
-          <span class="error" id="password-error" aria-live="polite">
-            <img src="/images/error-cross.svg" alt="" class="icon" />
-            <span class="message">Required</span>
-          </span>
+          <%- include('partials/validation_error',{errors,id:'password-error',name:'password'}) %>
         </section>
         <div class="action-buttons">
           <button>Login</button>

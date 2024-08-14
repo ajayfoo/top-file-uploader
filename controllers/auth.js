@@ -40,12 +40,8 @@ const validateSignUpFormFields = [
     .withMessage("Passwords must match"),
 ];
 
-const handleSignUpValidationErrors = (req, res, next) => {
-  const result = validationResult(req);
-  if (result.isEmpty()) {
-    return next();
-  }
-  const errors = result.array().reduce((acc, curr) => {
+const getFormattedValidationErrors = (validationResult) => {
+  return validationResult.array().reduce((acc, curr) => {
     if (!acc[curr.path]) {
       acc[curr.path] = [curr.msg];
     } else {
@@ -53,7 +49,13 @@ const handleSignUpValidationErrors = (req, res, next) => {
     }
     return acc;
   }, {});
-  console.log(errors);
+};
+const handleSignUpFromValidationErrors = (req, res, next) => {
+  const result = validationResult(req);
+  if (result.isEmpty()) {
+    return next();
+  }
+  const errors = getFormattedValidationErrors(result);
   res.render("signup", { errors });
 };
 
@@ -81,12 +83,36 @@ const signUp = async (req, res, next) => {
 
 const validaionAndSignUpMiddlewares = [
   ...validateSignUpFormFields,
-  handleSignUpValidationErrors,
+  handleSignUpFromValidationErrors,
   signUp,
 ];
 
 const renderLoginPage = (req, res) => {
-  res.render("login");
+  res.render("login", { errors: {} });
+};
+
+const validateLoginFormFields = [
+  body("username")
+    .trim()
+    .notEmpty()
+    .withMessage("Username is required")
+    .escape()
+    .isLength({ max: 25 })
+    .withMessage("Username must be at most 25 characters long"),
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .isLength({ max: 128 })
+    .withMessage("Password must be at most 128 characters long"),
+];
+
+const handleLoginFromValidationErrors = (req, res, next) => {
+  const result = validationResult(req);
+  if (result.isEmpty()) {
+    return next();
+  }
+  const errors = getFormattedValidationErrors(result);
+  res.render("login", { errors });
 };
 
 const login = auth.authenticate("local", {
@@ -94,9 +120,15 @@ const login = auth.authenticate("local", {
   failureRedirect: "/auth/login",
 });
 
+const validaionAndLoginMiddlewares = [
+  ...validateLoginFormFields,
+  handleLoginFromValidationErrors,
+  login,
+];
+
 export {
   renderSignUpPage,
   validaionAndSignUpMiddlewares,
   renderLoginPage,
-  login,
+  validaionAndLoginMiddlewares,
 };
