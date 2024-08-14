@@ -3,7 +3,6 @@ import "dotenv/config";
 import configuredSession from "./middlewares/session.js";
 import authRouter from "./routes/auth.js";
 import indexRouter from "./routes/index.js";
-import folderRouter from "./routes/folder.js";
 import auth from "./middlewares/auth.js";
 import { checkUsernameAvailability } from "./controllers/username.js";
 
@@ -17,7 +16,9 @@ app.use(express.json());
 app.use(configuredSession);
 app.use(auth.session());
 app.head("/users/:username", checkUsernameAvailability);
+
 app.use("/auth", authRouter);
+
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {
     next();
@@ -25,8 +26,9 @@ app.use((req, res, next) => {
     res.redirect("/auth/login");
   }
 });
+
 app.use("/", indexRouter);
-app.use("/folders", folderRouter);
+
 app.listen(process.env.PORT, () => {
   console.log("Listening on PORT: " + process.env.PORT);
 });

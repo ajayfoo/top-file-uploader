@@ -13,7 +13,7 @@ const renderIndex = async (req, res) => {
   });
   res.render("index", {
     username: user.username,
-    folder: { name: user.rootFolder.name, id: user.rootFolder.id },
+    folder: user.rootFolder,
   });
 };
 
@@ -43,4 +43,15 @@ const fileUploadMiddlewares = [
   },
 ];
 
-export { renderIndex, renderNonRootFolderPage, fileUploadMiddlewares };
+const createFolder = (req, res) => {
+  const { name } = req.body;
+  console.log("Folder name: " + name);
+  res.redirect("../");
+};
+
+export {
+  renderIndex,
+  renderNonRootFolderPage,
+  fileUploadMiddlewares,
+  createFolder,
+};

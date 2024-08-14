@@ -1,56 +1,53 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link rel="stylesheet" href="/stylesheets/index.css" />
-    <script src="/javascripts/index.js" defer></script>
-  </head>
-  <body>
-    <main>
-      <p class="welcome-banner">
-        Welcome, <span class="username"><%=username%></span>!
-      </p>
-      <%- include('partials/header',{folderName:folder.name}) %>
-      <div class="files">
-        <div id="add-menu">
-          <button id="add-menu-header">Add</button>
-          <div class="items">
-            <button id="add-files-button">Add file(s)</button>
-            <button id="add-folder-button">Add folder</button>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link rel="stylesheet" href="/stylesheets/index.css" />
+  <script src="/javascripts/index.js" defer></script>
+</head>
+
+<body>
+  <main>
+    <p class="welcome-banner">
+      Welcome, <span class="username"><%=username%></span>!
+    </p>
+    <%- include('partials/header',{folderName:folder.name}) %>
+    <div class="files">
+      <div id="add-menu">
+        <button id="add-menu-header">Add</button>
+        <div class="items">
+          <button id="add-files-button">Add file(s)</button>
+          <button id="add-folder-button">Add folder</button>
         </div>
       </div>
-    </main>
-    <div class="dialogs">
-      <dialog id="add-files-dialog">
-        <form method="dialog">
-          <label for="files">Files</label>
-          <input type="file" multiple name="files" id="files" />
-          <button
-            formenctype="multipart/form-data"
-            formmethod="post"
-            formaction="/files"
-          >
-            Submit
-          </button>
-          <button>Close</button>
-        </form>
-      </dialog>
-      <dialog id="add-folder-dialog">
-        <form method="dialog">
-          <label for="folder-name">Name</label>
-          <input required name="name" id="folder-name" />
-          <button
-            formmethod="post"
-            formaction="/folders"
-          >
-            Submit
-          </button>
-          <button formnovalidate>Close</button>
-        </form>
-      </dialog>
     </div>
-  </body>
+  </main>
+  <div class="dialogs">
+    <dialog id="add-files-dialog">
+      <form method="dialog">
+        <label for="files">Files</label>
+        <input type="file" multiple name="files" id="files" />
+        <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
+          Submit
+        </button>
+        <button>Close</button>
+      </form>
+    </dialog>
+    <dialog id="add-folder-dialog">
+      <form method="dialog">
+        <label for="folder-name">Name</label>
+        <input required name="name" id="folder-name" />
+        <input type="hidden" name="parent_id" value="<%=folder.id%>">
+        <button formmethod="post" formaction="/folders">
+          Submit
+        </button>
+        <button formnovalidate>Close</button>
+      </form>
+    </dialog>
+  </div>
+</body>
+
 </html>
