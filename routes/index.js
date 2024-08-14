@@ -5,6 +5,6 @@ const router = Router();
 
 router.get("/", renderIndex);
 
-router.post("/file", fileUploadMiddlewares);
+router.post("/files", fileUploadMiddlewares);
 
 export default router;
