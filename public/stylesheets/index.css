@@ -1,0 +1,27 @@
+@import url("/stylesheets/global.css");
+
+.welcome-banner {
+  font-weight: 300;
+  font-size: var(--size-700);
+}
+.welcome-banner > .username {
+  font-weight: 700;
+}
+
+.main-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#add-menu {
+  position: relative;
+}
+#add-menu > .items {
+  position: absolute;
+  visibility: hidden;
+}
+
+#add-menu > .items.visible {
+  visibility: visible;
+}
