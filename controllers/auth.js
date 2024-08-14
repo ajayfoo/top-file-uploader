@@ -73,13 +73,9 @@ const signUp = async (req, res, next) => {
         },
       },
     },
-    include: {
-      rootFolder: true,
-    },
   });
   const userForSession = {
     id: newUser.id,
-    rootFolderId: newUser.rootFolder.id,
   };
   req.login(userForSession, (err) => {
     if (err) {

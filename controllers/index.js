@@ -3,13 +3,18 @@ import { saveFiles } from "../utils.js";
 import db from "../db.js";
 
 const renderIndex = async (req, res) => {
-  const { username } = await db.user.findUnique({
+  const user = await db.user.findUnique({
     where: {
       id: req.session.passport.user.id,
     },
+    include: {
+      rootFolder: true,
+    },
   });
-  console.log(username);
-  res.render("index", { username, folder: { name: "Root", id: 1 } });
+  res.render("index", {
+    username: user.username,
+    folder: { name: user.rootFolder.name, id: user.rootFolder.id },
+  });
 };
 
 const renderNonRootFolderPage = async (req, res) => {

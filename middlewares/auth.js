@@ -24,21 +24,18 @@ const localStrategy = new LocalStrategy(async (username, password, done) => {
 });
 passport.use(localStrategy);
 passport.serializeUser((user, done) => {
-  done(null, { id: user.id, rootFolderId: user.rootFolderId });
+  done(null, { id: user.id });
 });
 passport.deserializeUser(async (user, done) => {
   try {
     const targetUser = await db.user.findUnique({
       where: { id: user.id },
-      include: {
-        rootFolder: true,
-      },
     });
     if (!targetUser) {
       done(new Error("User not found"));
       return;
     }
-    done(null, { id: targetUser.id, rootFolderId: targetUser.rootFolder.id });
+    done(null, { id: targetUser.id });
   } catch (err) {
     done(err);
   }
