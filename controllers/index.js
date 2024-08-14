@@ -9,7 +9,22 @@ const renderIndex = async (req, res) => {
     },
   });
   console.log(username);
-  res.render("index", { username, folderName: "Root" });
+  res.render("index", { username, folder: { name: "Root", id: 1 } });
+};
+
+const renderNonRootFolderPage = async (req, res) => {
+  const { id } = req.params;
+  const [{ username }, folder] = await Promise.all([
+    db.user.findUnique({
+      where: {
+        id: req.session.passport.user.id,
+      },
+    }),
+    db.folder.findUnique({ where: { id } }),
+  ]);
+  console.log(username);
+  console.log(folder);
+  res.render("index", { username, folder });
 };
 
 const storage = multer.memoryStorage();
@@ -23,4 +38,4 @@ const fileUploadMiddlewares = [
   },
 ];
 
-export { renderIndex, fileUploadMiddlewares };
+export { renderIndex, renderNonRootFolderPage, fileUploadMiddlewares };

@@ -67,10 +67,19 @@ const signUp = async (req, res, next) => {
     data: {
       username,
       password: passwordHash,
+      rootFolder: {
+        create: {
+          name: "Root",
+        },
+      },
+    },
+    include: {
+      rootFolder: true,
     },
   });
   const userForSession = {
     id: newUser.id,
+    rootFolderId: newUser.rootFolder.id,
   };
   req.login(userForSession, (err) => {
     if (err) {
