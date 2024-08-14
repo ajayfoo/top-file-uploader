@@ -14,7 +14,7 @@
   width: 1.5em;
   height: 1.5em;
 }
-@media screen and (prefers-color-scheme) {
+@media screen and (prefers-color-scheme: light) {
   .invalid-credential > img {
     filter: brightness(0) saturate(100%) invert(6%) sepia(86%) saturate(5648%)
       hue-rotate(345deg) brightness(56%) contrast(109%);

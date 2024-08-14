@@ -72,7 +72,6 @@ const signUp = async (req, res, next) => {
   const userForSession = {
     id: newUser.id,
   };
-  console.log(newUser);
   req.login(userForSession, (err) => {
     if (err) {
       return next(err);
@@ -115,14 +114,8 @@ const handleLoginFromValidationErrors = (req, res, next) => {
   res.render("login", { errors, invalidCredential: false });
 };
 
-// const login = auth.authenticate("local", {
-//   successRedirect: "../../",
-//   failureRedirect: "/auth/login",
-// });
-
 const login = (req, res, next) => {
   auth.authenticate("local", (err, user) => {
-    console.log(user);
     if (err) return next(err);
     if (!user) {
       res.render("login", { errors: {}, invalidCredential: true });

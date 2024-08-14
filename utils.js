@@ -7,9 +7,11 @@ const getExt = (fileName) => {
   if (extIndex === -1) return "";
   return fileName.slice(extIndex + 1);
 };
+
 const getFileName = async (file) => {
   const originalname = file.originalname;
   const result = await fileTypeFromBuffer(file.buffer);
+  if (!result) return originalname;
   const ext = result.ext;
   const possibleExts = mime.getAllExtensions(result.mime);
   if (possibleExts.has(getExt(originalname))) {

@@ -48,7 +48,6 @@ const populateInputMap = () => {
     i.addEventListener("input", () => {
       edited = true;
       if (i === confirmPasswordEle) {
-        console.log("validating confirm password");
         validateConfirmPassword();
       }
       if (i.checkValidity()) {
@@ -117,7 +116,6 @@ const usernameIsAvailable = async (username) => {
   const response = await fetch(url, {
     method: "HEAD",
   });
-  console.log(response.status);
   return response.ok;
 };
 
