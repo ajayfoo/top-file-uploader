@@ -34,23 +34,24 @@
     <dialog id="add-files-dialog">
       <form method="dialog">
         <label for="files">Files</label>
+        <input type="hidden" name="parentId" value="<%=parentFolder.id%>">
         <input type="file" multiple name="files" id="files" />
         <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
           Submit
         </button>
         <button>Close</button>
-      </form>
-    </dialog>
-    <dialog id="add-folder-dialog">
-      <form method="dialog">
-        <label for="folder-name">Name</label>
-        <input required name="name" id="folder-name" />
-        <input type="hidden" id="parent-id" name="parentId" value="<%=parentFolder.id%>">
-        <button formmethod="post" formaction="/folders">
-          Submit
-        </button>
-        <button formnovalidate>Close</button>
         </form>
+        </dialog>
+        <dialog id="add-folder-dialog">
+          <form method="dialog">
+            <label for="folder-name">Name</label>
+            <input required name="name" id="folder-name" />
+            <input type="hidden" id="parent-id" name="parentId" value="<%=parentFolder.id%>">
+            <button formmethod="post" formaction="/folders">
+              Submit
+            </button>
+            <button formnovalidate>Close</button>
+          </form>
         </dialog>
         <dialog id="create-folder-post-reponse">
           <form method="dialog">

@@ -25,6 +25,17 @@ model User{
   username String @unique
   password String
   folders Folder[]
+  files File[]
+}
+
+model File{
+  id Int @id @default(autoincrement())
+  name String
+  mimeType String
+  owner User @relation(fields: [ownerId],references: [id])
+  ownerId Int
+  parent Folder @relation("FolderToFile",fields: [parentId],references: [id])
+  parentId Int
 }
 
 model Folder{
@@ -32,7 +43,8 @@ model Folder{
   name String
   owner User @relation(fields: [ownerId],references: [id])
   ownerId Int
-  children Folder[] @relation("ParentChildren")
+  childrenFolder Folder[] @relation("ParentChildren")
   parent Folder? @relation("ParentChildren",fields: [parentId],references: [id])
   parentId Int?
+  files File[] @relation("FolderToFile")
 }

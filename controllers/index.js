@@ -65,7 +65,11 @@ const upload = multer({ storage });
 const fileUploadMiddlewares = [
   upload.array("files"),
   async (req, res) => {
-    await saveFiles(req.files);
+    const { id: ownerId } = req.session.passport.user;
+    const parentId = parseInt(req.body.parentId);
+    console.log(req.body);
+    console.log("Owner ID: " + ownerId + ", Parent ID: " + parentId);
+    await saveFiles(req.files, ownerId, parentId);
     res.status(200).end();
   },
 ];
@@ -80,10 +84,6 @@ const getDuplicateFolder = async (name, parentId, ownerId) => {
 const createFolder = async (req, res) => {
   const { id } = req.session.passport.user;
   const { name, parentId } = req.body;
-  console.log(req.body);
-  console.log(
-    "Owner ID: " + id + ", Parent ID: " + parentId + ", Folder Name: " + name,
-  );
   try {
     const duplicateFolder = await getDuplicateFolder(name, parentId, id);
     console.log(duplicateFolder);

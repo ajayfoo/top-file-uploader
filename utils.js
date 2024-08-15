@@ -1,6 +1,6 @@
 import { fileTypeFromBuffer } from "file-type";
-import fs from "node:fs/promises";
 import mime from "mime/lite";
+import db from "./db.js";
 
 const getExt = (fileName) => {
   const extIndex = fileName.lastIndexOf(".");
@@ -19,12 +19,20 @@ const getFileName = async (file) => {
   }
   return originalname + "." + ext;
 };
-const saveFile = async (file) => {
-  const fileName = await getFileName(file);
-  await fs.writeFile("uploads/" + fileName, file.buffer);
-};
-const saveFiles = async (files) => {
-  await Promise.all(files.map(saveFile));
+
+const saveFiles = async (files, ownerId, parentId) => {
+  const formattedFiles = await Promise.all(
+    files.map(async (f) => ({
+      name: await getFileName(f),
+      mimeType: "txt",
+      ownerId,
+      parentId,
+    })),
+  );
+  const result = await db.file.createMany({
+    data: formattedFiles,
+  });
+  console.log(result);
 };
 
 export { saveFiles };
