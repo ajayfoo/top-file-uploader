@@ -29,7 +29,48 @@ addFolderButton.addEventListener("click", () => {
   addFolderDialog.showModal();
 });
 
-// addFolderDialog.addEventListener("submit", (e) => {
-//   e.preventDefault();
-//   console.log("submit");
-// });
+const sendCreateFolderPostRequest = async () => {
+  const parentId = parseInt(document.getElementById("parent-id").value);
+  const name = document.getElementById("folder-name").value;
+  console.log(parentId);
+  console.log(name);
+  const url = location.origin + "/folders";
+  console.log(url);
+  const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({
+      name,
+      parentId,
+    }),
+  });
+  return response;
+};
+
+const showFailedResponseMessage = (msg) => {
+  const dialog = document.getElementById("create-folder-post-reponse");
+  const msgEle = dialog.querySelector("form>p.message");
+  msgEle.textContent = msg;
+  dialog.showModal();
+};
+
+addFolderDialog.addEventListener("submit", async (e) => {
+  if (document.activeElement.hasAttribute("formnovalidate")) return;
+  e.preventDefault();
+  try {
+    const response = await sendCreateFolderPostRequest();
+    if (response.ok) {
+      location.reload();
+    } else {
+      const json = await response.json();
+      showFailedResponseMessage(
+        "There's already a folder named '" + json.duplicateName + "'",
+      );
+    }
+  } catch (err) {
+    console.error(err);
+    console.log("failed");
+  }
+});

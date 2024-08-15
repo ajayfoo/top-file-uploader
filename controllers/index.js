@@ -70,11 +70,26 @@ const fileUploadMiddlewares = [
   },
 ];
 
+const getDuplicateFolder = async (name, parentId, ownerId) => {
+  const result = await db.$queryRaw`
+    SELECT name FROM "Folder" WHERE "parentId" = ${parseInt(parentId)} AND LOWER(name) = LOWER(${name}) AND "ownerId" = ${parseInt(ownerId)}
+    `;
+  return result[0];
+};
+
 const createFolder = async (req, res) => {
   const { id } = req.session.passport.user;
   const { name, parentId } = req.body;
-  console.log("Owner ID: " + id + ", Parent ID: " + parentId);
+  console.log(req.body);
+  console.log(
+    "Owner ID: " + id + ", Parent ID: " + parentId + ", Folder Name: " + name,
+  );
   try {
+    const duplicateFolder = await getDuplicateFolder(name, parentId, id);
+    console.log(duplicateFolder);
+    if (duplicateFolder) {
+      return res.status(403).json({ duplicateName: duplicateFolder.name });
+    }
     await db.folder.create({
       data: {
         name,

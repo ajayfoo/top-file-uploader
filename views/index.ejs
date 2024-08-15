@@ -45,12 +45,18 @@
       <form method="dialog">
         <label for="folder-name">Name</label>
         <input required name="name" id="folder-name" />
-        <input type="hidden" name="parentId" value="<%=parentFolder.id%>">
+        <input type="hidden" id="parent-id" name="parentId" value="<%=parentFolder.id%>">
         <button formmethod="post" formaction="/folders">
           Submit
         </button>
         <button formnovalidate>Close</button>
         </form>
+        </dialog>
+        <dialog id="create-folder-post-reponse">
+          <form method="dialog">
+            <p class="message"></p>
+            <button>Close</button>
+          </form>
         </dialog>
       </div>
 </body>
