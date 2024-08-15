@@ -31,11 +31,12 @@ model User{
 model File{
   id Int @id @default(autoincrement())
   name String
-  mimeType String
+  mimeType String?
   owner User @relation(fields: [ownerId],references: [id])
   ownerId Int
   parent Folder @relation("FolderToFile",fields: [parentId],references: [id])
   parentId Int
+  uploadedAt DateTime @default(now())
 }
 
 model Folder{

@@ -8,27 +8,33 @@ const getExt = (fileName) => {
   return fileName.slice(extIndex + 1);
 };
 
-const getFileName = async (file) => {
+const getFormattedFileInfo = async (file) => {
   const originalname = file.originalname;
   const result = await fileTypeFromBuffer(file.buffer);
-  if (!result) return originalname;
+  if (!result) {
+    return { name: originalname, mimeType: mime.getType(originalname) };
+  }
   const ext = result.ext;
   const possibleExts = mime.getAllExtensions(result.mime);
   if (possibleExts.has(getExt(originalname))) {
-    return originalname;
+    return { name: originalname, mimeType: mime.getType(ext) };
   }
-  return originalname + "." + ext;
+  return { name: originalname + "." + ext, mimeType: mime.getType(ext) };
 };
 
 const saveFiles = async (files, ownerId, parentId) => {
   const formattedFiles = await Promise.all(
-    files.map(async (f) => ({
-      name: await getFileName(f),
-      mimeType: "txt",
-      ownerId,
-      parentId,
-    })),
+    files.map(async (f) => {
+      const fileInfo = await getFormattedFileInfo(f);
+      const formattedFile = {
+        ...fileInfo,
+        ownerId,
+        parentId,
+      };
+      return formattedFile;
+    }),
   );
+  console.log(formattedFiles);
   const result = await db.file.createMany({
     data: formattedFiles,
   });
