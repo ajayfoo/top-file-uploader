@@ -132,6 +132,7 @@ const login = (req, res, next) => {
     }
     const userForSession = {
       id: user.id,
+      rootFolderId: user.rootFolderId,
     };
     req.login(userForSession, (err) => {
       if (err) {

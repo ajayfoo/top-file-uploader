@@ -14,7 +14,7 @@
     <p class="welcome-banner">
       Welcome, <span class="username"><%=username%></span>!
     </p>
-    <%- include('partials/header',{folderName:parentFolder.name}) %>
+    <%- include('partials/header',{folderName:parentFolder.name,isRoot}) %>
     <div class="folders-files">
       <div id="add-menu">
         <button id="add-menu-header">Add</button>

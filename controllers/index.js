@@ -4,6 +4,7 @@ import db from "../db.js";
 
 const renderIndex = async (req, res) => {
   const { id, rootFolderId } = req.session.passport.user;
+  console.log(rootFolderId);
   const [user, parentFolder] = await Promise.all([
     db.user.findUnique({
       where: {
@@ -33,6 +34,7 @@ const renderIndex = async (req, res) => {
     folders: user.folders,
     files: user.files,
     parentFolder: { id: rootFolderId, name: parentFolder.name },
+    isRoot: true,
   });
 };
 
@@ -68,6 +70,7 @@ const renderNonRootFolderPage = async (req, res) => {
     folders: user.folders,
     files: user.files,
     parentFolder: { id: parentId, name: parentFolder.name },
+    isRoot: true,
   });
 };
 
@@ -172,10 +175,8 @@ const recursivelyDeleteFolder = async (id) => {
       },
     }),
   ]);
-  if (childFolders.length !== 0) {
-    for (const folder of childFolders) {
-      await recursivelyDeleteFolder(folder.id);
-    }
+  for (const folder of childFolders) {
+    await recursivelyDeleteFolder(folder.id);
   }
   await db.file.deleteMany({
     where: {
