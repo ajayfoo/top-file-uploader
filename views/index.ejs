@@ -62,6 +62,17 @@
             <button>Close</button>
           </form>
         </dialog>
+        <dialog id="rename-current-folder-dialog">
+          <form method="dialog">
+            <label for="current-folder-name">Name</label>
+            <input required name="name" id="current-folder-name" />
+            <input type="hidden" name="_method" value="PATCH">
+            <button formmethod="post" formaction="<%='/folders/'+parentFolder.id%>">
+              Submit
+            </button>
+            <button formnovalidate>Close</button>
+          </form>
+        </dialog>
       </div>
 </body>
 

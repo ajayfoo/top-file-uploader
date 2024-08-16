@@ -138,10 +138,32 @@ const renderFileInfo = async (req, res, next) => {
   res.render("file_info", { file });
 };
 
+const renameFolder = async (req, res) => {
+  if (req.method !== "PATCH" && req.body._method !== "PATCH") {
+    return res.status(403).end();
+  }
+  const id = parseInt(req.params.id);
+  const { newName: name } = req.body;
+  try {
+    await db.folder.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+    });
+    res.status(204).end();
+  } catch {
+    res.status(500).end();
+  }
+};
+
 export {
   renderIndex,
   renderNonRootFolderPage,
   fileUploadMiddlewares,
   createFolder,
   renderFileInfo,
+  renameFolder,
 };

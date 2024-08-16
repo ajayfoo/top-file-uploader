@@ -74,3 +74,39 @@ addFolderDialog.addEventListener("submit", async (e) => {
     console.log("failed");
   }
 });
+
+const renameFolderButton = document.getElementById("rename-folder-button");
+const renameCurrentFolderDialog = document.getElementById(
+  "rename-current-folder-dialog",
+);
+const sendRenameFolderPutRequest = async () => {
+  const newName = document.getElementById("current-folder-name").value;
+  const url =
+    location.origin + document.activeElement.getAttribute("formaction");
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ newName }),
+  });
+  return response.ok;
+};
+renameFolderButton.addEventListener("click", () => {
+  renameCurrentFolderDialog.showModal();
+});
+renameCurrentFolderDialog.addEventListener("submit", async (e) => {
+  if (document.activeElement.hasAttribute("formnovalidate")) return;
+  e.preventDefault();
+  try {
+    const done = await sendRenameFolderPutRequest();
+    if (done) {
+      location.reload();
+    } else {
+      showFailedResponseMessage("Something went wrong");
+    }
+  } catch (err) {
+    console.log(err);
+    showFailedResponseMessage("Something went wrong");
+  }
+});

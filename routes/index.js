@@ -5,6 +5,7 @@ import {
   renderNonRootFolderPage,
   createFolder,
   renderFileInfo,
+  renameFolder,
 } from "../controllers/index.js";
 
 const router = Router();
@@ -19,5 +20,7 @@ router.post("/files", fileUploadMiddlewares);
 router.get("/files/:id", renderFileInfo);
 
 router.post("/folders", createFolder);
+router.post("/folders/:id", renameFolder);
+router.patch("/folders/:id", renameFolder);
 
 export default router;
