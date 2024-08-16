@@ -124,9 +124,24 @@ const createFolder = async (req, res) => {
   }
 };
 
+const renderFileInfo = async (req, res, next) => {
+  const id = parseInt(req.params.id);
+  const file = await db.file.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!file) {
+    next(new Error("File not found"));
+    return;
+  }
+  res.render("file_info", { file });
+};
+
 export {
   renderIndex,
   renderNonRootFolderPage,
   fileUploadMiddlewares,
   createFolder,
+  renderFileInfo,
 };
