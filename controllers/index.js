@@ -70,7 +70,7 @@ const renderNonRootFolderPage = async (req, res) => {
     folders: user.folders,
     files: user.files,
     parentFolder: { id: parentId, name: parentFolder.name },
-    isRoot: true,
+    isRoot: false,
   });
 };
 
