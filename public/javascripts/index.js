@@ -110,3 +110,32 @@ renameCurrentFolderDialog.addEventListener("submit", async (e) => {
     showFailedResponseMessage("Something went wrong");
   }
 });
+
+const deleteFolderButton = document.getElementById("delete-folder-button");
+const deleteFolderDialog = document.getElementById("delete-folder-dialog");
+const sendDeleteFolderRequest = async () => {
+  const url =
+    location.origin + document.activeElement.getAttribute("formaction");
+  const response = await fetch(url, {
+    method: "DELETE",
+  });
+  return response.ok;
+};
+deleteFolderButton.addEventListener("click", () => {
+  deleteFolderDialog.showModal();
+});
+deleteFolderDialog.addEventListener("submit", async (e) => {
+  if (document.activeElement.hasAttribute("formnovalidate")) return;
+  e.preventDefault();
+  try {
+    const done = await sendDeleteFolderRequest();
+    if (done) {
+      location.replace(location.origin);
+    } else {
+      showFailedResponseMessage("Something went wrong");
+    }
+  } catch (err) {
+    console.log(err);
+    showFailedResponseMessage("Something went wrong");
+  }
+});

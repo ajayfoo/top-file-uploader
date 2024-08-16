@@ -159,6 +159,49 @@ const renameFolder = async (req, res) => {
   }
 };
 
+const recursivelyDeleteFolder = async (id) => {
+  const [childFolders, childFiles] = await Promise.all([
+    db.folder.findMany({
+      where: {
+        parentId: id,
+      },
+    }),
+    db.file.findMany({
+      where: {
+        parentId: id,
+      },
+    }),
+  ]);
+  if (childFolders.length !== 0) {
+    for (const folder of childFolders) {
+      await recursivelyDeleteFolder(folder.id);
+    }
+  }
+  await db.file.deleteMany({
+    where: {
+      id: {
+        in: childFiles.map((f) => f.id),
+      },
+    },
+  });
+  await db.folder.delete({
+    where: {
+      id,
+    },
+  });
+};
+
+const removeFolder = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    await recursivelyDeleteFolder(id);
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+};
+
 export {
   renderIndex,
   renderNonRootFolderPage,
@@ -166,4 +209,5 @@ export {
   createFolder,
   renderFileInfo,
   renameFolder,
+  removeFolder,
 };

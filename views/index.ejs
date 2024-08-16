@@ -73,6 +73,15 @@
             <button formnovalidate>Close</button>
           </form>
         </dialog>
+        <dialog id="delete-folder-dialog">
+          <form method="dialog">
+            <p>Are you want to delete folder <strong><%=parentFolder.name%></strong> and all its content(s)?</p>
+            <button formaction="<%='/folders/'+parentFolder.id%>">
+              Submit
+            </button>
+            <button formnovalidate>Close</button>
+          </form>
+        </dialog>
       </div>
 </body>
 

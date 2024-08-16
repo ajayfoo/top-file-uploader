@@ -6,6 +6,7 @@ import {
   createFolder,
   renderFileInfo,
   renameFolder,
+  removeFolder,
 } from "../controllers/index.js";
 
 const router = Router();
@@ -22,5 +23,6 @@ router.get("/files/:id", renderFileInfo);
 router.post("/folders", createFolder);
 router.post("/folders/:id", renameFolder);
 router.patch("/folders/:id", renameFolder);
+router.delete("/folders/:id", removeFolder);
 
 export default router;
