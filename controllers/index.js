@@ -15,6 +15,11 @@ const renderIndex = async (req, res) => {
             parentId: rootFolderId,
           },
         },
+        files: {
+          where: {
+            parentId: rootFolderId,
+          },
+        },
       },
     }),
     db.folder.findUnique({
@@ -26,6 +31,7 @@ const renderIndex = async (req, res) => {
   res.render("index", {
     username: user.username,
     folders: user.folders,
+    files: user.files,
     parentFolder: { id: rootFolderId, name: parentFolder.name },
   });
 };
@@ -44,6 +50,11 @@ const renderNonRootFolderPage = async (req, res) => {
             parentId,
           },
         },
+        files: {
+          where: {
+            parentId,
+          },
+        },
       },
     }),
     db.folder.findUnique({
@@ -55,6 +66,7 @@ const renderNonRootFolderPage = async (req, res) => {
   res.render("index", {
     username: user.username,
     folders: user.folders,
+    files: user.files,
     parentFolder: { id: parentId, name: parentFolder.name },
   });
 };
@@ -70,7 +82,7 @@ const fileUploadMiddlewares = [
     console.log(req.body);
     console.log("Owner ID: " + ownerId + ", Parent ID: " + parentId);
     await saveFiles(req.files, ownerId, parentId);
-    res.status(200).end();
+    res.redirect("/" + parentId);
   },
 ];
 

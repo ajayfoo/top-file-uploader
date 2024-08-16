@@ -27,6 +27,9 @@
         <%for(const folder of folders){%>
         <%- include('partials/folder',{folder}) %>
         <%}%>
+        <%for(const file of files){%>
+        <%- include('partials/file',{file}) %>
+        <%}%>
       </div>
     </div>
   </main>
