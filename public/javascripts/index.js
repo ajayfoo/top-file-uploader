@@ -1,7 +1,28 @@
+const uploadFiles = async () => {
+  const parentId = document.getElementById("current-folder-id").value;
+  const files = document.getElementById("files-to-upload").files;
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append("files", file, file.name);
+  }
+  formData.append("parentId", parentId);
+  const url = document.activeElement.getAttribute("formaction");
+  const response = await fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+  const json = await response.json();
+  console.log(json);
+};
 const addFilesButton = document.getElementById("add-files-button");
 const addFileDialog = document.getElementById("add-files-dialog");
 addFilesButton.addEventListener("click", () => {
   addFileDialog.showModal();
+});
+addFileDialog.addEventListener("submit", async (e) => {
+  if (document.activeElement.hasAttribute("formnovalidate")) return;
+  e.preventDefault();
+  await uploadFiles();
 });
 
 const setupAddMenu = () => {

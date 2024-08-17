@@ -76,9 +76,38 @@ const renderNonRootFolderPage = async (req, res) => {
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-
+const sendDuplicateFileNamesIfAny = async (req, res, next) => {
+  console.log(req.files);
+  const { id: ownerId } = req.session.passport.user;
+  const parentId = parseInt(req.body.parentId);
+  try {
+    const duplicateFileNames = await db.file.findMany({
+      where: {
+        ownerId,
+        parentId,
+        name: {
+          in: req.files.map((f) => f.originalname),
+          mode: "insensitive",
+        },
+      },
+      select: {
+        name: true,
+        id: true,
+      },
+    });
+    if (duplicateFileNames.length === 0) {
+      next();
+      return;
+    }
+    res.status(409).json(duplicateFileNames);
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+};
 const fileUploadMiddlewares = [
   upload.array("files"),
+  sendDuplicateFileNamesIfAny,
   async (req, res) => {
     const { id: ownerId } = req.session.passport.user;
     const parentId = parseInt(req.body.parentId);

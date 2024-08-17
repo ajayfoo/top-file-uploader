@@ -36,9 +36,9 @@
   <div class="dialogs">
     <dialog id="add-files-dialog">
       <form method="dialog">
-        <label for="files">Files</label>
-        <input type="hidden" name="parentId" value="<%=parentFolder.id%>">
-        <input type="file" multiple name="files" id="files" />
+        <label for="files-to-upload">Files</label>
+        <input type="hidden" id="current-folder-id" name="parentId" value="<%=parentFolder.id%>">
+        <input type="file" multiple name="files" id="files-to-upload" />
         <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
           Submit
         </button>
