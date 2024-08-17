@@ -1,3 +1,29 @@
+const getNewCheckbox = (id, name) => {
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.id = id;
+  const label = document.createElement("label");
+  label.textContent = name;
+  label.setAttribute("for", checkbox.id);
+
+  const container = document.createElement("section");
+  container.classList.add("field");
+  container.append(checkbox, label);
+  return container;
+};
+
+const showDuplicateFilesContainer = (duplicateFiles) => {
+  const resolveUploadFileConflictContainer = document.getElementById(
+    "resolve-upload-file-conflict",
+  );
+  resolveUploadFileConflictContainer.classList.remove("none");
+  const duplicateFilesContainer = document.getElementById("duplicate-files");
+  duplicateFilesContainer.textContent = "";
+  for (const file of duplicateFiles) {
+    duplicateFilesContainer.appendChild(getNewCheckbox(file.id, file.name));
+  }
+};
+
 const uploadFiles = async () => {
   const parentId = document.getElementById("current-folder-id").value;
   const files = document.getElementById("files-to-upload").files;
@@ -11,8 +37,8 @@ const uploadFiles = async () => {
     method: "POST",
     body: formData,
   });
-  const json = await response.json();
-  console.log(json);
+  const duplicateFiles = await response.json();
+  showDuplicateFilesContainer(duplicateFiles);
 };
 const addFilesButton = document.getElementById("add-files-button");
 const addFileDialog = document.getElementById("add-files-dialog");
