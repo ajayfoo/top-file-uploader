@@ -8,10 +8,7 @@ const getFormattedFileInfo = async (file) => {
   if (!result) {
     return { name: originalname, mimeType: mime.getType(originalname) };
   }
-  const ext = result.ext;
-  console.log(ext);
-  console.log(mime.getType(ext));
-  return { name: originalname, mimeType: mime.getType(ext) };
+  return { name: originalname, mimeType: result.mime };
 };
 
 const saveFiles = async (files, ownerId, parentId) => {
