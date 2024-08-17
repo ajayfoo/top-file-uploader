@@ -20,9 +20,9 @@ router.get("/:id", renderNonRootFolderPage);
 router.post("/files", fileUploadMiddlewares);
 router.get("/files/:id", renderFileInfo);
 
-router.post("/folders", createFolder);
-router.post("/folders/:id", renameFolder);
-router.patch("/folders/:id", renameFolder);
-router.delete("/folders/:id", removeFolder);
+router.post("/", createFolder);
+router.post("/:id", renameFolder);
+router.patch("/:id", renameFolder);
+router.delete("/:id", removeFolder);
 
 export default router;

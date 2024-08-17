@@ -34,7 +34,7 @@ const sendCreateFolderPostRequest = async () => {
   const name = document.getElementById("folder-name").value;
   console.log(parentId);
   console.log(name);
-  const url = location.origin + "/folders";
+  const url = document.activeElement.getAttribute("formaction");
   console.log(url);
   const response = await fetch(url, {
     headers: {

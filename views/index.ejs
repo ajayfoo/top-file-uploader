@@ -50,7 +50,7 @@
             <label for="folder-name">Name</label>
             <input required name="name" id="folder-name" />
             <input type="hidden" id="parent-id" name="parentId" value="<%=parentFolder.id%>">
-            <button formmethod="post" formaction="/folders">
+            <button formmethod="post" formaction="/">
               Submit
             </button>
             <button formnovalidate>Close</button>
@@ -67,7 +67,7 @@
             <label for="current-folder-name">Name</label>
             <input required name="name" id="current-folder-name" />
             <input type="hidden" name="_method" value="PATCH">
-            <button formmethod="post" formaction="<%='/folders/'+parentFolder.id%>">
+            <button formmethod="post" formaction="<%='/'+parentFolder.id%>">
               Submit
             </button>
             <button formnovalidate>Close</button>
@@ -77,7 +77,7 @@
         <dialog id="delete-folder-dialog">
           <form method="dialog">
             <p>Are you want to delete folder <strong><%=parentFolder.name%></strong> and all its content(s)?</p>
-            <button formaction="<%='/folders/'+parentFolder.id%>">
+            <button formaction="<%='/'+parentFolder.id%>">
               Submit
             </button>
             <button formnovalidate>Close</button>
