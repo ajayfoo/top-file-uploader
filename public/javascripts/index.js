@@ -1,7 +1,10 @@
-const getNewCheckbox = (id, name) => {
+const getNewCheckbox = (id, name, group) => {
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.id = id;
+  checkbox.name = group;
+  checkbox.value = id;
+  checkbox.setAttribute("data-name", name);
   const label = document.createElement("label");
   label.textContent = name;
   label.setAttribute("for", checkbox.id);
@@ -20,16 +23,83 @@ const showDuplicateFilesContainer = (duplicateFiles) => {
   const duplicateFilesContainer = document.getElementById("duplicate-files");
   duplicateFilesContainer.textContent = "";
   for (const file of duplicateFiles) {
-    duplicateFilesContainer.appendChild(getNewCheckbox(file.id, file.name));
+    duplicateFilesContainer.appendChild(
+      getNewCheckbox(file.id, file.name, "filesToReplace"),
+    );
   }
+};
+
+const clearDuplicateFilesContainer = () => {
+  const duplicateFilesContainer = document.getElementById("duplicate-files");
+  duplicateFilesContainer.textContent = "";
+  const resolveUploadFileConflictContainer = document.getElementById(
+    "resolve-upload-file-conflict",
+  );
+  resolveUploadFileConflictContainer.classList.add("none");
+};
+const addIdsOfFilesToReplaceToFormData = (
+  formData,
+  duplicateFileCheckBoxes,
+) => {
+  const idsOfFilesToReplace = duplicateFileCheckBoxes
+    .filter((i) => i.checked)
+    .map((i) => i.value);
+  for (const fileId of idsOfFilesToReplace) {
+    formData.append("idsOfFilesToReplace", fileId);
+  }
+};
+
+const removeUnselectedFilesFromInput = (unselectedFileNames) => {
+  const dt = new DataTransfer();
+  const filesInput = document.getElementById("files-to-upload");
+  const { files } = filesInput;
+  for (const file of files) {
+    if (unselectedFileNames.includes(file.name)) continue;
+    dt.items.add(file);
+  }
+  filesInput.files = dt.files;
+};
+
+const addSelectedFilesToFormData = (formData, unselectedFileNames) => {
+  const files = document.getElementById("files-to-upload").files;
+  let numOfFilesAdded = 0;
+  for (const file of files) {
+    if (unselectedFileNames.includes(file.name)) continue;
+    formData.append("files", file, file.name);
+    ++numOfFilesAdded;
+  }
+  return numOfFilesAdded;
+};
+
+const getDuplicateFileCheckBoxes = (form) => {
+  const duplicateFileCheckBoxes = [];
+  const checkboxElements = form.querySelectorAll(
+    'input[name="filesToReplace"]',
+  );
+  for (const checkbox of checkboxElements) {
+    duplicateFileCheckBoxes.push(checkbox);
+  }
+  return duplicateFileCheckBoxes;
 };
 
 const uploadFiles = async () => {
   const parentId = document.getElementById("current-folder-id").value;
-  const files = document.getElementById("files-to-upload").files;
+  const form = document.querySelector("#add-files-dialog>form");
+  const duplicateFileCheckBoxes = getDuplicateFileCheckBoxes(form);
   const formData = new FormData();
-  for (const file of files) {
-    formData.append("files", file, file.name);
+  addIdsOfFilesToReplaceToFormData(formData, duplicateFileCheckBoxes);
+  const unselectedFileNames = duplicateFileCheckBoxes
+    .filter((i) => !i.checked)
+    .map((i) => i.dataset["name"]);
+  removeUnselectedFilesFromInput(unselectedFileNames);
+  const numOfFilesAdded = addSelectedFilesToFormData(
+    formData,
+    unselectedFileNames,
+  );
+  if (numOfFilesAdded < 1) {
+    clearDuplicateFilesContainer();
+    form.reportValidity();
+    return;
   }
   formData.append("parentId", parentId);
   const url = document.activeElement.getAttribute("formaction");
@@ -37,9 +107,14 @@ const uploadFiles = async () => {
     method: "POST",
     body: formData,
   });
+  if (response.ok) {
+    location.replace(location.origin);
+    return;
+  }
   const duplicateFiles = await response.json();
   showDuplicateFilesContainer(duplicateFiles);
 };
+
 const addFilesButton = document.getElementById("add-files-button");
 const addFileDialog = document.getElementById("add-files-dialog");
 addFilesButton.addEventListener("click", () => {
@@ -55,7 +130,6 @@ const setupAddMenu = () => {
   const menuHeader = document.getElementById("add-menu-header");
   const itemsEle = document.querySelector("#add-menu>.items");
   const firstItem = document.querySelector("#add-menu>.items>:first-child");
-  console.log(firstItem);
   let open = false;
   menuHeader.addEventListener("click", () => {
     if (open) {
@@ -79,10 +153,7 @@ addFolderButton.addEventListener("click", () => {
 const sendCreateFolderPostRequest = async () => {
   const parentId = parseInt(document.getElementById("parent-id").value);
   const name = document.getElementById("folder-name").value;
-  console.log(parentId);
-  console.log(name);
   const url = document.activeElement.getAttribute("formaction");
-  console.log(url);
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -118,7 +189,6 @@ addFolderDialog.addEventListener("submit", async (e) => {
     }
   } catch (err) {
     console.error(err);
-    console.log("failed");
   }
 });
 
@@ -153,7 +223,7 @@ renameCurrentFolderDialog.addEventListener("submit", async (e) => {
       showFailedResponseMessage("Something went wrong");
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
     showFailedResponseMessage("Something went wrong");
   }
 });
@@ -183,7 +253,7 @@ if (deleteFolderButton) {
         showFailedResponseMessage("Something went wrong");
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       showFailedResponseMessage("Something went wrong");
     }
   });

@@ -4,7 +4,6 @@ import db from "../db.js";
 
 const renderIndex = async (req, res) => {
   const { id, rootFolderId } = req.session.passport.user;
-  console.log(rootFolderId);
   const [user, parentFolder] = await Promise.all([
     db.user.findUnique({
       where: {
@@ -76,18 +75,50 @@ const renderNonRootFolderPage = async (req, res) => {
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+const getIdsOfFileToReplace = (req) => {
+  const idsOfFilesToReplace = req.body.idsOfFilesToReplace ?? [];
+  if (!Array.isArray(idsOfFilesToReplace)) {
+    return [idsOfFilesToReplace].map(parseInt);
+  }
+  return idsOfFilesToReplace.map(parseInt);
+};
+
+const removeToBeReplacedFiles = async (req, res, next) => {
+  const idsOfFilesToReplace = getIdsOfFileToReplace(req);
+  try {
+    await db.file.deleteMany({
+      where: {
+        id: {
+          in: idsOfFilesToReplace,
+        },
+      },
+    });
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
+const areEqualArrays = (arr1, arr2) => {
+  if (arr1.length !== arr2.length) return false;
+  for (const e1 of arr1) {
+    if (!arr2.includes(e1)) return false;
+  }
+  return true;
+};
+
 const sendDuplicateFileNamesIfAny = async (req, res, next) => {
-  console.log(req.files);
+  if (req.files.length === 0) return res.status(200).end();
+  const idsOfFilesToReplace = getIdsOfFileToReplace(req);
   const { id: ownerId } = req.session.passport.user;
   const parentId = parseInt(req.body.parentId);
   try {
-    const duplicateFileNames = await db.file.findMany({
+    const duplicateFiles = await db.file.findMany({
       where: {
         ownerId,
         parentId,
         name: {
           in: req.files.map((f) => f.originalname),
-          mode: "insensitive",
         },
       },
       select: {
@@ -95,11 +126,15 @@ const sendDuplicateFileNamesIfAny = async (req, res, next) => {
         id: true,
       },
     });
-    if (duplicateFileNames.length === 0) {
-      next();
-      return;
+    if (
+      areEqualArrays(
+        duplicateFiles.map((f) => f.id),
+        idsOfFilesToReplace,
+      )
+    ) {
+      return next();
     }
-    res.status(409).json(duplicateFileNames);
+    res.status(409).json(duplicateFiles);
   } catch (err) {
     console.error(err);
     res.status(500).end();
@@ -108,13 +143,12 @@ const sendDuplicateFileNamesIfAny = async (req, res, next) => {
 const fileUploadMiddlewares = [
   upload.array("files"),
   sendDuplicateFileNamesIfAny,
+  removeToBeReplacedFiles,
   async (req, res) => {
     const { id: ownerId } = req.session.passport.user;
     const parentId = parseInt(req.body.parentId);
-    console.log(req.body);
-    console.log("Owner ID: " + ownerId + ", Parent ID: " + parentId);
     await saveFiles(req.files, ownerId, parentId);
-    res.redirect("/" + parentId);
+    res.status(200).end();
   },
 ];
 
@@ -130,7 +164,6 @@ const createFolder = async (req, res) => {
   const { name, parentId } = req.body;
   try {
     const duplicateFolder = await getDuplicateFolder(name, parentId, id);
-    console.log(duplicateFolder);
     if (duplicateFolder) {
       return res.status(403).json({ duplicateName: duplicateFolder.name });
     }

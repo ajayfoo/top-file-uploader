@@ -38,7 +38,7 @@
       <form method="dialog">
         <label for="files-to-upload">Files</label>
         <input type="hidden" id="current-folder-id" name="parentId" value="<%=parentFolder.id%>">
-        <input type="file" multiple name="files" id="files-to-upload" />
+        <input type="file" required multiple name="files" id="files-to-upload" />
         <section class="none" id="resolve-upload-file-conflict">
 
           <p>Select all the duplicate file(s) you want to replace with new ones or leave them unselected to skip them.</p>
@@ -49,7 +49,7 @@
         <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
           Submit
         </button>
-        <button>Close</button>
+        <button formnovalidate>Close</button>
         </form>
         </dialog>
         <dialog id="add-folder-dialog">
