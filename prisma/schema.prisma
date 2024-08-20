@@ -32,6 +32,8 @@ model File{
   id Int @id @default(autoincrement())
   name String
   mimeType String?
+  size Int
+  displaySize String
   owner User @relation(fields: [ownerId],references: [id])
   ownerId Int
   parent Folder @relation("FolderToFile",fields: [parentId],references: [id])
