@@ -198,9 +198,7 @@ const renameCurrentFolderDialog = document.getElementById(
 );
 const sendRenameFolderPutRequest = async () => {
   const newName = document.getElementById("current-folder-name").value;
-  const url =
-    location.origin + document.activeElement.getAttribute("formaction");
-  const response = await fetch(url, {
+  const response = await fetch(location.href, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -232,9 +230,7 @@ const deleteFolderButton = document.getElementById("delete-folder-button");
 const deleteFolderDialog = document.getElementById("delete-folder-dialog");
 if (deleteFolderButton) {
   const sendDeleteFolderRequest = async () => {
-    const url =
-      location.origin + document.activeElement.getAttribute("formaction");
-    const response = await fetch(url, {
+    const response = await fetch(location.origin, {
       method: "DELETE",
     });
     return response.ok;

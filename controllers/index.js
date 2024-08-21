@@ -219,10 +219,7 @@ const renderFileInfo = async (req, res, next) => {
 };
 
 const renameFolder = async (req, res) => {
-  if (req.method !== "PATCH" && req.body._method !== "PATCH") {
-    return res.status(403).end();
-  }
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id) || req.session.passport.user.rootFolderId;
   const { newName: name } = req.body;
   try {
     await db.folder.update({
@@ -234,7 +231,8 @@ const renameFolder = async (req, res) => {
       },
     });
     res.status(204).end();
-  } catch {
+  } catch (err) {
+    console.error(err);
     res.status(500).end();
   }
 };

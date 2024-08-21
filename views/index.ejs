@@ -69,22 +69,12 @@
             <button>Close</button>
           </form>
         </dialog>
-        <dialog id="rename-current-folder-dialog">
-          <form method="dialog">
-            <label for="current-folder-name">Name</label>
-            <input required name="name" id="current-folder-name" />
-            <input type="hidden" name="_method" value="PATCH">
-            <button formmethod="post" formaction="<%='/'+parentFolder.id%>">
-              Submit
-            </button>
-            <button formnovalidate>Close</button>
-          </form>
-        </dialog>
+        <%- include('partials/rename_dialog',{dialogId:'rename-current-folder-dialog',inputId:'current-folder-name'}) %>
         <%if(!isRoot){%>
         <dialog id="delete-folder-dialog">
           <form method="dialog">
             <p>Are you want to delete folder <strong><%=parentFolder.name%></strong> and all its content(s)?</p>
-            <button formaction="<%='/'+parentFolder.id%>">
+            <button>
               Submit
             </button>
             <button formnovalidate>Close</button>

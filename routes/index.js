@@ -23,8 +23,8 @@ router.get("/files/:id", renderFileInfo);
 router.delete("/files/:id", removeFile);
 
 router.post("/", createFolder);
-router.post("/:id", renameFolder);
 router.patch("/:id", renameFolder);
+router.patch("/", renameFolder);
 router.delete("/:id", removeFolder);
 
 export default router;
