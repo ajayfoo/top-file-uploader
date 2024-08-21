@@ -8,6 +8,7 @@ import {
   renameFolder,
   removeFolder,
   removeFile,
+  renameFile,
 } from "../controllers/index.js";
 
 const router = Router();
@@ -21,6 +22,7 @@ router.get("/:id", renderNonRootFolderPage);
 router.post("/files", fileUploadMiddlewares);
 router.get("/files/:id", renderFileInfo);
 router.delete("/files/:id", removeFile);
+router.patch("/files/:id", renameFile);
 
 router.post("/", createFolder);
 router.patch("/:id", renameFolder);

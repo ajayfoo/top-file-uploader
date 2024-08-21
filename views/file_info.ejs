@@ -14,9 +14,11 @@
     <li>Type: <%=file.mimeType%></li>
     <li>Size: <%=file.displaySize%></li>
     <li>Uploaded At: <%=file.uploadedAt%></li>
+    <button type="button" id="rename-file">Rename</button>
     <button type="button" id="delete-file">Delete</button>
   </ol>
   <div class="dialogs">
+    <%- include('partials/rename_dialog',{dialogId:'rename-file-dialog',inputId:'current-file-name'}) %>
     <dialog id="confirm-delete-file-dialog">
       <form method="dialog">
         <p>Are you sure you want to delete this file?</p>
@@ -24,12 +26,7 @@
         <button>Yes</button>
       </form>
     </dialog>
-    <dialog id="failed-to-delete-file-dialog">
-      <form method="dialog">
-        <p>Failed to delete file!</p>
-        <button>OK</button>
-      </form>
-    </dialog>
+    <%- include('partials/failed_message_dialog') %>
   </div>
 </body>
 

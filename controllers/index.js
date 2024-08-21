@@ -167,6 +167,25 @@ const removeFile = async (req, res) => {
   }
 };
 
+const renameFile = async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { name } = req.body;
+  try {
+    await db.file.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+    });
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+};
+
 const getDuplicateFolder = async (name, parentId, ownerId) => {
   const result = await db.$queryRaw`
     SELECT name FROM "Folder" WHERE "parentId" = ${parseInt(parentId)} AND LOWER(name) = LOWER(${name}) AND "ownerId" = ${parseInt(ownerId)}
@@ -283,6 +302,7 @@ export {
   renderNonRootFolderPage,
   fileUploadMiddlewares,
   removeFile,
+  renameFile,
   createFolder,
   renderFileInfo,
   renameFolder,
