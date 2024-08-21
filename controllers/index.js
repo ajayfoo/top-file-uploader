@@ -152,6 +152,21 @@ const fileUploadMiddlewares = [
   },
 ];
 
+const removeFile = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    await db.file.delete({
+      where: {
+        id,
+      },
+    });
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+};
+
 const getDuplicateFolder = async (name, parentId, ownerId) => {
   const result = await db.$queryRaw`
     SELECT name FROM "Folder" WHERE "parentId" = ${parseInt(parentId)} AND LOWER(name) = LOWER(${name}) AND "ownerId" = ${parseInt(ownerId)}
@@ -269,6 +284,7 @@ export {
   renderIndex,
   renderNonRootFolderPage,
   fileUploadMiddlewares,
+  removeFile,
   createFolder,
   renderFileInfo,
   renameFolder,
