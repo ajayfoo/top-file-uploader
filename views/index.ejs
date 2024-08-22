@@ -86,6 +86,34 @@
             <button>Cancel</button>
           </form>
         </dialog>
+        <dialog id="share-folder-dialog">
+          <form method="dialog">
+            <section class="field">
+              <input type="checkbox" name="share" id="share-folder-checkbox">
+              <label for="share-folder-checkbox">Share</label>
+            </section>
+            <section class="field">
+              <section class="sub-field">
+                <input type="number" required min="0" step="1"  name="hours" id="share-hours">
+                <label for="share-hours">Hr</label>
+              </section>
+              <section class="sub-field">
+                <input type="number" required min="0" step="1" name="days" id="share-days">
+                <label for="share-days">Day</label>
+              </section>
+              <section class="sub-field">
+                <input type="number" required min="0" step="1"  name="months" id="share-months">
+                <label for="share-months">Mth</label>
+              </section>
+              <section class="sub-field">
+                <input type="number" required min="0" step="1"  name="years" id="share-years">
+                <label for="share-years">Yrs</label>
+              </section>
+            </section>
+            <button>Save</button>
+            <button formnovalidate>Cancel</button>
+          </form>
+        </dialog>
       </div>
 </body>
 

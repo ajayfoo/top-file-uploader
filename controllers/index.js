@@ -1,3 +1,6 @@
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import duration from "dayjs/plugin/duration.js";
 import db from "../db.js";
 
 const renderIndex = async (req, res) => {
@@ -168,10 +171,35 @@ const removeFolder = async (req, res) => {
   }
 };
 
+const createSharedUrl = async (req, res) => {
+  const folderId = parseInt(req.params.id);
+  const { hours, days, months, years } = req.body;
+  console.log(
+    `hrs: ${hours}, days: ${days}, months: ${months}, years: ${years}`,
+  );
+  const sharingDuration = dayjs
+    .extend(duration)
+    .duration({ hours, days, months, years });
+  const expiresOn = dayjs.extend(utc).utc().add(sharingDuration).format();
+  try {
+    await db.sharedUrl.create({
+      data: {
+        folderId,
+        expiresOn,
+      },
+    });
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+};
+
 export {
   renderIndex,
   renderNonRootFolderPage,
   createFolder,
   renameFolder,
   removeFolder,
+  createSharedUrl,
 };

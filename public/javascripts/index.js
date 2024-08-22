@@ -254,3 +254,42 @@ if (deleteFolderButton) {
     }
   });
 }
+
+const shareFolderDialog = document.getElementById("share-folder-dialog");
+const sharingFolderBtn = document.getElementById("sharing-folder-button");
+sharingFolderBtn.addEventListener("click", () => {
+  shareFolderDialog.showModal();
+});
+shareFolderDialog.addEventListener("submit", async (e) => {
+  if (document.activeElement.hasAttribute("formnovalidate")) return;
+  console.log("share");
+  e.preventDefault();
+  const hours = document.getElementById("share-hours").value;
+  const days = document.getElementById("share-days").value;
+  const months = document.getElementById("share-months").value;
+  const years = document.getElementById("share-years").value;
+  const url = location.href + "/sharedUrl";
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        hours,
+        days,
+        months,
+        years,
+      }),
+    });
+    if (response.ok) {
+      console.log("created shared url");
+    } else {
+      showFailedResponseMessage("Failed to add shared url");
+    }
+  } catch {
+    showFailedResponseMessage("Failed to add shared url");
+  } finally {
+    shareFolderDialog.close();
+  }
+});

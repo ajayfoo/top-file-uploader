@@ -5,6 +5,7 @@ import {
   createFolder,
   renameFolder,
   removeFolder,
+  createSharedUrl,
 } from "../controllers/index.js";
 
 const router = Router();
@@ -16,6 +17,7 @@ router.get("/favicon.ico", (req, res) => {
 router.get("/:id", renderNonRootFolderPage);
 
 router.post("/", createFolder);
+router.post("/:id/sharedUrl", createSharedUrl);
 router.patch("/:id", renameFolder);
 router.patch("/", renameFolder);
 router.delete("/:id", removeFolder);

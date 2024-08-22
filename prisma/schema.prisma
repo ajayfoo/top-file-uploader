@@ -50,4 +50,12 @@ model Folder{
   parent Folder? @relation("ParentChildren",fields: [parentId],references: [id])
   parentId Int?
   files File[] @relation("FolderToFile")
+  sharedUrl SharedUrl?
+}
+
+model SharedUrl{
+  id Int @id @default(autoincrement())
+  folder Folder @relation(fields: [folderId],references: [id])
+  folderId Int @unique
+  expiresOn DateTime
 }
