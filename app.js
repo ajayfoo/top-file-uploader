@@ -4,6 +4,7 @@ import configuredSession from "./middlewares/session.js";
 import authRouter from "./routes/auth.js";
 import indexRouter from "./routes/index.js";
 import filesRouter from "./routes/files.js";
+import sharedUrlRouter from "./routes/sharedUrl.js";
 import auth from "./middlewares/auth.js";
 import { checkUsernameAvailability } from "./controllers/username.js";
 
@@ -19,6 +20,7 @@ app.use(auth.session());
 app.head("/users/:username", checkUsernameAvailability);
 
 app.use("/auth", authRouter);
+app.use("/shared", sharedUrlRouter);
 
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {
