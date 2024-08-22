@@ -27,14 +27,33 @@ const renderIndex = async (req, res) => {
       where: {
         id: rootFolderId,
       },
+      include: {
+        sharedUrl: true,
+      },
     }),
   ]);
+  dayjs.extend(utc);
+  let sharing = null;
+  if (parentFolder.sharedUrl) {
+    dayjs.extend(utc);
+    dayjs.extend(duration);
+    const today = dayjs().utc();
+    const sharingTill = dayjs(parentFolder.sharedUrl.expiresOn).utc();
+    const timeLeft = dayjs.duration(sharingTill.diff(today));
+    sharing = {
+      hours: timeLeft.hours(),
+      days: timeLeft.days(),
+      months: timeLeft.months(),
+      years: timeLeft.years(),
+    };
+  }
   res.render("index", {
     username: user.username,
     folders: user.folders,
     files: user.files,
     parentFolder: { id: rootFolderId, name: parentFolder.name },
     isRoot: true,
+    sharing,
   });
 };
 
@@ -63,14 +82,32 @@ const renderNonRootFolderPage = async (req, res) => {
       where: {
         id: parentId,
       },
+      include: {
+        sharedUrl: true,
+      },
     }),
   ]);
+  let sharing = null;
+  if (parentFolder.sharedUrl) {
+    dayjs.extend(utc);
+    dayjs.extend(duration);
+    const today = dayjs().utc();
+    const sharingTill = dayjs(parentFolder.sharedUrl.expiresOn).utc();
+    const timeLeft = dayjs.duration(sharingTill.diff(today));
+    sharing = {
+      hours: timeLeft.hours(),
+      days: timeLeft.days(),
+      months: timeLeft.months(),
+      years: timeLeft.years(),
+    };
+  }
   res.render("index", {
     username: user.username,
     folders: user.folders,
     files: user.files,
     parentFolder: { id: parentId, name: parentFolder.name },
     isRoot: false,
+    sharing,
   });
 };
 

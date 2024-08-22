@@ -5,6 +5,8 @@
     <%if(!isRoot){%>
     <button id="delete-folder-button">Delete</button>
     <%}%>
-    <button id="sharing-folder-button">Not Sharing</button>
+    <button id="sharing-folder-button">
+      <%=sharing?'Sharing':'Not Sharing'%>
+    </button>
   </div>
 </header>

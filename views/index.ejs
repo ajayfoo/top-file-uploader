@@ -14,7 +14,7 @@
     <p class="welcome-banner">
       Welcome, <span class="username"><%=username%></span>!
     </p>
-    <%- include('partials/header',{folderName:parentFolder.name,isRoot}) %>
+    <%- include('partials/header',{folderName:parentFolder.name,isRoot,sharing}) %>
     <div class="folders-files">
       <div id="add-menu">
         <button id="add-menu-header">Add</button>
@@ -89,30 +89,18 @@
         <dialog id="share-folder-dialog">
           <form method="dialog">
             <section class="field">
-              <input type="checkbox" name="share" id="share-folder-checkbox">
-              <label for="share-folder-checkbox">Share</label>
-            </section>
-            <section class="field">
-              <section class="sub-field">
-                <input type="number" required min="0" step="1"  name="hours" id="share-hours">
-                <label for="share-hours">Hr</label>
-              </section>
-              <section class="sub-field">
-                <input type="number" required min="0" step="1" name="days" id="share-days">
-                <label for="share-days">Day</label>
-              </section>
-              <section class="sub-field">
-                <input type="number" required min="0" step="1"  name="months" id="share-months">
-                <label for="share-months">Mth</label>
-              </section>
-              <section class="sub-field">
-                <input type="number" required min="0" step="1"  name="years" id="share-years">
-                <label for="share-years">Yrs</label>
-              </section>
-            </section>
-            <button>Save</button>
-            <button formnovalidate>Cancel</button>
-          </form>
+              <input type="checkbox" name="share" id="share-folder-checkbox" <%=sharing?'checked':''%>>
+        <label for="share-folder-checkbox">Share</label>
+        </section>
+        <section class="field">
+          <%- include('partials/duration_subfield',{unit:'hours',displayName:'Hr',sharing}) %>
+          <%- include('partials/duration_subfield',{unit:'days',displayName:'Day',sharing}) %>
+          <%- include('partials/duration_subfield',{unit:'months',displayName:'Mth',sharing}) %>
+          <%- include('partials/duration_subfield',{unit:'years',displayName:'Yrs',sharing}) %>
+        </section>
+        <button>Save</button>
+        <button formnovalidate>Cancel</button>
+        </form>
         </dialog>
       </div>
 </body>
