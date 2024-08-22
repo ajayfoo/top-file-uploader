@@ -1,20 +1,19 @@
 import { Router } from "express";
 import {
-  renderIndex,
-  renderNonRootFolderPage,
   createFolder,
   renameFolder,
   removeFolder,
   createSharedUrl,
+  renderFolderPage,
 } from "../controllers/index.js";
 
 const router = Router();
 
-router.get("/", renderIndex);
+router.get("/", renderFolderPage);
 router.get("/favicon.ico", (req, res) => {
   return res.status(200).end();
 });
-router.get("/:id", renderNonRootFolderPage);
+router.get("/:id", renderFolderPage);
 
 router.post("/", createFolder);
 router.post("/:id/sharedUrl", createSharedUrl);

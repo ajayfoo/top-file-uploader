@@ -3,110 +3,60 @@ import utc from "dayjs/plugin/utc.js";
 import duration from "dayjs/plugin/duration.js";
 import db from "../db.js";
 
-const renderIndex = async (req, res) => {
-  const { id, rootFolderId } = req.session.passport.user;
-  const [user, parentFolder] = await Promise.all([
-    db.user.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        folders: {
-          where: {
-            parentId: rootFolderId,
-          },
-        },
-        files: {
-          where: {
-            parentId: rootFolderId,
-          },
-        },
-      },
-    }),
-    db.folder.findUnique({
-      where: {
-        id: rootFolderId,
-      },
-      include: {
-        sharedUrl: true,
-      },
-    }),
-  ]);
+const getDurations = (endDate) => {
+  if (!endDate) return null;
   dayjs.extend(utc);
-  let sharing = null;
-  if (parentFolder.sharedUrl) {
-    dayjs.extend(utc);
-    dayjs.extend(duration);
-    const today = dayjs().utc();
-    const sharingTill = dayjs(parentFolder.sharedUrl.expiresOn).utc();
-    const timeLeft = dayjs.duration(sharingTill.diff(today));
-    sharing = {
-      hours: timeLeft.hours(),
-      days: timeLeft.days(),
-      months: timeLeft.months(),
-      years: timeLeft.years(),
-    };
-  }
-  res.render("index", {
-    username: user.username,
-    folders: user.folders,
-    files: user.files,
-    parentFolder: { id: rootFolderId, name: parentFolder.name },
-    isRoot: true,
-    sharing,
-  });
+  dayjs.extend(duration);
+  const today = dayjs().utc();
+  const sharingTill = dayjs(endDate).utc();
+  const timeLeft = dayjs.duration(sharingTill.diff(today));
+  return {
+    hours: timeLeft.hours(),
+    days: timeLeft.days(),
+    months: timeLeft.months(),
+    years: timeLeft.years(),
+  };
 };
 
-const renderNonRootFolderPage = async (req, res) => {
-  const parentId = parseInt(req.params.id);
-  const { id } = req.session.passport.user;
+const renderFolderPage = async (req, res) => {
+  const { id: userId } = req.session.passport.user;
+  const parentFolderId =
+    parseInt(req.params.id) || req.session.passport.user.rootFolderId;
   const [user, parentFolder] = await Promise.all([
     db.user.findUnique({
       where: {
-        id,
+        id: userId,
       },
       include: {
         folders: {
           where: {
-            parentId,
+            parentId: parentFolderId,
           },
         },
         files: {
           where: {
-            parentId,
+            parentId: parentFolderId,
           },
         },
       },
     }),
     db.folder.findUnique({
       where: {
-        id: parentId,
+        ownerId: userId,
+        id: parentFolderId,
       },
       include: {
         sharedUrl: true,
       },
     }),
   ]);
-  let sharing = null;
-  if (parentFolder.sharedUrl) {
-    dayjs.extend(utc);
-    dayjs.extend(duration);
-    const today = dayjs().utc();
-    const sharingTill = dayjs(parentFolder.sharedUrl.expiresOn).utc();
-    const timeLeft = dayjs.duration(sharingTill.diff(today));
-    sharing = {
-      hours: timeLeft.hours(),
-      days: timeLeft.days(),
-      months: timeLeft.months(),
-      years: timeLeft.years(),
-    };
-  }
+  let sharing = getDurations(parentFolder.sharedUrl?.expiresOn);
   res.render("index", {
     username: user.username,
     folders: user.folders,
     files: user.files,
-    parentFolder: { id: parentId, name: parentFolder.name },
-    isRoot: false,
+    parentFolder: { id: parentFolderId, name: parentFolder.name },
+    isRoot: true,
     sharing,
   });
 };
@@ -211,9 +161,6 @@ const removeFolder = async (req, res) => {
 const createSharedUrl = async (req, res) => {
   const folderId = parseInt(req.params.id);
   const { hours, days, months, years } = req.body;
-  console.log(
-    `hrs: ${hours}, days: ${days}, months: ${months}, years: ${years}`,
-  );
   const sharingDuration = dayjs
     .extend(duration)
     .duration({ hours, days, months, years });
@@ -233,8 +180,7 @@ const createSharedUrl = async (req, res) => {
 };
 
 export {
-  renderIndex,
-  renderNonRootFolderPage,
+  renderFolderPage,
   createFolder,
   renameFolder,
   removeFolder,
