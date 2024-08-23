@@ -261,7 +261,6 @@ if (deleteFolderButton) {
 
 const isHomePage = () =>
   location.href.substring(location.href.lastIndexOf("/") + 1) === "";
-
 const updateSharing = async () => {
   const hours = document.getElementById("share-hours").value;
   const days = document.getElementById("share-days").value;
@@ -292,7 +291,6 @@ const updateSharing = async () => {
   });
   return response.ok;
 };
-
 const validateSharingForm = () => {
   const form = shareFolderDialog.querySelector("form");
   const id = document.getElementById("shared-url-id")?.value;
@@ -332,4 +330,18 @@ shareFolderDialog.addEventListener("submit", async (e) => {
   } finally {
     shareFolderDialog.close();
   }
+});
+
+const copySharedUrlBtn = document.getElementById("copy-shared-url-button");
+const writeSharedUrlToClipboard = async () => {
+  const url = new URL("shared/" + copySharedUrlBtn.dataset.id, location.origin)
+    .href;
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch {
+    showFailedResponseMessage("Failed to copy link to clipboard");
+  }
+};
+copySharedUrlBtn.addEventListener("click", async () => {
+  await writeSharedUrlToClipboard();
 });
