@@ -108,7 +108,7 @@ const uploadFiles = async () => {
     body: formData,
   });
   if (response.ok) {
-    location.replace(location.origin);
+    location.reload();
     return;
   }
   const duplicateFiles = await response.json();
