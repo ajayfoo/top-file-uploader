@@ -161,6 +161,48 @@ const removeFolder = async (req, res) => {
   }
 };
 
+const recursivelyCUDSharedUrl = async (folderId, expiresOn, op) => {
+  const childFolders = await db.folder.findMany({
+    where: {
+      parentId: folderId,
+    },
+  });
+  for (const folder of childFolders) {
+    await recursivelyCUDSharedUrl(folder.id, expiresOn, op);
+  }
+  switch (op.toLowerCase()) {
+    case "create":
+    case "update": {
+      await db.sharedUrl.upsert({
+        create: {
+          folderId,
+          expiresOn,
+        },
+        update: {
+          expiresOn,
+        },
+        where: {
+          folderId,
+        },
+      });
+      break;
+    }
+    case "delete": {
+      await db.sharedUrl.deleteMany({
+        where: {
+          folderId: {
+            in: [folderId],
+          },
+        },
+      });
+      break;
+    }
+    default: {
+      throw new Error("Invalid operation on SharedUrl");
+    }
+  }
+};
+
 const createSharedUrl = async (req, res) => {
   const folderId =
     parseInt(req.params.id) || req.session.passport.user.rootFolderId;
@@ -175,30 +217,11 @@ const createSharedUrl = async (req, res) => {
       return;
     }
     if (!enableSharing) {
-      await db.sharedUrl.delete({
-        where: {
-          id: parseInt(id),
-        },
-      });
-      res.status(204).end();
-      return;
-    }
-    if (id) {
-      await db.sharedUrl.update({
-        update: {
-          expiresOn,
-        },
-        where: {
-          id: parseInt(id),
-        },
-      });
+      await recursivelyCUDSharedUrl(folderId, null, "delete");
+    } else if (id) {
+      await recursivelyCUDSharedUrl(folderId, expiresOn, "update");
     } else {
-      await db.sharedUrl.create({
-        data: {
-          folderId,
-          expiresOn,
-        },
-      });
+      await recursivelyCUDSharedUrl(folderId, expiresOn, "create");
     }
     res.status(204).end();
   } catch (err) {

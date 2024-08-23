@@ -1,3 +1,7 @@
+const reloadCurrentPage = () => {
+  location.assign(location.href);
+};
+
 const getNewCheckbox = (id, name, group) => {
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
@@ -271,6 +275,7 @@ const updateSharing = async () => {
   if (isHomePage()) {
     url = location.href + "sharedUrl";
   }
+  console.log(url);
   const response = await fetch(url, {
     method: "PUT",
     headers: {
@@ -318,7 +323,7 @@ shareFolderDialog.addEventListener("submit", async (e) => {
   try {
     const done = await updateSharing();
     if (done) {
-      location.reload();
+      reloadCurrentPage();
     } else {
       showFailedResponseMessage("Failed to add shared url");
     }
