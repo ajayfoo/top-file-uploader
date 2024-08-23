@@ -162,7 +162,8 @@ const removeFolder = async (req, res) => {
 };
 
 const createSharedUrl = async (req, res) => {
-  const folderId = parseInt(req.params.id);
+  const folderId =
+    parseInt(req.params.id) || req.session.passport.user.rootFolderId;
   const { id, enableSharing, hours, days, months, years } = req.body;
   const sharingDuration = dayjs
     .extend(duration)

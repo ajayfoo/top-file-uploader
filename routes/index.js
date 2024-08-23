@@ -17,6 +17,7 @@ router.get("/:id", renderFolderPage);
 
 router.post("/", createFolder);
 router.put("/:id/sharedUrl", createSharedUrl);
+router.put("/sharedUrl", createSharedUrl);
 router.patch("/:id", renameFolder);
 router.patch("/", renameFolder);
 router.delete("/:id", removeFolder);

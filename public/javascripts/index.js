@@ -255,6 +255,9 @@ if (deleteFolderButton) {
   });
 }
 
+const isHomePage = () =>
+  location.href.substring(location.href.lastIndexOf("/") + 1) === "";
+
 const updateSharing = async () => {
   const hours = document.getElementById("share-hours").value;
   const days = document.getElementById("share-days").value;
@@ -264,8 +267,10 @@ const updateSharing = async () => {
   const enableSharing = document.getElementById(
     "share-folder-checkbox",
   ).checked;
-  console.log(id);
-  const url = location.href + "/sharedUrl";
+  let url = location.href + "/sharedUrl";
+  if (isHomePage()) {
+    url = location.href + "sharedUrl";
+  }
   const response = await fetch(url, {
     method: "PUT",
     headers: {
@@ -288,7 +293,6 @@ const validateSharingForm = () => {
   const id = document.getElementById("shared-url-id")?.value;
   const sharingCheckbox = document.getElementById("share-folder-checkbox");
   const enableSharing = sharingCheckbox.checked;
-  console.log(id, enableSharing);
   if (!id && !enableSharing) {
     sharingCheckbox.setCustomValidity("Must enable sharing");
     form.reportValidity();
@@ -309,14 +313,12 @@ sharingFolderBtn.addEventListener("click", () => {
 });
 shareFolderDialog.addEventListener("submit", async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
-  console.log("share");
   e.preventDefault();
   if (!validateSharingForm()) return;
   try {
     const done = await updateSharing();
     if (done) {
       location.reload();
-      console.log("created shared url");
     } else {
       showFailedResponseMessage("Failed to add shared url");
     }
