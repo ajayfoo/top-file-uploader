@@ -255,6 +255,53 @@ if (deleteFolderButton) {
   });
 }
 
+const updateSharing = async () => {
+  const hours = document.getElementById("share-hours").value;
+  const days = document.getElementById("share-days").value;
+  const months = document.getElementById("share-months").value;
+  const years = document.getElementById("share-years").value;
+  const id = document.getElementById("shared-url-id")?.value;
+  const enableSharing = document.getElementById(
+    "share-folder-checkbox",
+  ).checked;
+  console.log(id);
+  const url = location.href + "/sharedUrl";
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id,
+      enableSharing,
+      hours,
+      days,
+      months,
+      years,
+    }),
+  });
+  return response.ok;
+};
+
+const validateSharingForm = () => {
+  const form = shareFolderDialog.querySelector("form");
+  const id = document.getElementById("shared-url-id")?.value;
+  const sharingCheckbox = document.getElementById("share-folder-checkbox");
+  const enableSharing = sharingCheckbox.checked;
+  console.log(id, enableSharing);
+  if (!id && !enableSharing) {
+    sharingCheckbox.setCustomValidity("Must enable sharing");
+    form.reportValidity();
+    return false;
+  } else {
+    sharingCheckbox.setCustomValidity("");
+    return true;
+  }
+};
+const sharingCheckbox = document.getElementById("share-folder-checkbox");
+sharingCheckbox.addEventListener("input", () => {
+  validateSharingForm();
+});
 const shareFolderDialog = document.getElementById("share-folder-dialog");
 const sharingFolderBtn = document.getElementById("sharing-folder-button");
 sharingFolderBtn.addEventListener("click", () => {
@@ -264,25 +311,11 @@ shareFolderDialog.addEventListener("submit", async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   console.log("share");
   e.preventDefault();
-  const hours = document.getElementById("share-hours").value;
-  const days = document.getElementById("share-days").value;
-  const months = document.getElementById("share-months").value;
-  const years = document.getElementById("share-years").value;
-  const url = location.href + "/sharedUrl";
+  if (!validateSharingForm()) return;
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        hours,
-        days,
-        months,
-        years,
-      }),
-    });
-    if (response.ok) {
+    const done = await updateSharing();
+    if (done) {
+      location.reload();
       console.log("created shared url");
     } else {
       showFailedResponseMessage("Failed to add shared url");

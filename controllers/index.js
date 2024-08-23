@@ -50,7 +50,10 @@ const renderFolderPage = async (req, res) => {
       },
     }),
   ]);
-  let sharing = getDurations(parentFolder.sharedUrl?.expiresOn);
+  const sharing = getDurations(parentFolder.sharedUrl?.expiresOn);
+  if (sharing) {
+    sharing.id = parentFolder.sharedUrl.id;
+  }
   res.render("index", {
     username: user.username,
     folders: user.folders,
@@ -160,18 +163,42 @@ const removeFolder = async (req, res) => {
 
 const createSharedUrl = async (req, res) => {
   const folderId = parseInt(req.params.id);
-  const { hours, days, months, years } = req.body;
+  const { id, enableSharing, hours, days, months, years } = req.body;
   const sharingDuration = dayjs
     .extend(duration)
     .duration({ hours, days, months, years });
   const expiresOn = dayjs.extend(utc).utc().add(sharingDuration).format();
   try {
-    await db.sharedUrl.create({
-      data: {
-        folderId,
-        expiresOn,
-      },
-    });
+    if (!enableSharing && !id) {
+      res.status(400).end();
+      return;
+    }
+    if (!enableSharing) {
+      await db.sharedUrl.delete({
+        where: {
+          id: parseInt(id),
+        },
+      });
+      res.status(204).end();
+      return;
+    }
+    if (id) {
+      await db.sharedUrl.update({
+        update: {
+          expiresOn,
+        },
+        where: {
+          id: parseInt(id),
+        },
+      });
+    } else {
+      await db.sharedUrl.create({
+        data: {
+          folderId,
+          expiresOn,
+        },
+      });
+    }
     res.status(204).end();
   } catch (err) {
     console.error(err);

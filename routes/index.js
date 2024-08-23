@@ -16,7 +16,7 @@ router.get("/favicon.ico", (req, res) => {
 router.get("/:id", renderFolderPage);
 
 router.post("/", createFolder);
-router.post("/:id/sharedUrl", createSharedUrl);
+router.put("/:id/sharedUrl", createSharedUrl);
 router.patch("/:id", renameFolder);
 router.patch("/", renameFolder);
 router.delete("/:id", removeFolder);
