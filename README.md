@@ -6,3 +6,4 @@
 2. Show file extension as file type in no file type was found or show 'Unknown' as file type.
 3. Add failed message dialog to the needed pages.
 4. Do better redirecting after completing a task
+5. Error page
