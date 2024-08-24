@@ -36,3 +36,11 @@ app.use("/files", filesRouter);
 app.listen(process.env.PORT, () => {
   console.log("Listening on PORT: " + process.env.PORT);
 });
+
+app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+  res.status(500);
+  res.render("error", { error: err });
+});
