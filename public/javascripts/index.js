@@ -87,8 +87,8 @@ const getDuplicateFileCheckBoxes = (form) => {
 };
 
 const uploadFiles = async () => {
-  const parentId = document.getElementById("current-folder-id").value;
   const form = document.querySelector("#add-files-dialog>form");
+  const parentId = form.elements.parentId.value;
   const duplicateFileCheckBoxes = getDuplicateFileCheckBoxes(form);
   const formData = new FormData();
   addIdsOfFilesToReplaceToFormData(formData, duplicateFileCheckBoxes);
@@ -154,8 +154,9 @@ addFolderButton.addEventListener("click", () => {
   addFolderDialog.showModal();
 });
 
-const sendCreateFolderPostRequest = async () => {
-  const parentId = parseInt(document.getElementById("parent-id").value);
+const sendCreateFolderPostRequest = async (container) => {
+  const form = container.querySelector("form");
+  const parentId = form.elements.parentId.value;
   const name = document.getElementById("folder-name").value;
   const url = document.activeElement.getAttribute("formaction");
   const response = await fetch(url, {
@@ -182,7 +183,7 @@ addFolderDialog.addEventListener("submit", async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
   try {
-    const response = await sendCreateFolderPostRequest();
+    const response = await sendCreateFolderPostRequest(addFolderDialog);
     if (response.ok) {
       location.reload();
     } else {

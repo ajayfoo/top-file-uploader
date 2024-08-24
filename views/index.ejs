@@ -14,7 +14,7 @@
     <p class="welcome-banner">
       Welcome, <span class="username"><%=username%></span>!
     </p>
-    <%- include('partials/header',{folderName:parentFolder.name,isRoot,sharing}) %>
+    <%- include('partials/header',{folderName:currentFolder.name,isRoot,sharing}) %>
     <div class="folders-files">
       <div id="add-menu">
         <button id="add-menu-header">Add</button>
@@ -37,7 +37,7 @@
     <dialog id="add-files-dialog">
       <form method="dialog">
         <label for="files-to-upload">Files</label>
-        <input type="hidden" id="current-folder-id" name="parentId" value="<%=parentFolder.id%>">
+        <input type="hidden" name="parentId" value="<%=currentFolder.id%>">
         <input type="file" required multiple name="files" id="files-to-upload" />
         <section class="none" id="resolve-upload-file-conflict">
 
@@ -56,7 +56,7 @@
           <form method="dialog">
             <label for="folder-name">Name</label>
             <input required name="name" id="folder-name" />
-            <input type="hidden" id="parent-id" name="parentId" value="<%=parentFolder.id%>">
+            <input type="hidden" name="parentId" value="<%=currentFolder.id%>">
             <button formmethod="post" formaction="/">
               Submit
             </button>
@@ -73,7 +73,7 @@
         <%if(!isRoot){%>
         <dialog id="delete-folder-dialog">
           <form method="dialog">
-            <p>Are you want to delete folder <strong><%=parentFolder.name%></strong> and all its content(s)?</p>
+            <p>Are you want to delete folder <strong><%=currentFolder.name%></strong> and all its content(s)?</p>
             <button>
               Submit
             </button>

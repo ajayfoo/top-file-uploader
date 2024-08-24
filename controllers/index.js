@@ -21,10 +21,10 @@ const getDurations = (endDate) => {
 const renderFolderPage = async (req, res) => {
   const { id: userId } = req.session.passport.user;
   const isRoot = req.params.id === undefined;
-  const parentFolderId = isRoot
+  const folderId = isRoot
     ? req.session.passport.user.rootFolderId
     : parseInt(req.params.id);
-  const [user, parentFolder] = await Promise.all([
+  const [user, folder] = await Promise.all([
     db.user.findUnique({
       where: {
         id: userId,
@@ -32,12 +32,12 @@ const renderFolderPage = async (req, res) => {
       include: {
         folders: {
           where: {
-            parentId: parentFolderId,
+            parentId: folderId,
           },
         },
         files: {
           where: {
-            parentId: parentFolderId,
+            parentId: folderId,
           },
         },
       },
@@ -45,22 +45,22 @@ const renderFolderPage = async (req, res) => {
     db.folder.findUnique({
       where: {
         ownerId: userId,
-        id: parentFolderId,
+        id: folderId,
       },
       include: {
         sharedUrl: true,
       },
     }),
   ]);
-  const sharing = getDurations(parentFolder.sharedUrl?.expiresOn);
+  const sharing = getDurations(folder.sharedUrl?.expiresOn);
   if (sharing) {
-    sharing.id = parentFolder.sharedUrl.id;
+    sharing.id = folder.sharedUrl.id;
   }
   res.render("index", {
     username: user.username,
     folders: user.folders,
     files: user.files,
-    parentFolder: { id: parentFolderId, name: parentFolder.name },
+    currentFolder: { id: folderId, name: folder.name },
     isRoot,
     sharing,
   });
