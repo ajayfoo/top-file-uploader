@@ -8,3 +8,4 @@
 4. Add progress bars
 5. Fix enter key press event handler for forms
 6. Handle edge cases for sharing
+7. Don't use dom elements to store any state of database
