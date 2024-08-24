@@ -102,11 +102,13 @@ const createFolder = async (req, res) => {
 };
 
 const renameFolder = async (req, res) => {
+  const { id: ownerId } = req.session.passport.user;
   const id = parseInt(req.params.id) || req.session.passport.user.rootFolderId;
   const { newName: name } = req.body;
   try {
     await db.folder.update({
       where: {
+        ownerId,
         id,
       },
       data: {
@@ -120,24 +122,27 @@ const renameFolder = async (req, res) => {
   }
 };
 
-const recursivelyDeleteFolder = async (id) => {
+const recursivelyDeleteFolder = async (id, ownerId) => {
   const [childFolders, childFiles] = await Promise.all([
     db.folder.findMany({
       where: {
+        ownerId,
         parentId: id,
       },
     }),
     db.file.findMany({
       where: {
+        ownerId,
         parentId: id,
       },
     }),
   ]);
   for (const folder of childFolders) {
-    await recursivelyDeleteFolder(folder.id);
+    await recursivelyDeleteFolder(folder.id, ownerId);
   }
   await db.file.deleteMany({
     where: {
+      ownerId,
       id: {
         in: childFiles.map((f) => f.id),
       },
@@ -145,15 +150,17 @@ const recursivelyDeleteFolder = async (id) => {
   });
   await db.folder.delete({
     where: {
+      ownerId,
       id,
     },
   });
 };
 
 const removeFolder = async (req, res) => {
+  const { id: ownerId } = req.session.passport.user;
   const id = parseInt(req.params.id);
   try {
-    await recursivelyDeleteFolder(id);
+    await recursivelyDeleteFolder(id, ownerId);
     res.status(204).end();
   } catch (err) {
     console.error(err);
@@ -161,11 +168,9 @@ const removeFolder = async (req, res) => {
   }
 };
 
-const recursivelyCUDSharedUrl = async (folderId, expiresOn, op) => {
+const recursivelyCUDSharedUrl = async (folderId, expiresOn, op, ownerId) => {
   const childFolders = await db.folder.findMany({
-    where: {
-      parentId: folderId,
-    },
+    where: { ownerId, parentId: folderId },
   });
   for (const folder of childFolders) {
     await recursivelyCUDSharedUrl(folder.id, expiresOn, op);
@@ -183,6 +188,7 @@ const recursivelyCUDSharedUrl = async (folderId, expiresOn, op) => {
         },
         where: {
           folderId,
+          ownerId,
         },
       });
       break;
@@ -190,6 +196,7 @@ const recursivelyCUDSharedUrl = async (folderId, expiresOn, op) => {
     case "delete": {
       await db.sharedUrl.deleteMany({
         where: {
+          ownerId,
           folderId: {
             in: [folderId],
           },
@@ -204,6 +211,7 @@ const recursivelyCUDSharedUrl = async (folderId, expiresOn, op) => {
 };
 
 const createSharedUrl = async (req, res) => {
+  const { id: ownerId } = req.session.passport.user;
   const folderId =
     parseInt(req.params.id) || req.session.passport.user.rootFolderId;
   const { id, enableSharing, hours, days, months, years } = req.body;
@@ -217,11 +225,11 @@ const createSharedUrl = async (req, res) => {
       return;
     }
     if (!enableSharing) {
-      await recursivelyCUDSharedUrl(folderId, null, "delete");
+      await recursivelyCUDSharedUrl(folderId, null, "delete", ownerId);
     } else if (id) {
-      await recursivelyCUDSharedUrl(folderId, expiresOn, "update");
+      await recursivelyCUDSharedUrl(folderId, expiresOn, "update", ownerId);
     } else {
-      await recursivelyCUDSharedUrl(folderId, expiresOn, "create");
+      await recursivelyCUDSharedUrl(folderId, expiresOn, "create", ownerId);
     }
     res.status(204).end();
   } catch (err) {

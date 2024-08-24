@@ -3,9 +3,11 @@ import multer from "multer";
 import { saveFiles } from "../utils.js";
 
 const renderFileInfo = async (req, res, next) => {
+  const { id: ownerId } = req.session.passport.user;
   const id = parseInt(req.params.id);
   const file = await db.file.findUnique({
     where: {
+      ownerId,
       id,
     },
   });
@@ -27,10 +29,12 @@ const getIdsOfFileToReplace = (req) => {
 };
 
 const removeToBeReplacedFiles = async (req, res, next) => {
+  const { id: ownerId } = req.session.passport.user;
   const idsOfFilesToReplace = getIdsOfFileToReplace(req);
   try {
     await db.file.deleteMany({
       where: {
+        ownerId,
         id: {
           in: idsOfFilesToReplace,
         },
@@ -96,11 +100,13 @@ const fileUploadMiddlewares = [
 ];
 
 const removeFile = async (req, res) => {
+  const { id: ownerId } = req.session.passport.user;
   const id = parseInt(req.params.id);
   try {
     await db.file.delete({
       where: {
         id,
+        ownerId,
       },
     });
     res.status(204).end();
@@ -111,12 +117,14 @@ const removeFile = async (req, res) => {
 };
 
 const renameFile = async (req, res) => {
+  const { id: ownerId } = req.session.passport.user;
   const id = parseInt(req.params.id);
   const { name } = req.body;
   try {
     await db.file.update({
       where: {
         id,
+        ownerId,
       },
       data: {
         name,
