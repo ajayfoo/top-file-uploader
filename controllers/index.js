@@ -20,8 +20,10 @@ const getDurations = (endDate) => {
 
 const renderFolderPage = async (req, res) => {
   const { id: userId } = req.session.passport.user;
-  const parentFolderId =
-    parseInt(req.params.id) || req.session.passport.user.rootFolderId;
+  const isRoot = req.params.id === undefined;
+  const parentFolderId = isRoot
+    ? req.session.passport.user.rootFolderId
+    : parseInt(req.params.id);
   const [user, parentFolder] = await Promise.all([
     db.user.findUnique({
       where: {
@@ -59,7 +61,7 @@ const renderFolderPage = async (req, res) => {
     folders: user.folders,
     files: user.files,
     parentFolder: { id: parentFolderId, name: parentFolder.name },
-    isRoot: true,
+    isRoot,
     sharing,
   });
 };
@@ -160,6 +162,7 @@ const removeFolder = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   const id = parseInt(req.params.id);
   try {
+    await recursivelyCUDSharedUrl(id, null, "delete", ownerId);
     await recursivelyDeleteFolder(id, ownerId);
     res.status(204).end();
   } catch (err) {
@@ -196,9 +199,11 @@ const recursivelyCUDSharedUrl = async (folderId, expiresOn, op, ownerId) => {
     case "delete": {
       await db.sharedUrl.deleteMany({
         where: {
-          ownerId,
-          folderId: {
-            in: [folderId],
+          folder: {
+            ownerId,
+            id: {
+              in: [folderId],
+            },
           },
         },
       });

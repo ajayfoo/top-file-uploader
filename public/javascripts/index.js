@@ -234,7 +234,7 @@ const deleteFolderButton = document.getElementById("delete-folder-button");
 const deleteFolderDialog = document.getElementById("delete-folder-dialog");
 if (deleteFolderButton) {
   const sendDeleteFolderRequest = async () => {
-    const response = await fetch(location.origin, {
+    const response = await fetch(location.href, {
       method: "DELETE",
     });
     return response.ok;
@@ -342,6 +342,6 @@ const writeSharedUrlToClipboard = async () => {
     showFailedResponseMessage("Failed to copy link to clipboard");
   }
 };
-copySharedUrlBtn.addEventListener("click", async () => {
+copySharedUrlBtn?.addEventListener("click", async () => {
   await writeSharedUrlToClipboard();
 });
