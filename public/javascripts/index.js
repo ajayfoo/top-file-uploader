@@ -154,19 +154,15 @@ addFolderButton.addEventListener("click", () => {
   addFolderDialog.showModal();
 });
 
-const sendCreateFolderPostRequest = async (container) => {
-  const form = container.querySelector("form");
-  const parentId = form.elements.parentId.value;
+const sendCreateFolderPostRequest = async () => {
   const name = document.getElementById("folder-name").value;
-  const url = document.activeElement.getAttribute("formaction");
-  const response = await fetch(url, {
+  const response = await fetch(location.href, {
     headers: {
       "Content-Type": "application/json",
     },
     method: "POST",
     body: JSON.stringify({
       name,
-      parentId,
     }),
   });
   return response;
@@ -183,7 +179,7 @@ addFolderDialog.addEventListener("submit", async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
   try {
-    const response = await sendCreateFolderPostRequest(addFolderDialog);
+    const response = await sendCreateFolderPostRequest();
     if (response.ok) {
       location.reload();
     } else {

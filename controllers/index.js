@@ -66,18 +66,20 @@ const renderFolderPage = async (req, res) => {
   });
 };
 
-const getDuplicateFolder = async (name, parentId, ownerId) => {
-  const result = await db.$queryRaw`
-    SELECT name FROM "Folder" WHERE "parentId" = ${parseInt(parentId)} AND LOWER(name) = LOWER(${name}) AND "ownerId" = ${parseInt(ownerId)}
-    `;
-  return result[0];
-};
-
 const createFolder = async (req, res) => {
   const { id } = req.session.passport.user;
-  const { name, parentId } = req.body;
+  const parentId = parseInt(
+    req.params.id ?? req.session.passport.user.rootFolderId,
+  );
+  const { name } = req.body;
   try {
-    const duplicateFolder = await getDuplicateFolder(name, parentId, id);
+    const duplicateFolder = await db.folder.findFirst({
+      where: {
+        parentId,
+        name,
+        ownerId: id,
+      },
+    });
     if (duplicateFolder) {
       return res.status(403).json({ duplicateName: duplicateFolder.name });
     }
@@ -86,12 +88,12 @@ const createFolder = async (req, res) => {
         name,
         parent: {
           connect: {
-            id: parseInt(parentId),
+            id: parentId,
           },
         },
         owner: {
           connect: {
-            id: parseInt(id),
+            id: id,
           },
         },
       },
@@ -105,7 +107,7 @@ const createFolder = async (req, res) => {
 
 const renameFolder = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
-  const id = parseInt(req.params.id) || req.session.passport.user.rootFolderId;
+  const id = parseInt(req.params.id ?? req.session.passport.user.rootFolderId);
   const { newName: name } = req.body;
   try {
     await db.folder.update({
@@ -217,8 +219,9 @@ const recursivelyCUDSharedUrl = async (folderId, expiresOn, op, ownerId) => {
 
 const createSharedUrl = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
-  const folderId =
-    parseInt(req.params.id) || req.session.passport.user.rootFolderId;
+  const folderId = parseInt(
+    req.params.id ?? req.session.passport.user.rootFolderId,
+  );
   const { id, enableSharing, hours, days, months, years } = req.body;
   const sharingDuration = dayjs
     .extend(duration)
