@@ -9,4 +9,4 @@
 5. Fix enter key press event handler for forms
 6. Handle edge cases for sharing
 7. Don't use dom elements to store any state of database
-8. Fix folder or file rename leading to error due to duplicates
+8. Fix file rename leading to error due to duplicates

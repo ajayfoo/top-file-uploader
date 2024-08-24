@@ -69,7 +69,11 @@
             <button>Close</button>
           </form>
         </dialog>
-        <%- include('partials/rename_dialog',{dialogId:'rename-current-folder-dialog',inputId:'current-folder-name'}) %>
+        <%- include('partials/rename_dialog',{
+          dialogId:'rename-current-folder-dialog',
+          inputId:'current-folder-name',
+          parentId})
+          %>
         <%if(!isRoot){%>
         <dialog id="delete-folder-dialog">
           <form method="dialog">

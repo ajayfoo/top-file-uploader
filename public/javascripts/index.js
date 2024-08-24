@@ -182,11 +182,13 @@ addFolderDialog.addEventListener("submit", async (e) => {
     const response = await sendCreateFolderPostRequest();
     if (response.ok) {
       location.reload();
-    } else {
+    } else if (response.status === 403) {
       const json = await response.json();
       showFailedResponseMessage(
         "There's already a folder named '" + json.duplicateName + "'",
       );
+    } else {
+      showFailedResponseMessage("Something went wrong");
     }
   } catch (err) {
     console.error(err);
@@ -197,16 +199,18 @@ const renameFolderButton = document.getElementById("rename-folder-button");
 const renameCurrentFolderDialog = document.getElementById(
   "rename-current-folder-dialog",
 );
-const sendRenameFolderPutRequest = async () => {
+const sendRenameFolderPutRequest = async (container) => {
+  const form = container.querySelector("form");
+  const parentId = form.elements.parentId.value;
   const newName = document.getElementById("current-folder-name").value;
   const response = await fetch(location.href, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ newName }),
+    body: JSON.stringify({ parentId, newName }),
   });
-  return response.ok;
+  return response;
 };
 renameFolderButton.addEventListener("click", () => {
   renameCurrentFolderDialog.showModal();
@@ -215,9 +219,16 @@ renameCurrentFolderDialog.addEventListener("submit", async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
   try {
-    const done = await sendRenameFolderPutRequest();
-    if (done) {
+    const response = await sendRenameFolderPutRequest(
+      renameCurrentFolderDialog,
+    );
+    if (response.ok) {
       location.reload();
+    } else if (response.status === 403) {
+      const json = await response.json();
+      showFailedResponseMessage(
+        `There's already a folder named '${json.duplicateName}' inside folder '${json.parentFolderName}'`,
+      );
     } else {
       showFailedResponseMessage("Something went wrong");
     }

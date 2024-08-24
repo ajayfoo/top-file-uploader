@@ -24,7 +24,7 @@ const renderFolderPage = async (req, res) => {
   const folderId = isRoot
     ? req.session.passport.user.rootFolderId
     : parseInt(req.params.id);
-  const [user, folder] = await Promise.all([
+  const [user, folder, parentFolder] = await Promise.all([
     db.user.findUnique({
       where: {
         id: userId,
@@ -51,6 +51,19 @@ const renderFolderPage = async (req, res) => {
         sharedUrl: true,
       },
     }),
+    db.folder.findFirst({
+      where: {
+        ownerId: userId,
+        childrenFolder: {
+          some: {
+            id: folderId,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    }),
   ]);
   const sharing = getDurations(folder.sharedUrl?.expiresOn);
   if (sharing) {
@@ -63,6 +76,7 @@ const renderFolderPage = async (req, res) => {
     currentFolder: { id: folderId, name: folder.name },
     isRoot,
     sharing,
+    parentId: parentFolder ? parentFolder.id : null,
   });
 };
 
@@ -109,7 +123,28 @@ const renameFolder = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   const id = parseInt(req.params.id ?? req.session.passport.user.rootFolderId);
   const { newName: name } = req.body;
+  const parentId = parseInt(req.body.parentId);
   try {
+    const [duplicateFolder, parentFolder] = await Promise.all([
+      db.folder.findFirst({
+        where: {
+          parentId,
+          name,
+          ownerId,
+        },
+      }),
+      db.folder.findUnique({
+        where: {
+          id: parentId,
+        },
+      }),
+    ]);
+    if (duplicateFolder) {
+      return res.status(403).json({
+        duplicateName: duplicateFolder.name,
+        parentFolderName: parentFolder.name,
+      });
+    }
     await db.folder.update({
       where: {
         ownerId,
