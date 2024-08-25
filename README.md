@@ -10,3 +10,4 @@
 6. Handle edge cases for sharing
 7. Don't use dom elements to store any state of database
 8. Fix file rename leading to error due to duplicates
+9. Add minutes to sharing duraiton form
