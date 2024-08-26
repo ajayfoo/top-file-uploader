@@ -36,8 +36,8 @@ model File{
   displaySize String
   owner User @relation(fields: [ownerId],references: [id])
   ownerId Int
-  parent Folder @relation("FolderToFile",fields: [parentId],references: [id])
-  parentId Int
+  folder Folder @relation("FolderToFile",fields: [folderId],references: [id])
+  folderId Int
   uploadedAt DateTime @default(now())
 }
 

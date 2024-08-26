@@ -4,12 +4,12 @@ import { saveFiles } from "../utils.js";
 
 const renderFileInfo = async (req, res, next) => {
   const { id: ownerId } = req.session.passport.user;
-  const parentId = parseInt(req.params.folderId);
+  const folderId = parseInt(req.params.folderId);
   const id = parseInt(req.params.id);
   const file = await db.file.findUnique({
     where: {
       ownerId,
-      parentId,
+      folderId,
       id,
     },
   });
@@ -18,7 +18,7 @@ const renderFileInfo = async (req, res, next) => {
     next(new Error("File not found"));
     return;
   }
-  res.render("file_info", { file, parentId });
+  res.render("file_info", { file, folderId });
 };
 
 const storage = multer.memoryStorage();
@@ -61,12 +61,12 @@ const sendDuplicateFileNamesIfAny = async (req, res, next) => {
   if (req.files.length === 0) return res.status(200).end();
   const idsOfFilesToReplace = getIdsOfFileToReplace(req);
   const { id: ownerId } = req.session.passport.user;
-  const parentId = parseInt(req.params.folderId);
+  const folderId = parseInt(req.params.folderId);
   try {
     const duplicateFiles = await db.file.findMany({
       where: {
         ownerId,
-        parentId,
+        folderId,
         name: {
           in: req.files.map((f) => f.originalname),
         },
@@ -96,8 +96,8 @@ const fileUploadMiddlewares = [
   removeToBeReplacedFiles,
   async (req, res) => {
     const { id: ownerId } = req.session.passport.user;
-    const parentId = parseInt(req.params.folderId);
-    await saveFiles(req.files, ownerId, parentId);
+    const folderId = parseInt(req.params.folderId);
+    await saveFiles(req.files, ownerId, folderId);
     res.status(200).end();
   },
 ];

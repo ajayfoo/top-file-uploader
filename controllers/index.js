@@ -46,7 +46,7 @@ const renderFolderPage = async (req, res) => {
         },
         files: {
           where: {
-            parentId: folderId,
+            folderId,
           },
         },
       },
@@ -183,7 +183,7 @@ const recursivelyDeleteFolder = async (id, ownerId) => {
     db.file.findMany({
       where: {
         ownerId,
-        parentId: id,
+        folderId: id,
       },
     }),
   ]);

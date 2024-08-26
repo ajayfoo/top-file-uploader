@@ -41,14 +41,14 @@ const getFormattedFileInfo = async (file) => {
   return formattedFileInfo;
 };
 
-const saveFiles = async (files, ownerId, parentId) => {
+const saveFiles = async (files, ownerId, folderId) => {
   const formattedFiles = await Promise.all(
     files.map(async (f) => {
       const fileInfo = await getFormattedFileInfo(f);
       const formattedFile = {
         ...fileInfo,
         ownerId,
-        parentId,
+        folderId,
       };
       return formattedFile;
     }),
