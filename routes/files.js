@@ -6,7 +6,7 @@ import {
   renameFile,
 } from "../controllers/files.js";
 
-const router = Router();
+const router = Router({ mergeParams: true });
 router.post("/", fileUploadMiddlewares);
 router.get("/:id", renderFileInfo);
 router.delete("/:id", removeFile);

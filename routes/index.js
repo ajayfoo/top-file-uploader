@@ -7,6 +7,7 @@ import {
   renderFolderPage,
   getRootFolderId,
 } from "../controllers/index.js";
+import filesRouter from "./files.js";
 
 const router = Router();
 
@@ -24,5 +25,7 @@ router.put("/sharedUrls", createSharedUrl);
 
 router.patch("/folders/:id", renameFolder);
 router.delete("/folders/:id", removeFolder);
+
+router.use("/folders/:folderId/files", filesRouter);
 
 export default router;

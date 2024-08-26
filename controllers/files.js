@@ -4,18 +4,21 @@ import { saveFiles } from "../utils.js";
 
 const renderFileInfo = async (req, res, next) => {
   const { id: ownerId } = req.session.passport.user;
+  const parentId = parseInt(req.params.folderId);
   const id = parseInt(req.params.id);
   const file = await db.file.findUnique({
     where: {
       ownerId,
+      parentId,
       id,
     },
   });
+  console.log(file);
   if (!file) {
     next(new Error("File not found"));
     return;
   }
-  res.render("file_info", { file });
+  res.render("file_info", { file, parentId });
 };
 
 const storage = multer.memoryStorage();
@@ -58,7 +61,7 @@ const sendDuplicateFileNamesIfAny = async (req, res, next) => {
   if (req.files.length === 0) return res.status(200).end();
   const idsOfFilesToReplace = getIdsOfFileToReplace(req);
   const { id: ownerId } = req.session.passport.user;
-  const parentId = parseInt(req.body.parentId);
+  const parentId = parseInt(req.params.folderId);
   try {
     const duplicateFiles = await db.file.findMany({
       where: {
@@ -93,7 +96,7 @@ const fileUploadMiddlewares = [
   removeToBeReplacedFiles,
   async (req, res) => {
     const { id: ownerId } = req.session.passport.user;
-    const parentId = parseInt(req.body.parentId);
+    const parentId = parseInt(req.params.folderId);
     await saveFiles(req.files, ownerId, parentId);
     res.status(200).end();
   },

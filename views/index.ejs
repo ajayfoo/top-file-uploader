@@ -28,7 +28,7 @@
         <%- include('partials/folder',{folder}) %>
         <%}%>
         <%for(const file of files){%>
-        <%- include('partials/file',{file}) %>
+        <%- include('partials/file',{file,folderId:currentFolder.id}) %>
         <%}%>
       </div>
     </div>
