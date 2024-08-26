@@ -129,11 +129,33 @@ const removeFile = async (req, res) => {
   }
 };
 
+const findFileInFolder = async (name, folderId, ownerId) => {
+  return await db.file.findFirst({
+    where: {
+      name,
+      ownerId,
+      folderId,
+    },
+    include: {
+      folder: {
+        select: { name: true },
+      },
+    },
+  });
+};
+
 const renameFile = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
+  const folderId = parseInt(req.params.folderId);
   const id = parseInt(req.params.id);
   const { name } = req.body;
+  const file = await findFileInFolder(name, folderId, ownerId);
   try {
+    if (file) {
+      return res.status(403).json({
+        folderName: file.folder.name,
+      });
+    }
     await db.file.update({
       where: {
         id,

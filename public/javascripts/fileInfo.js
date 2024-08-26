@@ -54,7 +54,14 @@ renameFileDialog.addEventListener("submit", async (e) => {
     if (response.ok) {
       location.reload();
     } else {
-      showFailedMessage(failedMessage);
+      const json = await response?.json();
+      if (json) {
+        showFailedMessage(
+          `There is already a file named ${name} in folder ${json.folderName}`,
+        );
+      } else {
+        showFailedMessage(failedMessage);
+      }
     }
   } catch {
     showFailedMessage(failedMessage);
