@@ -117,7 +117,9 @@ const uploadFiles = async () => {
     return;
   }
   formData.append("parentId", parentId);
-  const url = document.activeElement.getAttribute("formaction");
+  const urlPart1 =
+    location.pathname === "/" ? "/folders/" + rootFolderId : location.pathname;
+  const url = urlPart1 + "/files";
   const response = await fetch(url, {
     method: "POST",
     body: formData,
