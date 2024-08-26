@@ -99,7 +99,6 @@ const getDuplicateFileCheckBoxes = (form) => {
 
 const uploadFiles = async () => {
   const form = document.querySelector("#add-files-dialog>form");
-  const parentId = form.elements.parentId.value;
   const duplicateFileCheckBoxes = getDuplicateFileCheckBoxes(form);
   const formData = new FormData();
   addIdsOfFilesToReplaceToFormData(formData, duplicateFileCheckBoxes);
@@ -116,7 +115,6 @@ const uploadFiles = async () => {
     form.reportValidity();
     return;
   }
-  formData.append("parentId", parentId);
   const urlPart1 =
     location.pathname === "/" ? "/folders/" + rootFolderId : location.pathname;
   const url = urlPart1 + "/files";

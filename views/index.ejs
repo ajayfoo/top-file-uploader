@@ -37,7 +37,6 @@
     <dialog id="add-files-dialog">
       <form method="dialog">
         <label for="files-to-upload">Files</label>
-        <input type="hidden" name="parentId" value="<%=currentFolder.id%>">
         <input type="file" required multiple name="files" id="files-to-upload" />
         <section class="none" id="resolve-upload-file-conflict">
 
@@ -57,11 +56,11 @@
             <label for="folder-name">Name</label>
             <input required name="name" id="folder-name" />
             <input type="hidden" name="parentId" value="<%=currentFolder.id%>">
-            <button formmethod="post" formaction="/folders">
-              Submit
-            </button>
-            <button formnovalidate>Close</button>
-          </form>
+        <button formmethod="post" formaction="/folders">
+          Submit
+        </button>
+        <button formnovalidate>Close</button>
+        </form>
         </dialog>
         <dialog id="create-folder-post-reponse">
           <form method="dialog">
