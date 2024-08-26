@@ -156,7 +156,9 @@ addFolderButton.addEventListener("click", () => {
 
 const sendCreateFolderPostRequest = async () => {
   const name = document.getElementById("folder-name").value;
-  const response = await fetch(location.href, {
+  const url = location.pathname === "/" ? "/folders" : location.pathname;
+
+  const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -267,8 +269,6 @@ if (deleteFolderButton) {
   });
 }
 
-const isHomePage = () =>
-  location.href.substring(location.href.lastIndexOf("/") + 1) === "";
 const updateSharing = async () => {
   const hours = document.getElementById("share-hours").value;
   const days = document.getElementById("share-days").value;
@@ -278,12 +278,7 @@ const updateSharing = async () => {
   const enableSharing = document.getElementById(
     "share-folder-checkbox",
   ).checked;
-  let url = location.href + "/sharedUrl";
-  if (isHomePage()) {
-    url = location.href + "sharedUrl";
-  }
-  console.log(url);
-  const response = await fetch(url, {
+  const response = await fetch("/sharedUrls", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

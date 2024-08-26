@@ -57,7 +57,7 @@
             <label for="folder-name">Name</label>
             <input required name="name" id="folder-name" />
             <input type="hidden" name="parentId" value="<%=currentFolder.id%>">
-            <button formmethod="post">
+            <button formmethod="post" formaction="/folders">
               Submit
             </button>
             <button formnovalidate>Close</button>

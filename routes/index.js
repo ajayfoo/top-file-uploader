@@ -13,12 +13,13 @@ router.get("/", renderFolderPage);
 router.get("/favicon.ico", (req, res) => {
   return res.status(200).end();
 });
-router.get("/:id", renderFolderPage);
+router.get("/folders/:id", renderFolderPage);
 
-router.post("/:id", createFolder);
-router.post("/", createFolder);
-router.put("/:id/sharedUrl", createSharedUrl);
-router.put("/sharedUrl", createSharedUrl);
+router.post("/folders/:id", createFolder);
+router.post("/folders", createFolder);
+
+router.put("/sharedUrls", createSharedUrl);
+
 router.patch("/:id", renameFolder);
 router.patch("/", renameFolder);
 router.delete("/:id", removeFolder);

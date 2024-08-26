@@ -228,7 +228,6 @@ const recursivelyCUDSharedUrl = async (folderId, expiresOn, op, ownerId) => {
         },
         where: {
           folderId,
-          ownerId,
         },
       });
       break;
