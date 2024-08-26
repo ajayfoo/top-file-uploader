@@ -61,7 +61,12 @@ const sendDuplicateFileNamesIfAny = async (req, res, next) => {
   if (req.files.length === 0) return res.status(200).end();
   const idsOfFilesToReplace = getIdsOfFileToReplace(req);
   const { id: ownerId } = req.session.passport.user;
-  const folderId = parseInt(req.params.folderId);
+  let folderId = null;
+  if (req.params.folderId === "root") {
+    folderId = req.session.passport.user.rootFolderId;
+  } else {
+    folderId = parseInt(req.params.folderId);
+  }
   try {
     const duplicateFiles = await db.file.findMany({
       where: {
@@ -96,7 +101,12 @@ const fileUploadMiddlewares = [
   removeToBeReplacedFiles,
   async (req, res) => {
     const { id: ownerId } = req.session.passport.user;
-    const folderId = parseInt(req.params.folderId);
+    let folderId = null;
+    if (req.params.folderId === "root") {
+      folderId = req.session.passport.user.rootFolderId;
+    } else {
+      folderId = parseInt(req.params.folderId);
+    }
     await saveFiles(req.files, ownerId, folderId);
     res.status(200).end();
   },

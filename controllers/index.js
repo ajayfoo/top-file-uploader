@@ -91,9 +91,12 @@ const renderFolderPage = async (req, res) => {
 
 const createFolder = async (req, res) => {
   const { id } = req.session.passport.user;
-  const parentId = parseInt(
-    req.params.id ?? req.session.passport.user.rootFolderId,
-  );
+  let parentId = null;
+  if (req.params.id === "root") {
+    parentId = req.session.passport.user.rootFolderId;
+  } else {
+    parentId = parseInt(req.params.id);
+  }
   const { name } = req.body;
   try {
     const duplicateFolder = await db.folder.findFirst({
@@ -130,7 +133,12 @@ const createFolder = async (req, res) => {
 
 const renameFolder = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
-  const id = parseInt(req.params.id);
+  let id = null;
+  if (req.params.id === "root") {
+    id = req.session.passport.user.rootFolderId;
+  } else {
+    id = parseInt(req.params.id);
+  }
   const { newName: name } = req.body;
   const parentId = parseInt(req.body.parentId);
   try {
