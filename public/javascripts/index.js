@@ -1,3 +1,14 @@
+let rootFolderId = null;
+
+const initRootFolderId = async () => {
+  const response = await fetch("/rootFolderId");
+  const json = await response.json();
+  rootFolderId = json.id;
+  console.log(rootFolderId);
+};
+
+initRootFolderId();
+
 const reloadCurrentPage = () => {
   location.assign(location.href);
 };
@@ -156,7 +167,8 @@ addFolderButton.addEventListener("click", () => {
 
 const sendCreateFolderPostRequest = async () => {
   const name = document.getElementById("folder-name").value;
-  const url = location.pathname === "/" ? "/folders" : location.pathname;
+  const url =
+    location.pathname === "/" ? "/folders/" + rootFolderId : location.pathname;
 
   const response = await fetch(url, {
     headers: {
@@ -205,7 +217,9 @@ const sendRenameFolderPutRequest = async (container) => {
   const form = container.querySelector("form");
   const parentId = form.elements.parentId.value;
   const newName = document.getElementById("current-folder-name").value;
-  const response = await fetch(location.href, {
+  const url =
+    location.pathname === "/" ? "/folders/" + rootFolderId : location.pathname;
+  const response = await fetch(url, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

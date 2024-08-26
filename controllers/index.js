@@ -3,6 +3,15 @@ import utc from "dayjs/plugin/utc.js";
 import duration from "dayjs/plugin/duration.js";
 import db from "../db.js";
 
+const getRootFolderId = async (req, res) => {
+  const { rootFolderId: id } = req.session.passport.user;
+  if (id) {
+    res.json({ id });
+  } else {
+    res.status(404).end();
+  }
+};
+
 const getDurations = (endDate) => {
   if (!endDate) return null;
   dayjs.extend(utc);
@@ -121,29 +130,31 @@ const createFolder = async (req, res) => {
 
 const renameFolder = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
-  const id = parseInt(req.params.id ?? req.session.passport.user.rootFolderId);
+  const id = parseInt(req.params.id);
   const { newName: name } = req.body;
   const parentId = parseInt(req.body.parentId);
   try {
-    const [duplicateFolder, parentFolder] = await Promise.all([
-      db.folder.findFirst({
-        where: {
-          parentId,
-          name,
-          ownerId,
-        },
-      }),
-      db.folder.findUnique({
-        where: {
-          id: parentId,
-        },
-      }),
-    ]);
-    if (duplicateFolder) {
-      return res.status(403).json({
-        duplicateName: duplicateFolder.name,
-        parentFolderName: parentFolder.name,
-      });
+    if (id !== req.session.passport.user.rootFolderId) {
+      const [duplicateFolder, parentFolder] = await Promise.all([
+        db.folder.findFirst({
+          where: {
+            parentId,
+            name,
+            ownerId,
+          },
+        }),
+        db.folder.findUnique({
+          where: {
+            id: parentId,
+          },
+        }),
+      ]);
+      if (duplicateFolder) {
+        return res.status(403).json({
+          duplicateName: duplicateFolder.name,
+          parentFolderName: parentFolder.name,
+        });
+      }
     }
     await db.folder.update({
       where: {
@@ -281,6 +292,7 @@ const createSharedUrl = async (req, res) => {
 };
 
 export {
+  getRootFolderId,
   renderFolderPage,
   createFolder,
   renameFolder,

@@ -5,9 +5,12 @@ import {
   removeFolder,
   createSharedUrl,
   renderFolderPage,
+  getRootFolderId,
 } from "../controllers/index.js";
 
 const router = Router();
+
+router.get("/rootFolderId", getRootFolderId);
 
 router.get("/", renderFolderPage);
 router.get("/favicon.ico", (req, res) => {
@@ -16,12 +19,10 @@ router.get("/favicon.ico", (req, res) => {
 router.get("/folders/:id", renderFolderPage);
 
 router.post("/folders/:id", createFolder);
-router.post("/folders", createFolder);
 
 router.put("/sharedUrls", createSharedUrl);
 
-router.patch("/:id", renameFolder);
-router.patch("/", renameFolder);
-router.delete("/:id", removeFolder);
+router.patch("/folders/:id", renameFolder);
+router.delete("/folders/:id", removeFolder);
 
 export default router;
