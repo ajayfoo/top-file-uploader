@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shared File Info</title>
+</head>
+
+<body>
+  <h1><%=file.name%></h1>
+  <ol>
+    <li>Type: <%=file.mimeType ?? 'Unknown'%></li>
+    <li>Size: <%=file.displaySize%></li>
+    <li>Uploaded At: <%=file.uploadedAt%></li>
+  </ol>
+</body>
+
+</html>

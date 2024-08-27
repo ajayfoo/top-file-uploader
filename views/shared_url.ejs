@@ -13,7 +13,9 @@
     <h2>Folders</h2>
     <div class="folders">
       <%for(const folder of folders){%>
-      <div class="folder"><%=folder.name%></div>
+      <div class="folder">
+        <a href="<%=`/shared/${folder.sharedUrl.id}`%>"><%=folder.name%></a>
+      </div>
       <%}%>
         </div>
     </section>
@@ -21,7 +23,9 @@
     <h2>Files</h2>
     <div class="files">
       <%for(const file of files){%>
-      <div class="file"><%=file.name%></div>
+      <div class="file">
+        <a href="<%=`/shared/${id}/files/${file.id}`%>"><%=file.name%></a>
+      </div>
       <%}%>
         </div>
     </section>
