@@ -7,4 +7,5 @@
 3. Do better redirecting after completing a task
 4. Add progress bars
 5. Fix enter key press event handler for forms
-6. Handle edge cases for sharing
+6. Handle edge cases for sharing(creating folders/files inside a shared folder)
+7. Fix duplicate files not replacing on upload
