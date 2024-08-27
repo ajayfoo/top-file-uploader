@@ -17,8 +17,8 @@ const durationSubfieldsObject = {
 };
 const durationSubfields = Object.values(durationSubfieldsObject);
 const sharingCheckbox = document.getElementById("share-folder-checkbox");
-const shareFolderDialog = document.getElementById("share-folder-dialog");
-const sharingForm = shareFolderDialog.querySelector("form");
+const sharingFolderDialog = document.getElementById("share-folder-dialog");
+const sharingForm = sharingFolderDialog.querySelector("form");
 const sharingFolderBtn = document.getElementById("sharing-folder-button");
 const copySharedUrlBtn = document.getElementById("copy-shared-url-button");
 
@@ -34,7 +34,7 @@ export {
   durationSubfieldsObject,
   durationSubfields,
   sharingCheckbox,
-  shareFolderDialog,
+  sharingFolderDialog,
   sharingForm,
   sharingFolderBtn,
   copySharedUrlBtn,

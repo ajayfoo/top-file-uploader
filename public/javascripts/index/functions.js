@@ -1,8 +1,8 @@
 import {
   durationSubfields,
   durationSubfieldsObject,
+  sharingCheckbox,
   sharingForm,
-  copySharedUrlBtn,
 } from "./globals.js";
 
 const getNewCheckbox = (id, name, group) => {
@@ -242,6 +242,10 @@ const getSumOfAllDurationSubfields = () =>
 
 const validateSharingDurationSubfields = () => {
   const minutesSubfield = durationSubfieldsObject.minutes;
+  if (!sharingCheckbox.checked) {
+    minutesSubfield.setCustomValidity("");
+    return true;
+  }
   const sum = getSumOfAllDurationSubfields();
   if (sum <= 0) {
     minutesSubfield.setCustomValidity("Duration must be at least one minute");
@@ -267,16 +271,6 @@ const validateSharingCheckbox = () => {
   }
 };
 
-const writeSharedUrlToClipboard = async () => {
-  const url = new URL("shared/" + copySharedUrlBtn.dataset.id, location.origin)
-    .href;
-  try {
-    await navigator.clipboard.writeText(url);
-  } catch {
-    showFailedResponseMessage("Failed to copy link to clipboard");
-  }
-};
-
 export {
   setupAddMenu,
   setupDeleteFolderButton,
@@ -287,5 +281,4 @@ export {
   validateSharingDurationSubfields,
   validateSharingCheckbox,
   updateSharing,
-  writeSharedUrlToClipboard,
 };
