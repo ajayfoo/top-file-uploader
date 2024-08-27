@@ -1,6 +1,9 @@
-const reloadCurrentPage = () => {
-  location.assign(location.href);
-};
+import {
+  durationSubfields,
+  durationSubfieldsObject,
+  sharingForm,
+  copySharedUrlBtn,
+} from "./globals.js";
 
 const getNewCheckbox = (id, name, group) => {
   const checkbox = document.createElement("input");
@@ -119,17 +122,6 @@ const uploadFiles = async () => {
   showDuplicateFilesContainer(duplicateFiles);
 };
 
-const addFilesButton = document.getElementById("add-files-button");
-const addFileDialog = document.getElementById("add-files-dialog");
-addFilesButton.addEventListener("click", () => {
-  addFileDialog.showModal();
-});
-addFileDialog.addEventListener("submit", async (e) => {
-  if (document.activeElement.hasAttribute("formnovalidate")) return;
-  e.preventDefault();
-  await uploadFiles();
-});
-
 const setupAddMenu = () => {
   const menuHeader = document.getElementById("add-menu-header");
   const itemsEle = document.querySelector("#add-menu>.items");
@@ -145,14 +137,6 @@ const setupAddMenu = () => {
     open = !open;
   });
 };
-
-setupAddMenu();
-
-const addFolderButton = document.getElementById("add-folder-button");
-const addFolderDialog = document.getElementById("add-folder-dialog");
-addFolderButton.addEventListener("click", () => {
-  addFolderDialog.showModal();
-});
 
 const sendCreateFolderPostRequest = async () => {
   const name = document.getElementById("folder-name").value;
@@ -177,30 +161,6 @@ const showFailedResponseMessage = (msg) => {
   dialog.showModal();
 };
 
-addFolderDialog.addEventListener("submit", async (e) => {
-  if (document.activeElement.hasAttribute("formnovalidate")) return;
-  e.preventDefault();
-  try {
-    const response = await sendCreateFolderPostRequest();
-    if (response.ok) {
-      location.reload();
-    } else if (response.status === 403) {
-      const json = await response.json();
-      showFailedResponseMessage(
-        "There's already a folder named '" + json.duplicateName + "'",
-      );
-    } else {
-      showFailedResponseMessage("Something went wrong");
-    }
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-const renameFolderButton = document.getElementById("rename-folder-button");
-const renameCurrentFolderDialog = document.getElementById(
-  "rename-current-folder-dialog",
-);
 const sendRenameFolderPutRequest = async (container) => {
   const form = container.querySelector("form");
   const parentId = form.elements.parentId.value;
@@ -215,60 +175,37 @@ const sendRenameFolderPutRequest = async (container) => {
   });
   return response;
 };
-renameFolderButton.addEventListener("click", () => {
-  renameCurrentFolderDialog.showModal();
-});
-renameCurrentFolderDialog.addEventListener("submit", async (e) => {
-  if (document.activeElement.hasAttribute("formnovalidate")) return;
-  e.preventDefault();
-  try {
-    const response = await sendRenameFolderPutRequest(
-      renameCurrentFolderDialog,
-    );
-    if (response.ok) {
-      location.reload();
-    } else if (response.status === 403) {
-      const json = await response.json();
-      showFailedResponseMessage(
-        `There's already a folder named '${json.duplicateName}' inside folder '${json.parentFolderName}'`,
-      );
-    } else {
-      showFailedResponseMessage("Something went wrong");
-    }
-  } catch (err) {
-    console.error(err);
-    showFailedResponseMessage("Something went wrong");
-  }
-});
 
-const deleteFolderButton = document.getElementById("delete-folder-button");
-const deleteFolderDialog = document.getElementById("delete-folder-dialog");
-if (deleteFolderButton) {
-  const sendDeleteFolderRequest = async () => {
-    const response = await fetch(location.href, {
-      method: "DELETE",
+const setupDeleteFolderButton = () => {
+  const deleteFolderButton = document.getElementById("delete-folder-button");
+  const deleteFolderDialog = document.getElementById("delete-folder-dialog");
+  if (deleteFolderButton) {
+    const sendDeleteFolderRequest = async () => {
+      const response = await fetch(location.href, {
+        method: "DELETE",
+      });
+      return response.ok;
+    };
+    deleteFolderButton.addEventListener("click", () => {
+      deleteFolderDialog.showModal();
     });
-    return response.ok;
-  };
-  deleteFolderButton.addEventListener("click", () => {
-    deleteFolderDialog.showModal();
-  });
-  deleteFolderDialog.addEventListener("submit", async (e) => {
-    if (document.activeElement.hasAttribute("formnovalidate")) return;
-    e.preventDefault();
-    try {
-      const done = await sendDeleteFolderRequest();
-      if (done) {
-        location.replace(location.origin);
-      } else {
+    deleteFolderDialog.addEventListener("submit", async (e) => {
+      if (document.activeElement.hasAttribute("formnovalidate")) return;
+      e.preventDefault();
+      try {
+        const done = await sendDeleteFolderRequest();
+        if (done) {
+          location.replace(location.origin);
+        } else {
+          showFailedResponseMessage("Something went wrong");
+        }
+      } catch (err) {
+        console.error(err);
         showFailedResponseMessage("Something went wrong");
       }
-    } catch (err) {
-      console.error(err);
-      showFailedResponseMessage("Something went wrong");
-    }
-  });
-}
+    });
+  }
+};
 
 const updateSharing = async () => {
   const minutes = document.getElementById("share-minutes").value;
@@ -298,14 +235,6 @@ const updateSharing = async () => {
   return response.ok;
 };
 
-const durationSubfieldsObject = {
-  minutes: document.getElementById("share-minutes"),
-  hours: document.getElementById("share-hours"),
-  days: document.getElementById("share-days"),
-  months: document.getElementById("share-months"),
-  years: document.getElementById("share-years"),
-};
-const durationSubfields = Object.values(durationSubfieldsObject);
 const getSumOfAllDurationSubfields = () =>
   durationSubfields
     .map((e) => parseInt(e.value))
@@ -316,8 +245,7 @@ const validateSharingDurationSubfields = () => {
   const sum = getSumOfAllDurationSubfields();
   if (sum <= 0) {
     minutesSubfield.setCustomValidity("Duration must be at least one minute");
-    const form = shareFolderDialog.querySelector("form");
-    form.reportValidity();
+    sharingForm.reportValidity();
     return false;
   } else {
     minutesSubfield.setCustomValidity("");
@@ -326,13 +254,12 @@ const validateSharingDurationSubfields = () => {
 };
 
 const validateSharingCheckbox = () => {
-  const form = shareFolderDialog.querySelector("form");
   const id = document.getElementById("shared-url-id")?.value;
   const sharingCheckbox = document.getElementById("share-folder-checkbox");
   const enableSharing = sharingCheckbox.checked;
   if (!id && !enableSharing) {
     sharingCheckbox.setCustomValidity("Must enable sharing");
-    form.reportValidity();
+    sharingForm.reportValidity();
     return false;
   } else {
     sharingCheckbox.setCustomValidity("");
@@ -340,37 +267,6 @@ const validateSharingCheckbox = () => {
   }
 };
 
-durationSubfields.forEach((d) => {
-  d.addEventListener("input", validateSharingDurationSubfields);
-});
-
-const sharingCheckbox = document.getElementById("share-folder-checkbox");
-sharingCheckbox.addEventListener("input", validateSharingCheckbox);
-const shareFolderDialog = document.getElementById("share-folder-dialog");
-const sharingFolderBtn = document.getElementById("sharing-folder-button");
-sharingFolderBtn.addEventListener("click", () => {
-  shareFolderDialog.showModal();
-});
-shareFolderDialog.addEventListener("submit", async (e) => {
-  if (document.activeElement.hasAttribute("formnovalidate")) return;
-  e.preventDefault();
-  validateSharingDurationSubfields();
-  if (!validateSharingCheckbox() && !validateSharingDurationSubfields()) return;
-  try {
-    const done = await updateSharing();
-    if (done) {
-      reloadCurrentPage();
-    } else {
-      showFailedResponseMessage("Failed to add shared url");
-    }
-  } catch {
-    showFailedResponseMessage("Failed to add shared url");
-  } finally {
-    shareFolderDialog.close();
-  }
-});
-
-const copySharedUrlBtn = document.getElementById("copy-shared-url-button");
 const writeSharedUrlToClipboard = async () => {
   const url = new URL("shared/" + copySharedUrlBtn.dataset.id, location.origin)
     .href;
@@ -380,6 +276,16 @@ const writeSharedUrlToClipboard = async () => {
     showFailedResponseMessage("Failed to copy link to clipboard");
   }
 };
-copySharedUrlBtn?.addEventListener("click", async () => {
-  await writeSharedUrlToClipboard();
-});
+
+export {
+  setupAddMenu,
+  setupDeleteFolderButton,
+  uploadFiles,
+  sendCreateFolderPostRequest,
+  showFailedResponseMessage,
+  sendRenameFolderPutRequest,
+  validateSharingDurationSubfields,
+  validateSharingCheckbox,
+  updateSharing,
+  writeSharedUrlToClipboard,
+};
