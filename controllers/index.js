@@ -20,6 +20,7 @@ const getDurations = (endDate) => {
   const sharingTill = dayjs(endDate).utc();
   const timeLeft = dayjs.duration(sharingTill.diff(today));
   return {
+    minutes: timeLeft.minutes(),
     hours: timeLeft.hours(),
     days: timeLeft.days(),
     months: timeLeft.months(),
@@ -275,10 +276,10 @@ const createSharedUrl = async (req, res) => {
   const folderId = parseInt(
     req.params.id ?? req.session.passport.user.rootFolderId,
   );
-  const { id, enableSharing, hours, days, months, years } = req.body;
+  const { id, enableSharing, minutes, hours, days, months, years } = req.body;
   const sharingDuration = dayjs
     .extend(duration)
-    .duration({ hours, days, months, years });
+    .duration({ minutes, hours, days, months, years });
   const expiresOn = dayjs.extend(utc).utc().add(sharingDuration).format();
   try {
     if (!enableSharing && !id) {

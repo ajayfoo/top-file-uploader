@@ -271,6 +271,7 @@ if (deleteFolderButton) {
 }
 
 const updateSharing = async () => {
+  const minutes = document.getElementById("share-minutes").value;
   const hours = document.getElementById("share-hours").value;
   const days = document.getElementById("share-days").value;
   const months = document.getElementById("share-months").value;
@@ -287,6 +288,7 @@ const updateSharing = async () => {
     body: JSON.stringify({
       id,
       enableSharing,
+      minutes,
       hours,
       days,
       months,

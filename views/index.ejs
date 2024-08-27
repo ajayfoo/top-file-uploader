@@ -99,7 +99,8 @@
         <input type="hidden" name="id" id="shared-url-id" value="<%=sharing.id%>">
         <%}%>
         <section class="field">
-          <%- include('partials/duration_subfield',{unit:'hours',displayName:'Hr',sharing}) %>
+        <%- include('partials/duration_subfield',{unit:'minutes',displayName:'Min',sharing}) %>
+        <%- include('partials/duration_subfield',{unit:'hours',displayName:'Hr',sharing}) %>
         <%- include('partials/duration_subfield',{unit:'days',displayName:'Day',sharing}) %>
         <%- include('partials/duration_subfield',{unit:'months',displayName:'Mth',sharing}) %>
         <%- include('partials/duration_subfield',{unit:'years',displayName:'Yrs',sharing}) %>
