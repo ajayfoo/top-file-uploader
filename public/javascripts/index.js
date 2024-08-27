@@ -297,7 +297,35 @@ const updateSharing = async () => {
   });
   return response.ok;
 };
-const validateSharingForm = () => {
+
+const durationSubfieldsObject = {
+  minutes: document.getElementById("share-minutes"),
+  hours: document.getElementById("share-hours"),
+  days: document.getElementById("share-days"),
+  months: document.getElementById("share-months"),
+  years: document.getElementById("share-years"),
+};
+const durationSubfields = Object.values(durationSubfieldsObject);
+const getSumOfAllDurationSubfields = () =>
+  durationSubfields
+    .map((e) => parseInt(e.value))
+    .reduce((acc, curr) => acc + curr, 0);
+
+const validateSharingDurationSubfields = () => {
+  const minutesSubfield = durationSubfieldsObject.minutes;
+  const sum = getSumOfAllDurationSubfields();
+  if (sum <= 0) {
+    minutesSubfield.setCustomValidity("Duration must be at least one minute");
+    const form = shareFolderDialog.querySelector("form");
+    form.reportValidity();
+    return false;
+  } else {
+    minutesSubfield.setCustomValidity("");
+    return true;
+  }
+};
+
+const validateSharingCheckbox = () => {
   const form = shareFolderDialog.querySelector("form");
   const id = document.getElementById("shared-url-id")?.value;
   const sharingCheckbox = document.getElementById("share-folder-checkbox");
@@ -311,10 +339,13 @@ const validateSharingForm = () => {
     return true;
   }
 };
-const sharingCheckbox = document.getElementById("share-folder-checkbox");
-sharingCheckbox.addEventListener("input", () => {
-  validateSharingForm();
+
+durationSubfields.forEach((d) => {
+  d.addEventListener("input", validateSharingDurationSubfields);
 });
+
+const sharingCheckbox = document.getElementById("share-folder-checkbox");
+sharingCheckbox.addEventListener("input", validateSharingCheckbox);
 const shareFolderDialog = document.getElementById("share-folder-dialog");
 const sharingFolderBtn = document.getElementById("sharing-folder-button");
 sharingFolderBtn.addEventListener("click", () => {
@@ -323,7 +354,8 @@ sharingFolderBtn.addEventListener("click", () => {
 shareFolderDialog.addEventListener("submit", async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
-  if (!validateSharingForm()) return;
+  validateSharingDurationSubfields();
+  if (!validateSharingCheckbox() && !validateSharingDurationSubfields()) return;
   try {
     const done = await updateSharing();
     if (done) {
