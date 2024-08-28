@@ -7,4 +7,4 @@
 3. Do better redirecting after completing a task
 4. Add progress bars
 5. Fix enter key press event handler for forms
-6. Handle edge cases for sharing(creating files inside a shared folder)
+6. Add feat to share an individual file
