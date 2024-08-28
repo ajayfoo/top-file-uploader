@@ -26,9 +26,9 @@ const upload = multer({ storage });
 const getIdsOfFileToReplace = (req) => {
   const idsOfFilesToReplace = req.body.idsOfFilesToReplace ?? [];
   if (!Array.isArray(idsOfFilesToReplace)) {
-    return [idsOfFilesToReplace].map(parseInt);
+    return [idsOfFilesToReplace].map((e) => parseInt(e));
   }
-  return idsOfFilesToReplace.map(parseInt);
+  return idsOfFilesToReplace.map((e) => parseInt(e));
 };
 
 const removeToBeReplacedFiles = async (req, res, next) => {
