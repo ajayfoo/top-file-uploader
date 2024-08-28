@@ -14,11 +14,15 @@
     <div class="folders">
       <%for(const folder of folders){%>
       <div class="folder">
+        <%if(folder.sharedUrl){%>
         <a href="<%=`/shared/${folder.sharedUrl.id}`%>"><%=folder.name%></a>
+        <%}else{%>
+        <p><%=folder.name%></p>
+        <%}%>
       </div>
       <%}%>
-        </div>
-    </section>
+      </div>
+  </section>
   <section>
     <h2>Files</h2>
     <div class="files">

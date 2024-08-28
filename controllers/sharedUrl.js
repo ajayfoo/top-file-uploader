@@ -1,6 +1,6 @@
 import db from "../db.js";
 
-const render = async (req, res) => {
+const render = async (req, res, next) => {
   const id = parseInt(req.params.id);
   try {
     const sharedUrl = await db.sharedUrl.findUnique({
@@ -28,8 +28,7 @@ const render = async (req, res) => {
       name: sharedUrl.folder.name,
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).end();
+    next(err);
   }
 };
 

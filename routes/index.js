@@ -21,6 +21,7 @@ router.get("/folders/:id", renderFolderPage);
 
 router.post("/folders/:id", createFolder);
 
+router.put("/sharedUrls/:id", createSharedUrl);
 router.put("/sharedUrls", createSharedUrl);
 
 router.patch("/folders/:id", renameFolder);

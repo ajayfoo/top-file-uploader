@@ -90,8 +90,33 @@ const renderFolderPage = async (req, res) => {
   });
 };
 
+const createFolderWith = async (name, parentFolder, ownerId) => {
+  await db.folder.create({
+    data: {
+      name,
+      parent: {
+        connect: {
+          id: parentFolder.id,
+        },
+      },
+      owner: {
+        connect: {
+          id: ownerId,
+        },
+      },
+      ...(parentFolder.sharedUrl && {
+        sharedUrl: {
+          create: {
+            expiresOn: parentFolder.sharedUrl.expiresOn,
+          },
+        },
+      }),
+    },
+  });
+};
+
 const createFolder = async (req, res) => {
-  const { id } = req.session.passport.user;
+  const { id: ownerId } = req.session.passport.user;
   let parentId = null;
   if (req.params.id === "root") {
     parentId = req.session.passport.user.rootFolderId;
@@ -104,27 +129,17 @@ const createFolder = async (req, res) => {
       where: {
         parentId,
         name,
-        ownerId: id,
+        ownerId,
       },
     });
     if (duplicateFolder) {
       return res.status(403).json({ duplicateName: duplicateFolder.name });
     }
-    await db.folder.create({
-      data: {
-        name,
-        parent: {
-          connect: {
-            id: parentId,
-          },
-        },
-        owner: {
-          connect: {
-            id: id,
-          },
-        },
-      },
+    const parentFolder = await db.folder.findUnique({
+      where: { id: parentId },
+      include: { sharedUrl: true },
     });
+    await createFolderWith(name, parentFolder, ownerId);
     res.redirect("../");
   } catch (err) {
     console.error(err);
