@@ -253,7 +253,7 @@ const recursivelyCUDSharedUrl = async (folderId, expiresOn, op, ownerId) => {
   switch (op.toLowerCase()) {
     case "create":
     case "update": {
-      await db.sharedUrl.upsert({
+      await db.sharedFolderUrl.upsert({
         create: {
           folderId,
           expiresOn,
@@ -263,6 +263,19 @@ const recursivelyCUDSharedUrl = async (folderId, expiresOn, op, ownerId) => {
         },
         where: {
           folderId,
+        },
+      });
+      await db.file.update({
+        where: {
+          ownerId,
+          folderId,
+        },
+        data: {
+          sharedUrl: {
+            create: {
+              expiresOn,
+            },
+          },
         },
       });
       break;
