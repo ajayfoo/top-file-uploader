@@ -230,7 +230,7 @@ const removeFolder = async (req, res) => {
   }
 };
 
-const createSharedUrlForFilesInFolder = async (
+const upsertSharedUrlForFilesInFolder = async (
   folderId,
   ownerId,
   expiresOn,
@@ -245,9 +245,18 @@ const createSharedUrlForFilesInFolder = async (
     fileId: file.id,
     expiresOn,
   }));
-  await db.sharedFileUrl.createMany({
-    data: sharedUrls,
-  });
+  const upserts = sharedUrls.map((url) =>
+    db.sharedFileUrl.upsert({
+      create: url,
+      where: {
+        fileId: url.fileId,
+      },
+      update: {
+        expiresOn: url.expiresOn,
+      },
+    }),
+  );
+  await db.$transaction(upserts);
 };
 
 const deleteSharedUrlForFilesInFolder = async (folderId, ownerId) => {
@@ -261,7 +270,7 @@ const deleteSharedUrlForFilesInFolder = async (folderId, ownerId) => {
   });
 };
 
-const recursivelyCreateSharedFolderUrl = async (
+const recursivelyUpsertSharedFolderUrl = async (
   folderId,
   expiresOn,
   ownerId,
@@ -270,15 +279,21 @@ const recursivelyCreateSharedFolderUrl = async (
     where: { ownerId, parentId: folderId },
   });
   for (const folder of childFolders) {
-    await recursivelyCreateSharedFolderUrl(folder.id, expiresOn, ownerId);
+    await recursivelyUpsertSharedFolderUrl(folder.id, expiresOn, ownerId);
   }
-  await db.sharedFolderUrl.create({
-    data: {
+  await db.sharedFolderUrl.upsert({
+    create: {
       folderId,
       expiresOn,
     },
+    where: {
+      folderId,
+    },
+    update: {
+      expiresOn,
+    },
   });
-  await createSharedUrlForFilesInFolder(folderId, ownerId, expiresOn);
+  await upsertSharedUrlForFilesInFolder(folderId, ownerId, expiresOn);
 };
 
 const updateSharedUrlForFilesInFolder = async (
@@ -366,7 +381,7 @@ const createSharedUrl = async (req, res) => {
     } else if (id) {
       await recursivelyUpdateSharedFolderUrl(folderId, expiresOn, ownerId);
     } else {
-      await recursivelyCreateSharedFolderUrl(folderId, expiresOn, ownerId);
+      await recursivelyUpsertSharedFolderUrl(folderId, expiresOn, ownerId);
     }
     res.status(204).end();
   } catch (err) {
