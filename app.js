@@ -3,7 +3,8 @@ import "dotenv/config";
 import configuredSession from "./middlewares/session.js";
 import authRouter from "./routes/auth.js";
 import indexRouter from "./routes/index.js";
-import sharedUrlRouter from "./routes/sharedUrl.js";
+import sharedRouter from "./routes/shared.js";
+import sharedUrlsRouter from "./routes/sharedUrls.js";
 import auth from "./middlewares/auth.js";
 import { checkUsernameAvailability } from "./controllers/username.js";
 
@@ -19,7 +20,7 @@ app.use(auth.session());
 app.head("/users/:username", checkUsernameAvailability);
 
 app.use("/auth", authRouter);
-app.use("/shared", sharedUrlRouter);
+app.use("/shared", sharedRouter);
 
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", indexRouter);
+app.use("/sharedUrls", sharedUrlsRouter);
 
 app.listen(process.env.PORT, () => {
   console.log("Listening on PORT: " + process.env.PORT);
