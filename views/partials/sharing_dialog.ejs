@@ -1,0 +1,20 @@
+<dialog id="share-folder-dialog">
+  <form method="dialog">
+    <section class="field">
+      <input type="checkbox" name="share" id="share-folder-checkbox" <%=sharing?'checked':''%>>
+      <label for="share-folder-checkbox">Share</label>
+    </section>
+    <%if(sharing){%>
+    <input type="hidden" name="id" id="shared-url-id" value="<%=sharing.id%>">
+    <%}%>
+    <section class="field">
+    <%- include('duration_subfield',{unit:'minutes',displayName:'Min',sharing}) %>
+    <%- include('duration_subfield',{unit:'hours',displayName:'Hr',sharing}) %>
+    <%- include('duration_subfield',{unit:'days',displayName:'Day',sharing}) %>
+    <%- include('duration_subfield',{unit:'months',displayName:'Mth',sharing}) %>
+    <%- include('duration_subfield',{unit:'years',displayName:'Yrs',sharing}) %>
+    </section>
+    <button>Save</button>
+    <button formnovalidate>Cancel</button>
+  </form>
+</dialog>
