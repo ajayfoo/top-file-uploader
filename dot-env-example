@@ -1,0 +1,4 @@
+PORT=3000
+DATABASE_URL="postgresql://[username]:[password]@[hostname]/[dbname]"
+SALT_ROUNDS=12
+EXPRESS_SESSION_SECRET="[some secret code]"
