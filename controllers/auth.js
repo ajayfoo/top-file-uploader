@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import auth from "../middlewares/auth.js";
 import bcrypt from "bcrypt";
 import db from "../db.js";
