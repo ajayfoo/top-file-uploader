@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", indexRouter);
-app.use("/sharedUrls", sharedUrlsRouter);
+app.use("/", sharedUrlsRouter);
 
 app.listen(process.env.PORT, () => {
   console.log("Listening on PORT: " + process.env.PORT);

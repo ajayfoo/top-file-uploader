@@ -211,7 +211,7 @@ const getSharedUrlCUDRoute = () => {
   const lastPathnamePortion = location.pathname.slice(
     location.pathname.lastIndexOf("/") + 1,
   );
-  return "/sharedUrls/" + lastPathnamePortion;
+  return "/sharedFolderUrls/" + lastPathnamePortion;
 };
 
 const updateSharing = async () => {
