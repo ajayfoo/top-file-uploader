@@ -1,17 +1,15 @@
-const confirmDeleteFileDialog = document.getElementById(
-  "confirm-delete-file-dialog",
-);
-const deleteFileBtn = document.getElementById("delete-file");
-deleteFileBtn.addEventListener("click", () => {
+import {
+  confirmDeleteFileDialog,
+  renameFileDialog,
+  sharingDialog,
+} from "./globals.js";
+import { showFailedMessage } from "./functions.js";
+
+const showConfirmDeleteModal = () => {
   confirmDeleteFileDialog.showModal();
-});
-const showFailedMessage = (msg) => {
-  const dialog = document.getElementById("failed-message-dialog");
-  const p = document.getElementById("failed-message-text");
-  p.textContent = msg;
-  dialog.showModal();
 };
-confirmDeleteFileDialog.addEventListener("submit", async (e) => {
+
+const onConfirmDeleteSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
   const failedMessage = "Failed to delete file!";
@@ -29,14 +27,13 @@ confirmDeleteFileDialog.addEventListener("submit", async (e) => {
   } finally {
     confirmDeleteFileDialog.close();
   }
-});
+};
 
-const renameFileDialog = document.getElementById("rename-file-dialog");
-const renameFileBtn = document.getElementById("rename-file");
-renameFileBtn.addEventListener("click", () => {
+const showRenameDialog = () => {
   renameFileDialog.showModal();
-});
-renameFileDialog.addEventListener("submit", async (e) => {
+};
+
+const onRenameSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
   const failedMessage = "Failed to rename the file";
@@ -68,10 +65,15 @@ renameFileDialog.addEventListener("submit", async (e) => {
   } finally {
     renameFileDialog.close();
   }
-});
+};
 
-const sharingDialog = document.getElementById("share-file-dialog");
-const sharingButton = document.getElementById("sharing-file-button");
-sharingButton.addEventListener("click", () => {
+const showSharingModal = () => {
   sharingDialog.showModal();
-});
+};
+export {
+  showConfirmDeleteModal,
+  onConfirmDeleteSubmit,
+  showRenameDialog,
+  onRenameSubmit,
+  showSharingModal,
+};
