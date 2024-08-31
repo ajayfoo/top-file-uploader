@@ -69,3 +69,9 @@ renameFileDialog.addEventListener("submit", async (e) => {
     renameFileDialog.close();
   }
 });
+
+const sharingDialog = document.getElementById("share-file-dialog");
+const sharingButton = document.getElementById("sharing-file-button");
+sharingButton.addEventListener("click", () => {
+  sharingDialog.showModal();
+});

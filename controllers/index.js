@@ -281,6 +281,29 @@ const recursivelyCreateSharedFolderUrl = async (
   await createSharedUrlForFilesInFolder(folderId, ownerId, expiresOn);
 };
 
+const updateSharedUrlForFilesInFolder = async (
+  folderId,
+  expiresOn,
+  ownerId,
+) => {
+  const filesWithId = await db.file.findMany({
+    where: {
+      folderId,
+      ownerId,
+    },
+  });
+  await db.sharedFileUrl.updateMany({
+    where: {
+      fileId: {
+        in: filesWithId.map((f) => f.id),
+      },
+    },
+    data: {
+      expiresOn,
+    },
+  });
+};
+
 const recursivelyUpdateSharedFolderUrl = async (
   folderId,
   expiresOn,
@@ -300,6 +323,7 @@ const recursivelyUpdateSharedFolderUrl = async (
       expiresOn,
     },
   });
+  await updateSharedUrlForFilesInFolder(folderId, expiresOn, ownerId);
 };
 
 const recursivelyDeleteSharedFolderUrl = async (folderId, ownerId) => {

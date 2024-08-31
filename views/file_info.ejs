@@ -16,7 +16,7 @@
     <li>Uploaded At: <%=file.uploadedAt%></li>
     <button type="button" id="rename-file">Rename</button>
     <button type="button" id="delete-file">Delete</button>
-    <button type="button" id="sharing-folder-button">
+    <button type="button" id="sharing-file-button">
       <%=sharing?'Sharing':'Not Sharing'%>
     </button>
   </ol>
@@ -29,6 +29,7 @@
         <button>Yes</button>
       </form>
     </dialog>
+    <%- include('partials/sharing_dialog',{sharing,forFolder:false}) %>
     <%- include('partials/failed_message_dialog') %>
   </div>
 </body>

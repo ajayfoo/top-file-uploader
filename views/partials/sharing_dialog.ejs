@@ -1,8 +1,14 @@
-<dialog id="share-folder-dialog">
+<%
+const entity=forFolder?'folder':'file';
+const dialogId=`share-${entity}-dialog`;
+const checkboxId=`share-${entity}-checkbox`;
+%>
+
+<dialog id="<%=dialogId%>">
   <form method="dialog">
     <section class="field">
-      <input type="checkbox" name="share" id="share-folder-checkbox" <%=sharing?'checked':''%>>
-      <label for="share-folder-checkbox">Share</label>
+      <input type="checkbox" name="share" id="<%=checkboxId%>" <%=sharing?'checked':''%>>
+      <label for="<%=checkboxId%>">Share</label>
     </section>
     <%if(sharing){%>
     <input type="hidden" name="id" id="shared-url-id" value="<%=sharing.id%>">
