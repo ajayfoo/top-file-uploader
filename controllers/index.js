@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import duration from "dayjs/plugin/duration.js";
+import { getDurations } from "../utils.js";
 import db from "../db.js";
 
 const getRootFolderId = async (req, res) => {
@@ -10,22 +11,6 @@ const getRootFolderId = async (req, res) => {
   } else {
     res.status(404).end();
   }
-};
-
-const getDurations = (endDate) => {
-  if (!endDate) return null;
-  dayjs.extend(utc);
-  dayjs.extend(duration);
-  const today = dayjs().utc();
-  const sharingTill = dayjs(endDate).utc();
-  const timeLeft = dayjs.duration(sharingTill.diff(today));
-  return {
-    minutes: timeLeft.minutes(),
-    hours: timeLeft.hours(),
-    days: timeLeft.days(),
-    months: timeLeft.months(),
-    years: timeLeft.years(),
-  };
 };
 
 const renderFolderPage = async (req, res) => {
@@ -75,7 +60,9 @@ const renderFolderPage = async (req, res) => {
       },
     }),
   ]);
-  const sharing = getDurations(folder.sharedUrl?.expiresOn);
+  const sharing = folder.sharedUrl
+    ? getDurations(folder.sharedUrl.expiresOn)
+    : null;
   if (sharing) {
     sharing.id = folder.sharedUrl.id;
   }

@@ -1,4 +1,7 @@
 import { fileTypeFromBuffer } from "file-type";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import duration from "dayjs/plugin/duration.js";
 import mime from "mime/lite";
 import db from "./db.js";
 
@@ -60,4 +63,19 @@ const saveFiles = async (files, ownerId, folderId) => {
   console.log(result);
 };
 
-export { saveFiles };
+const getDurations = (endDate) => {
+  dayjs.extend(utc);
+  dayjs.extend(duration);
+  const today = dayjs().utc();
+  const sharingTill = dayjs(endDate).utc();
+  const timeLeft = dayjs.duration(sharingTill.diff(today));
+  return {
+    minutes: timeLeft.minutes(),
+    hours: timeLeft.hours(),
+    days: timeLeft.days(),
+    months: timeLeft.months(),
+    years: timeLeft.years(),
+  };
+};
+
+export { saveFiles, getDurations };

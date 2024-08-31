@@ -1,25 +1,6 @@
 import db from "../db.js";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc.js";
-import duration from "dayjs/plugin/duration.js";
 import multer from "multer";
-import { saveFiles } from "../utils.js";
-
-const getDurations = (endDate) => {
-  if (!endDate) return null;
-  dayjs.extend(utc);
-  dayjs.extend(duration);
-  const today = dayjs().utc();
-  const sharingTill = dayjs(endDate).utc();
-  const timeLeft = dayjs.duration(sharingTill.diff(today));
-  return {
-    minutes: timeLeft.minutes(),
-    hours: timeLeft.hours(),
-    days: timeLeft.days(),
-    months: timeLeft.months(),
-    years: timeLeft.years(),
-  };
-};
+import { saveFiles, getDurations } from "../utils.js";
 
 const renderFileInfo = async (req, res, next) => {
   const { id: ownerId } = req.session.passport.user;
@@ -40,7 +21,9 @@ const renderFileInfo = async (req, res, next) => {
     next(new Error("File not found"));
     return;
   }
-  const sharing = getDurations(file.sharedUrl?.expiresOn);
+  const sharing = file.sharedUrl
+    ? getDurations(file.sharedUrl.expiresOn)
+    : null;
   if (sharing) {
     sharing.id = file.sharedUrl.id;
   }
