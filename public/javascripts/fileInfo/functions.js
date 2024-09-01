@@ -1,5 +1,4 @@
 import {
-  sharingForm,
   durationSubfields,
   durationSubfieldsObject,
   sharingCheckbox,

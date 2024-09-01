@@ -10,8 +10,8 @@ import {
   sendCreateFolderPostRequest,
   showFailedResponseMessage,
   sendRenameFolderPutRequest,
-  validateSharingDurationSubfields,
   updateSharing,
+  setCustomValidityForDurationField,
 } from "./functions.js";
 
 const showAddFilesModal = () => {
@@ -71,7 +71,7 @@ const showSharingFolderModal = () => {
 const onSharingFolderSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
-  if (!validateSharingDurationSubfields()) return;
+  if (!setCustomValidityForDurationField()) return;
   try {
     const done = await updateSharing();
     if (done) {
