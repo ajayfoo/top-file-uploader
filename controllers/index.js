@@ -263,51 +263,6 @@ const recursivelyUpsertSharedFolderUrl = async (
   await upsertSharedUrlForFilesInFolder(folderId, ownerId, expiresOn);
 };
 
-const updateSharedUrlForFilesInFolder = async (
-  folderId,
-  expiresOn,
-  ownerId,
-) => {
-  const filesWithId = await db.file.findMany({
-    where: {
-      folderId,
-      ownerId,
-    },
-  });
-  await db.sharedFileUrl.updateMany({
-    where: {
-      fileId: {
-        in: filesWithId.map((f) => f.id),
-      },
-    },
-    data: {
-      expiresOn,
-    },
-  });
-};
-
-const recursivelyUpdateSharedFolderUrl = async (
-  folderId,
-  expiresOn,
-  ownerId,
-) => {
-  const childFolders = await db.folder.findMany({
-    where: { ownerId, parentId: folderId },
-  });
-  for (const folder of childFolders) {
-    await recursivelyUpdateSharedFolderUrl(folder.id, expiresOn, ownerId);
-  }
-  await db.sharedFolderUrl.update({
-    where: {
-      folderId,
-    },
-    data: {
-      expiresOn,
-    },
-  });
-  await updateSharedUrlForFilesInFolder(folderId, expiresOn, ownerId);
-};
-
 const recursivelyDeleteSharedFolderUrl = async (folderId, ownerId) => {
   const childFolders = await db.folder.findMany({
     where: { ownerId, parentId: folderId },
@@ -328,28 +283,32 @@ const recursivelyDeleteSharedFolderUrl = async (folderId, ownerId) => {
   await deleteSharedUrlForFilesInFolder(folderId, ownerId);
 };
 
-const createSharedUrl = async (req, res) => {
+const deleteSharedUrl = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   const folderId = parseInt(
     req.params.id ?? req.session.passport.user.rootFolderId,
   );
-  const { id, enableSharing, minutes, hours, days, months, years } = req.body;
+  try {
+    await recursivelyDeleteSharedFolderUrl(folderId, ownerId);
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+};
+
+const upsertSharedUrl = async (req, res) => {
+  const { id: ownerId } = req.session.passport.user;
+  const { minutes, hours, days, months, years } = req.body;
+  const folderId = parseInt(
+    req.body.folderId || req.session.passport.user.rootFolderId,
+  );
   const sharingDuration = dayjs
     .extend(duration)
     .duration({ minutes, hours, days, months, years });
   const expiresOn = dayjs.extend(utc).utc().add(sharingDuration).format();
   try {
-    if (!enableSharing && !id) {
-      res.status(400).end();
-      return;
-    }
-    if (!enableSharing) {
-      await recursivelyDeleteSharedFolderUrl(folderId, ownerId);
-    } else if (id) {
-      await recursivelyUpdateSharedFolderUrl(folderId, expiresOn, ownerId);
-    } else {
-      await recursivelyUpsertSharedFolderUrl(folderId, expiresOn, ownerId);
-    }
+    await recursivelyUpsertSharedFolderUrl(folderId, expiresOn, ownerId);
     res.status(204).end();
   } catch (err) {
     console.error(err);
@@ -363,5 +322,6 @@ export {
   createFolder,
   renameFolder,
   removeFolder,
-  createSharedUrl,
+  upsertSharedUrl,
+  deleteSharedUrl,
 };

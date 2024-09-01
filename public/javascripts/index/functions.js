@@ -133,15 +133,29 @@ const getSharedUrlCUDRoute = () => {
 };
 
 const updateSharing = async () => {
+  const folderId = location.pathname.substring(
+    location.pathname.lastIndexOf("/") + 1,
+  );
+  const enableSharing = document.getElementById(
+    "share-folder-checkbox",
+  ).checked;
+  if (!enableSharing) {
+    const response = await fetch("/sharedFolderUrls", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        folderId,
+      }),
+    });
+    return response.ok;
+  }
   const minutes = document.getElementById("share-minutes").value;
   const hours = document.getElementById("share-hours").value;
   const days = document.getElementById("share-days").value;
   const months = document.getElementById("share-months").value;
   const years = document.getElementById("share-years").value;
-  const id = document.getElementById("shared-url-id")?.value;
-  const enableSharing = document.getElementById(
-    "share-folder-checkbox",
-  ).checked;
   const url = getSharedUrlCUDRoute();
   const response = await fetch(url, {
     method: "PUT",
@@ -149,7 +163,7 @@ const updateSharing = async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      id,
+      folderId,
       enableSharing,
       minutes,
       hours,
@@ -183,20 +197,6 @@ const validateSharingDurationSubfields = () => {
   }
 };
 
-const validateSharingCheckbox = () => {
-  const id = document.getElementById("shared-url-id")?.value;
-  const sharingCheckbox = document.getElementById("share-folder-checkbox");
-  const enableSharing = sharingCheckbox.checked;
-  if (!id && !enableSharing) {
-    sharingCheckbox.setCustomValidity("Must enable sharing");
-    sharingForm.reportValidity();
-    return false;
-  } else {
-    sharingCheckbox.setCustomValidity("");
-    return true;
-  }
-};
-
 export {
   setupAddMenu,
   setupDeleteFolderButton,
@@ -205,6 +205,5 @@ export {
   showFailedResponseMessage,
   sendRenameFolderPutRequest,
   validateSharingDurationSubfields,
-  validateSharingCheckbox,
   updateSharing,
 };

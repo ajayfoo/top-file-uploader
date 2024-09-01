@@ -10,7 +10,6 @@ import {
   sendCreateFolderPostRequest,
   showFailedResponseMessage,
   sendRenameFolderPutRequest,
-  validateSharingCheckbox,
   validateSharingDurationSubfields,
   updateSharing,
 } from "./functions.js";
@@ -72,7 +71,7 @@ const showSharingFolderModal = () => {
 const onSharingFolderSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
-  if (!validateSharingCheckbox() || !validateSharingDurationSubfields()) return;
+  if (!validateSharingDurationSubfields()) return;
   try {
     const done = await updateSharing();
     if (done) {

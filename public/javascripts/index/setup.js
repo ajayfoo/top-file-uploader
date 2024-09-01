@@ -6,15 +6,11 @@ import {
   renameCurrentFolderDialog,
   renameFolderButton,
   durationSubfields,
-  sharingCheckbox,
   sharingFolderDialog,
   sharingFolderBtn,
   copySharedUrlBtn,
 } from "./globals.js";
-import {
-  validateSharingDurationSubfields,
-  validateSharingCheckbox,
-} from "./functions.js";
+import { validateSharingDurationSubfields } from "./functions.js";
 import {
   onAddFilesSubmit,
   onAddFolderSubmit,
@@ -42,7 +38,6 @@ const attachEventListeners = () => {
   );
 
   sharingFolderBtn.addEventListener("click", showSharingFolderModal);
-  sharingCheckbox.addEventListener("input", validateSharingCheckbox);
   durationSubfields.forEach((d) => {
     d.addEventListener("input", validateSharingDurationSubfields);
   });
