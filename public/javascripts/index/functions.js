@@ -125,13 +125,6 @@ const setupDeleteFolderButton = () => {
   }
 };
 
-const getSharedUrlCUDRoute = () => {
-  const lastPathnamePortion = location.pathname.slice(
-    location.pathname.lastIndexOf("/") + 1,
-  );
-  return "/sharedFolderUrls/" + lastPathnamePortion;
-};
-
 const updateSharing = async () => {
   const folderId = location.pathname.substring(
     location.pathname.lastIndexOf("/") + 1,
@@ -156,8 +149,7 @@ const updateSharing = async () => {
   const days = document.getElementById("share-days").value;
   const months = document.getElementById("share-months").value;
   const years = document.getElementById("share-years").value;
-  const url = getSharedUrlCUDRoute();
-  const response = await fetch(url, {
+  const response = await fetch("/sharedFolderUrls", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
