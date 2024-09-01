@@ -1,12 +1,10 @@
 import { Router } from "express";
 import {
-  upsertSharedUrl as upsertSharedFolderUrl,
-  deleteSharedUrl as deleteSharedFolderUrl,
-} from "../controllers/index.js";
-import {
-  deleteSharedUrl as deleteSharedFileUrl,
-  upsertSharedUrl as upsertSharedFileUrl,
-} from "../controllers/files.js";
+  upsertSharedFolderUrl,
+  deleteSharedFolderUrl,
+  upsertSharedFileUrl,
+  deleteSharedFileUrl,
+} from "../controllers/sharedUrls.js";
 
 const router = Router();
 
