@@ -36,16 +36,11 @@ const onAddFolderSubmit = async (e) => {
     const response = await sendCreateFolderPostRequest();
     if (response.ok) {
       location.reload();
-    } else if (response.status === 403) {
-      const json = await response.json();
-      showFailedResponseMessage(
-        "There's already a folder named '" + json.duplicateName + "'",
-      );
     } else {
       showFailedResponseMessage("Something went wrong");
     }
-  } catch (err) {
-    console.error(err);
+  } catch {
+    showFailedResponseMessage("Something went wrong");
   }
 };
 
@@ -62,16 +57,10 @@ const onRenameCurrentFolderSubmit = async (e) => {
     );
     if (response.ok) {
       location.reload();
-    } else if (response.status === 403) {
-      const json = await response.json();
-      showFailedResponseMessage(
-        `There's already a folder named '${json.duplicateName}' inside folder '${json.parentFolderName}'`,
-      );
     } else {
       showFailedResponseMessage("Something went wrong");
     }
-  } catch (err) {
-    console.error(err);
+  } catch {
     showFailedResponseMessage("Something went wrong");
   }
 };

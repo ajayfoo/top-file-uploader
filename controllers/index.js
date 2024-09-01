@@ -112,16 +112,6 @@ const createFolder = async (req, res) => {
   }
   const { name } = req.body;
   try {
-    const duplicateFolder = await db.folder.findFirst({
-      where: {
-        parentId,
-        name,
-        ownerId,
-      },
-    });
-    if (duplicateFolder) {
-      return res.status(403).json({ duplicateName: duplicateFolder.name });
-    }
     const parentFolder = await db.folder.findUnique({
       where: { id: parentId },
       include: { sharedUrl: true },
@@ -143,30 +133,7 @@ const renameFolder = async (req, res) => {
     id = parseInt(req.params.id);
   }
   const { newName: name } = req.body;
-  const parentId = parseInt(req.body.parentId);
   try {
-    if (id !== req.session.passport.user.rootFolderId) {
-      const [duplicateFolder, parentFolder] = await Promise.all([
-        db.folder.findFirst({
-          where: {
-            parentId,
-            name,
-            ownerId,
-          },
-        }),
-        db.folder.findUnique({
-          where: {
-            id: parentId,
-          },
-        }),
-      ]);
-      if (duplicateFolder) {
-        return res.status(403).json({
-          duplicateName: duplicateFolder.name,
-          parentFolderName: parentFolder.name,
-        });
-      }
-    }
     await db.folder.update({
       where: {
         ownerId,
