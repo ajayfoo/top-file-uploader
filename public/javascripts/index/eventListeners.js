@@ -28,9 +28,10 @@ const showAddFilesModal = () => {
 const onAddFilesSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
+  const controller = new AbortController();
+  showProgressDialog(controller);
   try {
-    showProgressDialog();
-    const response = await uploadFiles();
+    const response = await uploadFiles(controller.signal);
     if (response.ok) {
       location.reload();
     } else {
@@ -50,8 +51,10 @@ const showAddFolderModal = () => {
 const onAddFolderSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
+  const controller = new AbortController();
+  showProgressDialog(controller);
   try {
-    const response = await sendCreateFolderPostRequest();
+    const response = await sendCreateFolderPostRequest(controller.signal);
     if (response.ok) {
       location.reload();
     } else {
@@ -59,6 +62,8 @@ const onAddFolderSubmit = async (e) => {
     }
   } catch {
     showFailedMessage("Something went wrong");
+  } finally {
+    closeProgressDialog();
   }
 };
 
@@ -69,10 +74,14 @@ const showRenameFolderModal = () => {
 const onRenameCurrentFolderSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
+  const parentId =
+    renameCurrentFolderDialog.querySelector("form").elements.parentId.value;
+  const controller = new AbortController();
+  showProgressDialog(controller);
   try {
-    showProgressDialog();
     const response = await sendRenameFolderPutRequest(
-      renameCurrentFolderDialog,
+      parentId,
+      controller.signal,
     );
     if (response.ok) {
       location.reload();
@@ -97,8 +106,10 @@ const onSharingFolderSubmit = async (e) => {
     !setCustomValidityForDurationField(durationSubfieldsObject, sharingCheckbox)
   )
     return;
+  const controller = new AbortController();
+  showProgressDialog(controller);
   try {
-    const done = await updateSharing();
+    const done = await updateSharing(controller.signal);
     if (done) {
       location.reload();
     } else {
@@ -108,6 +119,7 @@ const onSharingFolderSubmit = async (e) => {
     showFailedMessage("Failed to add shared url");
   } finally {
     sharingFolderDialog.close();
+    closeProgressDialog();
   }
 };
 

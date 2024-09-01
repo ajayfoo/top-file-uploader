@@ -1,9 +1,4 @@
-import {
-  showFailedMessage,
-  getDurationValues,
-  showProgressDialog,
-  closeProgressDialog,
-} from "../functions.js";
+import { showFailedMessage, getDurationValues } from "../functions.js";
 import { durationSubfieldsObject, sharingCheckbox } from "./globals.js";
 
 const addFilesToFormData = (formData) => {
@@ -13,7 +8,7 @@ const addFilesToFormData = (formData) => {
   }
 };
 
-const uploadFiles = () => {
+const uploadFiles = (signal) => {
   const formData = new FormData();
   addFilesToFormData(formData);
   const urlPart1 =
@@ -22,6 +17,7 @@ const uploadFiles = () => {
   return fetch(url, {
     method: "POST",
     body: formData,
+    signal,
   });
 };
 
@@ -41,11 +37,11 @@ const setupAddMenu = () => {
   });
 };
 
-const sendCreateFolderPostRequest = async () => {
+const sendCreateFolderPostRequest = (signal) => {
   const name = document.getElementById("folder-name").value;
   const url = location.pathname === "/" ? "/folders/root" : location.pathname;
 
-  const response = await fetch(url, {
+  return fetch(url, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -53,13 +49,11 @@ const sendCreateFolderPostRequest = async () => {
     body: JSON.stringify({
       name,
     }),
+    signal,
   });
-  return response;
 };
 
-const sendRenameFolderPutRequest = async (container) => {
-  const form = container.querySelector("form");
-  const parentId = form.elements.parentId.value;
+const sendRenameFolderPutRequest = async (parentId, signal) => {
   const newName = document.getElementById("current-folder-name").value;
   const url = location.pathname === "/" ? "/folders/root" : location.pathname;
   const response = await fetch(url, {
@@ -68,6 +62,7 @@ const sendRenameFolderPutRequest = async (container) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ parentId, newName }),
+    signal,
   });
   return response;
 };
@@ -89,7 +84,6 @@ const setupDeleteFolderButton = () => {
       if (document.activeElement.hasAttribute("formnovalidate")) return;
       e.preventDefault();
       try {
-        showProgressDialog();
         const done = await sendDeleteFolderRequest();
         if (done) {
           location.replace(location.origin);
@@ -99,14 +93,12 @@ const setupDeleteFolderButton = () => {
       } catch (err) {
         console.error(err);
         showFailedMessage("Something went wrong");
-      } finally {
-        closeProgressDialog();
       }
     });
   }
 };
 
-const updateSharing = async () => {
+const updateSharing = async (signal) => {
   const folderId = location.pathname.substring(
     location.pathname.lastIndexOf("/") + 1,
   );
@@ -121,6 +113,7 @@ const updateSharing = async () => {
       body: JSON.stringify({
         folderId,
       }),
+      signal,
     });
     return response.ok;
   }
@@ -135,6 +128,7 @@ const updateSharing = async () => {
       enableSharing,
       ...durationValues,
     }),
+    signal,
   });
   return response.ok;
 };

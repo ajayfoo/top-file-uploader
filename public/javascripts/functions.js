@@ -38,10 +38,15 @@ const setCustomValidityForDurationField = (
   }
 };
 
-const showProgressDialog = () => {
+const showProgressDialog = (controller) => {
   const progressDialog = document.getElementById("progress-dialog");
+  const cancelTask = () => {
+    controller.abort();
+  };
+  progressDialog.addEventListener("cancel", cancelTask, { once: true });
   progressDialog.showModal();
 };
+
 const closeProgressDialog = () => {
   const progressDialog = document.getElementById("progress-dialog");
   progressDialog.close();
