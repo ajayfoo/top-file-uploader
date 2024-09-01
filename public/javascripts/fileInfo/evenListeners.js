@@ -72,7 +72,7 @@ const showSharingModal = () => {
 };
 
 const writeSharedUrlToClipboard = async (e) => {
-  const url = new URL("shared/files/" + e.target.dataset.id, location.origin)
+  const url = new URL("sharedFiles/" + e.target.dataset.id, location.origin)
     .href;
   try {
     await navigator.clipboard.writeText(url);

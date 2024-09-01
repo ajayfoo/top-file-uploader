@@ -88,8 +88,10 @@ const onSharingFolderSubmit = async (e) => {
 };
 
 const writeSharedUrlToClipboard = async () => {
-  const url = new URL("shared/" + copySharedUrlBtn.dataset.id, location.origin)
-    .href;
+  const url = new URL(
+    "sharedFolders/" + copySharedUrlBtn.dataset.id,
+    location.origin,
+  ).href;
   try {
     await navigator.clipboard.writeText(url);
   } catch {

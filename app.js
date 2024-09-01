@@ -20,7 +20,7 @@ app.use(auth.session());
 app.head("/users/:username", checkUsernameAvailability);
 
 app.use("/auth", authRouter);
-app.use("/shared", sharedRouter);
+app.use("/", sharedRouter);
 
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {

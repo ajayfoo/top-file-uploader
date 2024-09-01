@@ -15,7 +15,7 @@
       <%for(const folder of folders){%>
       <div class="folder">
         <%if(folder.sharedUrl){%>
-        <a href="<%=`/shared/${folder.sharedUrl.id}`%>"><%=folder.name%></a>
+        <a href="<%=`/sharedFolders/${folder.sharedUrl.id}`%>"><%=folder.name%></a>
         <%}else{%>
         <p><%=folder.name%></p>
         <%}%>
@@ -28,7 +28,7 @@
     <div class="files">
       <%for(const file of files){%>
       <div class="file">
-        <a href="<%=`/shared/files/${file.sharedUrl.id}`%>"><%=file.name%></a>
+        <a href="<%=`/sharedFiles/${file.sharedUrl.id}`%>"><%=file.name%></a>
       </div>
       <%}%>
         </div>
