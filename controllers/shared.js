@@ -1,9 +1,9 @@
 import db from "../db.js";
 
-const render = async (req, res, next) => {
+const renderFolderPage = async (req, res, next) => {
   const id = parseInt(req.params.id);
   try {
-    const sharedUrl = await db.sharedUrl.findUnique({
+    const sharedUrl = await db.sharedFolderUrl.findUnique({
       where: {
         id,
       },
@@ -15,7 +15,11 @@ const render = async (req, res, next) => {
                 sharedUrl: true,
               },
             },
-            files: true,
+            files: {
+              include: {
+                sharedUrl: true,
+              },
+            },
           },
         },
       },
@@ -32,7 +36,7 @@ const render = async (req, res, next) => {
   }
 };
 
-const renderFileInfo = async (req, res, next) => {
+const renderFileInfoPage = async (req, res, next) => {
   const id = parseInt(req.params.id);
   const sharedUrl = await db.sharedFileUrl.findUnique({
     where: {
@@ -51,4 +55,4 @@ const renderFileInfo = async (req, res, next) => {
   });
 };
 
-export { render, renderFileInfo };
+export { renderFolderPage, renderFileInfoPage };
