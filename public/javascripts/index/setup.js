@@ -10,8 +10,9 @@ import {
   sharingFolderBtn,
   copySharedUrlBtn,
   sharingCheckbox,
+  durationSubfieldsObject,
 } from "./globals.js";
-import { setCustomValidityForDurationField } from "./functions.js";
+import { setCustomValidityForDurationField } from "../functions.js";
 import {
   onAddFilesSubmit,
   onAddFolderSubmit,
@@ -39,9 +40,16 @@ const attachEventListeners = () => {
   );
 
   sharingFolderBtn.addEventListener("click", showSharingFolderModal);
-  sharingCheckbox.addEventListener("input", setCustomValidityForDurationField);
+  sharingCheckbox.addEventListener("input", () =>
+    setCustomValidityForDurationField(durationSubfieldsObject, sharingCheckbox),
+  );
   durationSubfields.forEach((d) => {
-    d.addEventListener("input", setCustomValidityForDurationField);
+    d.addEventListener("input", () =>
+      setCustomValidityForDurationField(
+        durationSubfieldsObject,
+        sharingCheckbox,
+      ),
+    );
   });
   sharingFolderDialog.addEventListener("submit", onSharingFolderSubmit);
 

@@ -1,8 +1,5 @@
-import {
-  durationSubfields,
-  durationSubfieldsObject,
-  sharingCheckbox,
-} from "./globals.js";
+import { showFailedMessage, getDurationValues } from "../functions.js";
+import { durationSubfieldsObject, sharingCheckbox } from "./globals.js";
 
 const addFilesToFormData = (formData) => {
   const files = document.getElementById("files-to-upload").files;
@@ -35,7 +32,7 @@ const uploadFiles = async () => {
       return;
     }
   } catch {
-    showFailedResponseMessage("Something went wrong");
+    showFailedMessage("Something went wrong");
   }
 };
 
@@ -69,13 +66,6 @@ const sendCreateFolderPostRequest = async () => {
     }),
   });
   return response;
-};
-
-const showFailedResponseMessage = (msg) => {
-  const dialog = document.getElementById("create-folder-post-reponse");
-  const msgEle = dialog.querySelector("form>p.message");
-  msgEle.textContent = msg;
-  dialog.showModal();
 };
 
 const sendRenameFolderPutRequest = async (container) => {
@@ -114,11 +104,11 @@ const setupDeleteFolderButton = () => {
         if (done) {
           location.replace(location.origin);
         } else {
-          showFailedResponseMessage("Something went wrong");
+          showFailedMessage("Something went wrong");
         }
       } catch (err) {
         console.error(err);
-        showFailedResponseMessage("Something went wrong");
+        showFailedMessage("Something went wrong");
       }
     });
   }
@@ -128,11 +118,10 @@ const updateSharing = async () => {
   const folderId = location.pathname.substring(
     location.pathname.lastIndexOf("/") + 1,
   );
-  const enableSharing = document.getElementById(
-    "share-folder-checkbox",
-  ).checked;
+  const enableSharing = sharingCheckbox.checked;
+  const url = "/sharedFolderUrls";
   if (!enableSharing) {
-    const response = await fetch("/sharedFolderUrls", {
+    const response = await fetch(url, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -143,12 +132,8 @@ const updateSharing = async () => {
     });
     return response.ok;
   }
-  const minutes = document.getElementById("share-minutes").value;
-  const hours = document.getElementById("share-hours").value;
-  const days = document.getElementById("share-days").value;
-  const months = document.getElementById("share-months").value;
-  const years = document.getElementById("share-years").value;
-  const response = await fetch("/sharedFolderUrls", {
+  const durationValues = getDurationValues(durationSubfieldsObject);
+  const response = await fetch(url, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -156,35 +141,10 @@ const updateSharing = async () => {
     body: JSON.stringify({
       folderId,
       enableSharing,
-      minutes,
-      hours,
-      days,
-      months,
-      years,
+      ...durationValues,
     }),
   });
   return response.ok;
-};
-
-const getSumOfAllDurationSubfields = () =>
-  durationSubfields
-    .map((e) => parseInt(e.value))
-    .reduce((acc, curr) => acc + curr, 0);
-
-const setCustomValidityForDurationField = () => {
-  const minutesSubfield = durationSubfieldsObject.minutes;
-  if (!sharingCheckbox.checked) {
-    minutesSubfield.setCustomValidity("");
-    return true;
-  }
-  const sum = getSumOfAllDurationSubfields();
-  if (sum <= 0) {
-    minutesSubfield.setCustomValidity("Duration must be at least one minute");
-    return false;
-  } else {
-    minutesSubfield.setCustomValidity("");
-    return true;
-  }
 };
 
 export {
@@ -192,8 +152,6 @@ export {
   setupDeleteFolderButton,
   uploadFiles,
   sendCreateFolderPostRequest,
-  showFailedResponseMessage,
-  sendRenameFolderPutRequest,
-  setCustomValidityForDurationField,
   updateSharing,
+  sendRenameFolderPutRequest,
 };

@@ -1,13 +1,16 @@
 import {
   confirmDeleteFileDialog,
+  durationSubfieldsObject,
   renameFileDialog,
+  sharingCheckbox,
   sharingDialog,
 } from "./globals.js";
 import {
   setCustomValidityForDurationField,
   showFailedMessage,
-  updateSharing,
-} from "./functions.js";
+} from "../functions.js";
+
+import { updateSharing } from "./functions.js";
 
 const showConfirmDeleteModal = () => {
   confirmDeleteFileDialog.showModal();
@@ -78,7 +81,10 @@ const showSharingModal = () => {
 const onSharingSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
-  if (!setCustomValidityForDurationField()) return;
+  if (
+    !setCustomValidityForDurationField(durationSubfieldsObject, sharingCheckbox)
+  )
+    return;
   try {
     const done = await updateSharing();
     if (done) {

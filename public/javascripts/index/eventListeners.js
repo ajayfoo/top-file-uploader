@@ -4,15 +4,20 @@ import {
   renameCurrentFolderDialog,
   sharingFolderDialog,
   copySharedUrlBtn,
+  sharingCheckbox,
+  durationSubfieldsObject,
 } from "./globals.js";
 import {
   uploadFiles,
   sendCreateFolderPostRequest,
-  showFailedResponseMessage,
-  sendRenameFolderPutRequest,
   updateSharing,
-  setCustomValidityForDurationField,
+  sendRenameFolderPutRequest,
 } from "./functions.js";
+
+import {
+  setCustomValidityForDurationField,
+  showFailedMessage,
+} from "../functions.js";
 
 const showAddFilesModal = () => {
   addFileDialog.showModal();
@@ -36,10 +41,10 @@ const onAddFolderSubmit = async (e) => {
     if (response.ok) {
       location.reload();
     } else {
-      showFailedResponseMessage("Something went wrong");
+      showFailedMessage("Something went wrong");
     }
   } catch {
-    showFailedResponseMessage("Something went wrong");
+    showFailedMessage("Something went wrong");
   }
 };
 
@@ -57,10 +62,10 @@ const onRenameCurrentFolderSubmit = async (e) => {
     if (response.ok) {
       location.reload();
     } else {
-      showFailedResponseMessage("Something went wrong");
+      showFailedMessage("Something went wrong");
     }
   } catch {
-    showFailedResponseMessage("Something went wrong");
+    showFailedMessage("Something went wrong");
   }
 };
 
@@ -71,16 +76,19 @@ const showSharingFolderModal = () => {
 const onSharingFolderSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
-  if (!setCustomValidityForDurationField()) return;
+  if (
+    !setCustomValidityForDurationField(durationSubfieldsObject, sharingCheckbox)
+  )
+    return;
   try {
     const done = await updateSharing();
     if (done) {
       location.reload();
     } else {
-      showFailedResponseMessage("Failed to add shared url");
+      showFailedMessage("Failed to add shared url");
     }
   } catch {
-    showFailedResponseMessage("Failed to add shared url");
+    showFailedMessage("Failed to add shared url");
   } finally {
     sharingFolderDialog.close();
   }
@@ -94,7 +102,7 @@ const writeSharedUrlToClipboard = async () => {
   try {
     await navigator.clipboard.writeText(url);
   } catch {
-    showFailedResponseMessage("Failed to copy link to clipboard");
+    showFailedMessage("Failed to copy link to clipboard");
   }
 };
 

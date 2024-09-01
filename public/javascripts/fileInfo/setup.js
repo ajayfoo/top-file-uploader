@@ -8,6 +8,7 @@ import {
   copyLinkButton,
   durationSubfields,
   sharingCheckbox,
+  durationSubfieldsObject,
 } from "./globals.js";
 
 import {
@@ -18,8 +19,8 @@ import {
   showSharingModal,
   onSharingSubmit,
   writeSharedUrlToClipboard,
-} from "./evenListeners.js";
-import { setCustomValidityForDurationField } from "./functions.js";
+} from "./eventListeners.js";
+import { setCustomValidityForDurationField } from "../functions.js";
 
 const attachEventListeners = () => {
   deleteFileBtn.addEventListener("click", showConfirmDeleteModal);
@@ -30,9 +31,16 @@ const attachEventListeners = () => {
 
   sharingButton.addEventListener("click", showSharingModal);
   sharingDialog.addEventListener("submit", onSharingSubmit);
-  sharingCheckbox.addEventListener("input", setCustomValidityForDurationField);
+  sharingCheckbox.addEventListener("input", () =>
+    setCustomValidityForDurationField(durationSubfieldsObject, sharingCheckbox),
+  );
   durationSubfields.forEach((f) => {
-    f.addEventListener("input", setCustomValidityForDurationField);
+    f.addEventListener("input", () =>
+      setCustomValidityForDurationField(
+        durationSubfieldsObject,
+        sharingCheckbox,
+      ),
+    );
   });
 
   copyLinkButton?.addEventListener("click", writeSharedUrlToClipboard);
