@@ -3,7 +3,12 @@ import {
   renameFileDialog,
   sharingDialog,
 } from "./globals.js";
-import { showFailedMessage } from "./functions.js";
+import {
+  showFailedMessage,
+  updateSharing,
+  validateSharingCheckbox,
+  validateSharingDurationSubfields,
+} from "./functions.js";
 
 const showConfirmDeleteModal = () => {
   confirmDeleteFileDialog.showModal();
@@ -71,6 +76,24 @@ const showSharingModal = () => {
   sharingDialog.showModal();
 };
 
+const onSharingSubmit = async (e) => {
+  if (document.activeElement.hasAttribute("formnovalidate")) return;
+  e.preventDefault();
+  if (!validateSharingCheckbox() || !validateSharingDurationSubfields()) return;
+  try {
+    const done = await updateSharing();
+    if (done) {
+      location.reload();
+    } else {
+      showFailedMessage("Failed to add shared url");
+    }
+  } catch {
+    showFailedMessage("Failed to add shared url");
+  } finally {
+    sharingDialog.close();
+  }
+};
+
 const writeSharedUrlToClipboard = async (e) => {
   const url = new URL("sharedFiles/" + e.target.dataset.id, location.origin)
     .href;
@@ -87,5 +110,6 @@ export {
   showRenameDialog,
   onRenameSubmit,
   showSharingModal,
+  onSharingSubmit,
   writeSharedUrlToClipboard,
 };

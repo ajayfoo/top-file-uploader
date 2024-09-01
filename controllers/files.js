@@ -1,5 +1,8 @@
 import db from "../db.js";
 import multer from "multer";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import duration from "dayjs/plugin/duration.js";
 import { saveFiles, getDurations } from "../utils.js";
 
 const renderFileInfo = async (req, res, next) => {
@@ -16,7 +19,6 @@ const renderFileInfo = async (req, res, next) => {
       sharedUrl: true,
     },
   });
-  console.log(file);
   if (!file) {
     next(new Error("File not found"));
     return;
@@ -112,4 +114,43 @@ const renameFile = async (req, res) => {
   }
 };
 
-export { renderFileInfo, fileUploadMiddlewares, removeFile, renameFile };
+const upsertSharedUrl = async (req, res) => {
+  const { id: ownerId } = req.session.passport.user;
+  const fileId = parseInt(req.body.fileId);
+  const { minutes, hours, days, months, years } = req.body;
+  const sharingDuration = dayjs
+    .extend(duration)
+    .duration({ minutes, hours, days, months, years });
+  const expiresOn = dayjs.extend(utc).utc().add(sharingDuration).format();
+  try {
+    await db.sharedFileUrl.upsert({
+      create: {
+        file: {
+          connect: {
+            id: fileId,
+            ownerId,
+          },
+        },
+        expiresOn,
+      },
+      where: {
+        fileId,
+      },
+      update: {
+        expiresOn,
+      },
+    });
+    res.status(200).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+};
+
+export {
+  renderFileInfo,
+  fileUploadMiddlewares,
+  removeFile,
+  renameFile,
+  upsertSharedUrl,
+};
