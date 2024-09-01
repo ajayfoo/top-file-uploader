@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { createSharedUrl } from "../controllers/index.js";
-import { upsertSharedUrl } from "../controllers/files.js";
+import { deleteSharedUrl, upsertSharedUrl } from "../controllers/files.js";
 
 const router = Router();
 router.put("/sharedFolderUrls/:id", createSharedUrl);
 router.put("/sharedFolderUrls", createSharedUrl);
 
-router.post("/sharedFileUrls", upsertSharedUrl);
+router.put("/sharedFileUrls", upsertSharedUrl);
+router.delete("/sharedFileUrls", deleteSharedUrl);
 
 export default router;

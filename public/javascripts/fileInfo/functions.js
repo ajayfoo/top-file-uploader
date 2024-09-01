@@ -13,21 +13,34 @@ const showFailedMessage = (msg) => {
 };
 
 const updateSharing = async () => {
+  const fileId = location.pathname.substring(
+    location.pathname.lastIndexOf("/") + 1,
+  );
+  const enableSharing = document.getElementById("share-file-checkbox").checked;
+  if (!enableSharing) {
+    const response = await fetch("/sharedFileUrls", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fileId,
+      }),
+    });
+    return response.ok;
+  }
   const minutes = document.getElementById("share-minutes").value;
   const hours = document.getElementById("share-hours").value;
   const days = document.getElementById("share-days").value;
   const months = document.getElementById("share-months").value;
   const years = document.getElementById("share-years").value;
-  const fileId = document.getElementById("file-id").value;
-  const enableSharing = document.getElementById("share-file-checkbox").checked;
   const response = await fetch("/sharedFileUrls", {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       fileId,
-      enableSharing,
       minutes,
       hours,
       days,
@@ -36,20 +49,6 @@ const updateSharing = async () => {
     }),
   });
   return response.ok;
-};
-
-const validateSharingCheckbox = () => {
-  const id = document.getElementById("shared-url-id")?.value;
-  const sharingCheckbox = document.getElementById("share-file-checkbox");
-  const enableSharing = sharingCheckbox.checked;
-  if (!id && !enableSharing) {
-    sharingCheckbox.setCustomValidity("Must enable sharing");
-    sharingForm.reportValidity();
-    return false;
-  } else {
-    sharingCheckbox.setCustomValidity("");
-    return true;
-  }
 };
 
 const getSumOfAllDurationSubfields = () =>
@@ -74,9 +73,4 @@ const validateSharingDurationSubfields = () => {
   }
 };
 
-export {
-  showFailedMessage,
-  updateSharing,
-  validateSharingCheckbox,
-  validateSharingDurationSubfields,
-};
+export { showFailedMessage, updateSharing, validateSharingDurationSubfields };

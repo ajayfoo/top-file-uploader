@@ -147,10 +147,31 @@ const upsertSharedUrl = async (req, res) => {
   }
 };
 
+const deleteSharedUrl = async (req, res) => {
+  const { id: ownerId } = req.session.passport.user;
+  const fileId = parseInt(req.body.fileId);
+  try {
+    await db.sharedFileUrl.delete({
+      where: {
+        file: {
+          id: fileId,
+          ownerId,
+        },
+        fileId,
+      },
+    });
+    res.status(200).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+};
+
 export {
   renderFileInfo,
   fileUploadMiddlewares,
   removeFile,
   renameFile,
   upsertSharedUrl,
+  deleteSharedUrl,
 };

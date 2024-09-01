@@ -6,7 +6,6 @@ import {
 import {
   showFailedMessage,
   updateSharing,
-  validateSharingCheckbox,
   validateSharingDurationSubfields,
 } from "./functions.js";
 
@@ -79,7 +78,7 @@ const showSharingModal = () => {
 const onSharingSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
-  if (!validateSharingCheckbox() || !validateSharingDurationSubfields()) return;
+  if (!validateSharingDurationSubfields()) return;
   try {
     const done = await updateSharing();
     if (done) {
@@ -87,7 +86,8 @@ const onSharingSubmit = async (e) => {
     } else {
       showFailedMessage("Failed to add shared url");
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     showFailedMessage("Failed to add shared url");
   } finally {
     sharingDialog.close();
