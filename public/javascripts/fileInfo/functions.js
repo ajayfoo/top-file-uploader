@@ -56,7 +56,7 @@ const getSumOfAllDurationSubfields = () =>
     .map((e) => parseInt(e.value))
     .reduce((acc, curr) => acc + curr, 0);
 
-const validateSharingDurationSubfields = () => {
+const setCustomValidityForDurationField = () => {
   const minutesSubfield = durationSubfieldsObject.minutes;
   if (!sharingCheckbox.checked) {
     minutesSubfield.setCustomValidity("");
@@ -65,7 +65,6 @@ const validateSharingDurationSubfields = () => {
   const sum = getSumOfAllDurationSubfields();
   if (sum <= 0) {
     minutesSubfield.setCustomValidity("Duration must be at least one minute");
-    sharingForm.reportValidity();
     return false;
   } else {
     minutesSubfield.setCustomValidity("");
@@ -73,4 +72,4 @@ const validateSharingDurationSubfields = () => {
   }
 };
 
-export { showFailedMessage, updateSharing, validateSharingDurationSubfields };
+export { showFailedMessage, updateSharing, setCustomValidityForDurationField };

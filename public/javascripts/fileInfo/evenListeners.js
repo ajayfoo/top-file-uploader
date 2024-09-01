@@ -4,9 +4,9 @@ import {
   sharingDialog,
 } from "./globals.js";
 import {
+  setCustomValidityForDurationField,
   showFailedMessage,
   updateSharing,
-  validateSharingDurationSubfields,
 } from "./functions.js";
 
 const showConfirmDeleteModal = () => {
@@ -78,7 +78,7 @@ const showSharingModal = () => {
 const onSharingSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
-  if (!validateSharingDurationSubfields()) return;
+  if (!setCustomValidityForDurationField()) return;
   try {
     const done = await updateSharing();
     if (done) {
