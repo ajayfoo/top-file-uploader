@@ -32,82 +32,9 @@ const renderFileInfo = async (req, res, next) => {
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const getIdsOfFileToReplace = (req) => {
-  const idsOfFilesToReplace = req.body.idsOfFilesToReplace ?? [];
-  if (!Array.isArray(idsOfFilesToReplace)) {
-    return [idsOfFilesToReplace].map((e) => parseInt(e));
-  }
-  return idsOfFilesToReplace.map((e) => parseInt(e));
-};
 
-const removeToBeReplacedFiles = async (req, res, next) => {
-  const { id: ownerId } = req.session.passport.user;
-  const idsOfFilesToReplace = getIdsOfFileToReplace(req);
-  try {
-    await db.file.deleteMany({
-      where: {
-        ownerId,
-        id: {
-          in: idsOfFilesToReplace,
-        },
-      },
-    });
-    next();
-  } catch (err) {
-    next(err);
-  }
-};
-
-const areEqualArrays = (arr1, arr2) => {
-  if (arr1.length !== arr2.length) return false;
-  for (const e1 of arr1) {
-    if (!arr2.includes(e1)) return false;
-  }
-  return true;
-};
-
-const sendDuplicateFileNamesIfAny = async (req, res, next) => {
-  if (req.files.length === 0) return res.status(200).end();
-  const idsOfFilesToReplace = getIdsOfFileToReplace(req);
-  const { id: ownerId } = req.session.passport.user;
-  let folderId = null;
-  if (req.params.folderId === "root") {
-    folderId = req.session.passport.user.rootFolderId;
-  } else {
-    folderId = parseInt(req.params.folderId);
-  }
-  try {
-    const duplicateFiles = await db.file.findMany({
-      where: {
-        ownerId,
-        folderId,
-        name: {
-          in: req.files.map((f) => f.originalname),
-        },
-      },
-      select: {
-        name: true,
-        id: true,
-      },
-    });
-    if (
-      areEqualArrays(
-        duplicateFiles.map((f) => f.id),
-        idsOfFilesToReplace,
-      )
-    ) {
-      return next();
-    }
-    res.status(409).json(duplicateFiles);
-  } catch (err) {
-    console.error(err);
-    res.status(500).end();
-  }
-};
 const fileUploadMiddlewares = [
   upload.array("files"),
-  sendDuplicateFileNamesIfAny,
-  removeToBeReplacedFiles,
   async (req, res) => {
     const { id: ownerId } = req.session.passport.user;
     let folderId = null;
@@ -116,8 +43,12 @@ const fileUploadMiddlewares = [
     } else {
       folderId = parseInt(req.params.folderId);
     }
-    await saveFiles(req.files, ownerId, folderId);
-    res.status(200).end();
+    try {
+      await saveFiles(req.files, ownerId, folderId);
+      res.status(200).end();
+    } catch {
+      res.status(500).end();
+    }
   },
 ];
 

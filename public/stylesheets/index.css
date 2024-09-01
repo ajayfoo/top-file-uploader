@@ -25,7 +25,3 @@
 #add-menu > .items.visible {
   visibility: visible;
 }
-
-section.none {
-  display: none;
-}

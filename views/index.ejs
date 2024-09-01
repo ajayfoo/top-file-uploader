@@ -38,13 +38,6 @@
       <form method="dialog">
         <label for="files-to-upload">Files</label>
         <input type="file" required multiple name="files" id="files-to-upload" />
-        <section class="none" id="resolve-upload-file-conflict">
-
-          <p>Select all the duplicate file(s) you want to replace with new ones or leave them unselected to skip them.</p>
-          <section id="duplicate-files">
-
-          </section>
-        </section>
         <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
           Submit
         </button>
