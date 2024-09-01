@@ -8,4 +8,3 @@
 4. Add progress bars
 5. Fix enter key press event handler for forms
 6. Add feat to share an individual file
-7. Fix files failing to upload when folder is selected along with files

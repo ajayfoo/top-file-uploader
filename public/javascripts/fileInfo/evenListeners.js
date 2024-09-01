@@ -70,10 +70,22 @@ const onRenameSubmit = async (e) => {
 const showSharingModal = () => {
   sharingDialog.showModal();
 };
+
+const writeSharedUrlToClipboard = async (e) => {
+  const url = new URL("shared/files/" + e.target.dataset.id, location.origin)
+    .href;
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch {
+    showFailedMessage("Failed to copy link to clipboard");
+  }
+};
+
 export {
   showConfirmDeleteModal,
   onConfirmDeleteSubmit,
   showRenameDialog,
   onRenameSubmit,
   showSharingModal,
+  writeSharedUrlToClipboard,
 };

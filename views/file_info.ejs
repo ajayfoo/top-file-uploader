@@ -19,6 +19,9 @@
     <button type="button" id="sharing-file-button">
       <%=sharing?'Sharing':'Not Sharing'%>
     </button>
+    <%if(sharing){%>
+    <button id="copy-shared-url-button" data-id="<%=sharing.id%>">Copy Link</button>
+    <%}%>
   </ol>
   <div class="dialogs">
     <%- include('partials/rename_dialog',{dialogId:'rename-file-dialog',inputId:'current-file-name',parentId:folderId}) %>
@@ -31,7 +34,7 @@
     </dialog>
     <%- include('partials/sharing_dialog',{sharing,forFolder:false}) %>
     <%- include('partials/failed_message_dialog') %>
-  </div>
+    </div>
 </body>
 
 </html>

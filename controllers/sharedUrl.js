@@ -33,20 +33,13 @@ const render = async (req, res, next) => {
 };
 
 const renderFileInfo = async (req, res, next) => {
-  const sharedUrlId = parseInt(req.params.sharedUrlId);
   const id = parseInt(req.params.id);
-  const sharedUrl = await db.sharedUrl.findUnique({
+  const sharedUrl = await db.sharedFileUrl.findUnique({
     where: {
-      id: sharedUrlId,
+      id,
     },
     include: {
-      folder: {
-        include: {
-          files: {
-            where: { id },
-          },
-        },
-      },
+      file: true,
     },
   });
   if (!sharedUrl) {
@@ -54,8 +47,7 @@ const renderFileInfo = async (req, res, next) => {
     return;
   }
   res.render("shared_file_info", {
-    file: sharedUrl.folder.files[0],
-    folderId: sharedUrl.folder.id,
+    file: sharedUrl.file,
   });
 };
 

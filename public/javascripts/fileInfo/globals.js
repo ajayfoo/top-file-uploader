@@ -6,6 +6,7 @@ const renameFileDialog = document.getElementById("rename-file-dialog");
 const renameFileBtn = document.getElementById("rename-file");
 const sharingDialog = document.getElementById("share-file-dialog");
 const sharingButton = document.getElementById("sharing-file-button");
+const copyLinkButton = document.getElementById("copy-shared-url-button");
 
 export {
   confirmDeleteFileDialog,
@@ -14,4 +15,5 @@ export {
   renameFileBtn,
   sharingDialog,
   sharingButton,
+  copyLinkButton,
 };

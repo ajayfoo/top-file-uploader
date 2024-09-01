@@ -4,6 +4,7 @@ import {
   renameFileBtn,
   renameFileDialog,
   sharingButton,
+  copyLinkButton,
 } from "./globals.js";
 
 import {
@@ -12,6 +13,7 @@ import {
   showRenameDialog,
   onRenameSubmit,
   showSharingModal,
+  writeSharedUrlToClipboard,
 } from "./evenListeners.js";
 
 const attachEventListeners = () => {
@@ -22,6 +24,8 @@ const attachEventListeners = () => {
   renameFileDialog.addEventListener("submit", onRenameSubmit);
 
   sharingButton.addEventListener("click", showSharingModal);
+
+  copyLinkButton?.addEventListener("click", writeSharedUrlToClipboard);
 };
 
 attachEventListeners();
