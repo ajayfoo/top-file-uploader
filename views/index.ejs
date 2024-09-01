@@ -55,7 +55,6 @@
         <button formnovalidate>Close</button>
         </form>
         </dialog>
-        <%- include('partials/failed_message_dialog') %>
         <%- include('partials/rename_dialog',{
           dialogId:'rename-current-folder-dialog',
           inputId:'current-folder-name',
@@ -78,6 +77,8 @@
           </form>
         </dialog>
         <%- include('partials/sharing_dialog',{sharing,forFolder:true}) %>
+        <%- include('partials/failed_message_dialog') %>
+        <%- include('partials/progress_dialog') %>
       </div>
 </body>
 

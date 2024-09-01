@@ -15,8 +15,10 @@ import {
 } from "./functions.js";
 
 import {
+  closeProgressDialog,
   setCustomValidityForDurationField,
   showFailedMessage,
+  showProgressDialog,
 } from "../functions.js";
 
 const showAddFilesModal = () => {
@@ -26,7 +28,19 @@ const showAddFilesModal = () => {
 const onAddFilesSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
-  await uploadFiles();
+  try {
+    showProgressDialog();
+    const response = await uploadFiles();
+    if (response.ok) {
+      location.reload();
+    } else {
+      showFailedMessage("Something went wrong");
+    }
+  } catch {
+    showFailedMessage("Something went wrong");
+  } finally {
+    closeProgressDialog();
+  }
 };
 
 const showAddFolderModal = () => {
@@ -56,6 +70,7 @@ const onRenameCurrentFolderSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
   try {
+    showProgressDialog();
     const response = await sendRenameFolderPutRequest(
       renameCurrentFolderDialog,
     );
@@ -66,6 +81,8 @@ const onRenameCurrentFolderSubmit = async (e) => {
     }
   } catch {
     showFailedMessage("Something went wrong");
+  } finally {
+    closeProgressDialog();
   }
 };
 

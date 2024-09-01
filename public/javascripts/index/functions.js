@@ -1,39 +1,28 @@
-import { showFailedMessage, getDurationValues } from "../functions.js";
+import {
+  showFailedMessage,
+  getDurationValues,
+  showProgressDialog,
+  closeProgressDialog,
+} from "../functions.js";
 import { durationSubfieldsObject, sharingCheckbox } from "./globals.js";
 
 const addFilesToFormData = (formData) => {
   const files = document.getElementById("files-to-upload").files;
-  let numOfFilesAdded = 0;
   for (const file of files) {
     formData.append("files", file, file.name);
-    ++numOfFilesAdded;
   }
-  return numOfFilesAdded;
 };
 
-const uploadFiles = async () => {
-  const form = document.querySelector("#add-files-dialog>form");
+const uploadFiles = () => {
   const formData = new FormData();
-  const numOfFilesAdded = addFilesToFormData(formData);
-  if (numOfFilesAdded < 1) {
-    form.reportValidity();
-    return;
-  }
+  addFilesToFormData(formData);
   const urlPart1 =
     location.pathname === "/" ? "/folders/root" : location.pathname;
   const url = urlPart1 + "/files";
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    if (response.ok) {
-      location.reload();
-      return;
-    }
-  } catch {
-    showFailedMessage("Something went wrong");
-  }
+  return fetch(url, {
+    method: "POST",
+    body: formData,
+  });
 };
 
 const setupAddMenu = () => {
@@ -100,6 +89,7 @@ const setupDeleteFolderButton = () => {
       if (document.activeElement.hasAttribute("formnovalidate")) return;
       e.preventDefault();
       try {
+        showProgressDialog();
         const done = await sendDeleteFolderRequest();
         if (done) {
           location.replace(location.origin);
@@ -109,6 +99,8 @@ const setupDeleteFolderButton = () => {
       } catch (err) {
         console.error(err);
         showFailedMessage("Something went wrong");
+      } finally {
+        closeProgressDialog();
       }
     });
   }

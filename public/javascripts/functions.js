@@ -38,8 +38,19 @@ const setCustomValidityForDurationField = (
   }
 };
 
+const showProgressDialog = () => {
+  const progressDialog = document.getElementById("progress-dialog");
+  progressDialog.showModal();
+};
+const closeProgressDialog = () => {
+  const progressDialog = document.getElementById("progress-dialog");
+  progressDialog.close();
+};
+
 export {
   showFailedMessage,
   getDurationValues,
   setCustomValidityForDurationField,
+  showProgressDialog,
+  closeProgressDialog,
 };
