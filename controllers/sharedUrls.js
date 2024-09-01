@@ -161,13 +161,14 @@ const deleteSharedFileUrl = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   const fileId = parseInt(req.body.fileId);
   try {
-    await db.sharedFileUrl.delete({
+    await db.sharedFileUrl.deleteMany({
       where: {
         file: {
-          id: fileId,
           ownerId,
+          id: {
+            in: [fileId],
+          },
         },
-        fileId,
       },
     });
     res.status(200).end();
