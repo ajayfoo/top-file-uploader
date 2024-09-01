@@ -1,7 +1,7 @@
 import { getDurationValues } from "../functions.js";
 import { durationSubfieldsObject, sharingCheckbox } from "./globals.js";
 
-const updateSharing = async () => {
+const updateSharing = async (signal) => {
   const fileId = location.pathname.substring(
     location.pathname.lastIndexOf("/") + 1,
   );
@@ -16,6 +16,7 @@ const updateSharing = async () => {
       body: JSON.stringify({
         fileId,
       }),
+      signal,
     });
     return response.ok;
   }
@@ -29,6 +30,7 @@ const updateSharing = async () => {
       fileId,
       enableSharing,
       ...durationValues,
+      signal,
     }),
   });
   return response.ok;

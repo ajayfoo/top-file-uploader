@@ -157,20 +157,24 @@ const upsertSharedFileUrl = async (req, res) => {
   }
 };
 
+const deleteSharedFileUrlHavingFileId = (fileId, ownerId) => {
+  return db.sharedFileUrl.deleteMany({
+    where: {
+      file: {
+        ownerId,
+        id: {
+          in: [fileId],
+        },
+      },
+    },
+  });
+};
+
 const deleteSharedFileUrl = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   const fileId = parseInt(req.body.fileId);
   try {
-    await db.sharedFileUrl.deleteMany({
-      where: {
-        file: {
-          ownerId,
-          id: {
-            in: [fileId],
-          },
-        },
-      },
-    });
+    await deleteSharedFileUrlHavingFileId(fileId, ownerId);
     res.status(200).end();
   } catch (err) {
     console.error(err);
@@ -184,4 +188,5 @@ export {
   deleteSharedFolderUrl,
   upsertSharedFileUrl,
   deleteSharedFileUrl,
+  deleteSharedFileUrlHavingFileId,
 };

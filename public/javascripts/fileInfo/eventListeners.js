@@ -6,8 +6,10 @@ import {
   sharingDialog,
 } from "./globals.js";
 import {
+  closeProgressDialog,
   setCustomValidityForDurationField,
   showFailedMessage,
+  showProgressDialog,
 } from "../functions.js";
 
 import { updateSharing } from "./functions.js";
@@ -20,9 +22,12 @@ const onConfirmDeleteSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
   const failedMessage = "Failed to delete file!";
+  const controller = new AbortController();
+  showProgressDialog(controller);
   try {
     const response = await fetch(location.href, {
       method: "DELETE",
+      signal: controller.signal,
     });
     if (response.ok) {
       location.assign(location.origin);
@@ -33,6 +38,7 @@ const onConfirmDeleteSubmit = async (e) => {
     showFailedMessage(failedMessage);
   } finally {
     confirmDeleteFileDialog.close();
+    closeProgressDialog();
   }
 };
 
@@ -45,6 +51,8 @@ const onRenameSubmit = async (e) => {
   e.preventDefault();
   const failedMessage = "Failed to rename the file";
   const name = document.getElementById("current-file-name").value;
+  const controller = new AbortController();
+  showProgressDialog(controller);
   try {
     const response = await fetch(location.href, {
       method: "PATCH",
@@ -54,22 +62,17 @@ const onRenameSubmit = async (e) => {
       body: JSON.stringify({
         name,
       }),
+      signal: controller.signal,
     });
     if (response.ok) {
       location.reload();
     } else {
-      const json = await response?.json();
-      if (json) {
-        showFailedMessage(
-          `There is already a file named ${name} in folder ${json.folderName}`,
-        );
-      } else {
-        showFailedMessage(failedMessage);
-      }
+      showFailedMessage(failedMessage);
     }
   } catch {
     showFailedMessage(failedMessage);
   } finally {
+    closeProgressDialog();
     renameFileDialog.close();
   }
 };
@@ -85,8 +88,10 @@ const onSharingSubmit = async (e) => {
     !setCustomValidityForDurationField(durationSubfieldsObject, sharingCheckbox)
   )
     return;
+  const controller = new AbortController();
+  showProgressDialog(controller);
   try {
-    const done = await updateSharing();
+    const done = await updateSharing(controller.signal);
     if (done) {
       location.reload();
     } else {
@@ -96,6 +101,7 @@ const onSharingSubmit = async (e) => {
     console.error(err);
     showFailedMessage("Failed to add shared url");
   } finally {
+    closeProgressDialog();
     sharingDialog.close();
   }
 };

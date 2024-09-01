@@ -1,6 +1,7 @@
 import db from "../db.js";
 import multer from "multer";
 import { saveFiles, getDurations } from "../utils.js";
+import { deleteSharedFileUrlHavingFileId } from "./sharedUrls.js";
 
 const renderFileInfo = async (req, res, next) => {
   const { id: ownerId } = req.session.passport.user;
@@ -54,11 +55,14 @@ const fileUploadMiddlewares = [
 const removeFile = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   const id = parseInt(req.params.id);
+  const folderId = parseInt(req.params.folderId);
   try {
+    await deleteSharedFileUrlHavingFileId(id, ownerId);
     await db.file.delete({
       where: {
         id,
         ownerId,
+        folderId,
       },
     });
     res.status(204).end();
