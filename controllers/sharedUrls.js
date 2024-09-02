@@ -32,8 +32,8 @@ const upsertSharedUrlForFilesInFolder = async (
   await db.$transaction(upserts);
 };
 
-const deleteSharedUrlForFilesInFolder = async (folderId, ownerId) => {
-  await db.sharedFileUrl.deleteMany({
+const deleteSharedUrlForFilesInFolder = (folderId, ownerId) => {
+  return db.sharedFileUrl.deleteMany({
     where: {
       file: {
         folderId,
@@ -157,8 +157,8 @@ const upsertSharedFileUrl = async (req, res) => {
   }
 };
 
-const deleteSharedFileUrlHavingFileId = (fileId, ownerId) => {
-  return db.sharedFileUrl.deleteMany({
+const deleteSharedFileUrlHavingFileId = (fileId, ownerId) =>
+  db.sharedFileUrl.deleteMany({
     where: {
       file: {
         ownerId,
@@ -168,7 +168,6 @@ const deleteSharedFileUrlHavingFileId = (fileId, ownerId) => {
       },
     },
   });
-};
 
 const deleteSharedFileUrl = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;

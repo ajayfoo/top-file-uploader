@@ -9,8 +9,10 @@
 
 <body>
   <p>
-    <%=error.statusCode%>
-    Some thing went wrong
+    <% 
+     const message=error.statusCode+': '+error.message 
+    %>
+    <%=message%>
   </p>
   <a href="/">Go To Home</a>
 </body>

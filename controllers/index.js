@@ -1,6 +1,7 @@
 import { getDurations } from "../utils.js";
 import db from "../db.js";
 import { recursivelyDeleteSharedFolderUrl } from "./sharedUrls.js";
+import createHttpError from "http-errors";
 
 const getRootFolderId = async (req, res) => {
   const { rootFolderId: id } = req.session.passport.user;
@@ -59,6 +60,9 @@ const renderFolderPage = async (req, res, next) => {
         },
       }),
     ]);
+    if (!folder) {
+      return next(createHttpError(404, "The folder doesn't exist"));
+    }
     const sharing = folder.sharedUrl
       ? getDurations(folder.sharedUrl.expiresOn)
       : null;
@@ -79,8 +83,8 @@ const renderFolderPage = async (req, res, next) => {
   }
 };
 
-const createFolderWith = async (name, parentFolder, ownerId) => {
-  await db.folder.create({
+const createFolderWith = (name, parentFolder, ownerId) =>
+  db.folder.create({
     data: {
       name,
       parent: {
@@ -102,7 +106,6 @@ const createFolderWith = async (name, parentFolder, ownerId) => {
       }),
     },
   });
-};
 
 const createFolder = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
@@ -200,6 +203,9 @@ const removeFolder = async (req, res) => {
         parentId: true,
       },
     });
+    if (!folderToRemove) {
+      return res.status(404).end();
+    }
     await recursivelyDeleteSharedFolderUrl(id, ownerId);
     await recursivelyDeleteFolder(id, ownerId);
     console.log("user id " + id + " was deleted");

@@ -1,3 +1,4 @@
+import createHttpError from "http-errors";
 import db from "../db.js";
 
 const renderFolderPage = async (req, res, next) => {
@@ -24,6 +25,10 @@ const renderFolderPage = async (req, res, next) => {
         },
       },
     });
+    if (!sharedUrl) {
+      next(createHttpError(404, "Folder doesn't exists or it's not shared"));
+      return;
+    }
     res.render("shared_url", {
       id: sharedUrl.id,
       currentFolder: sharedUrl.folder,
@@ -38,21 +43,25 @@ const renderFolderPage = async (req, res, next) => {
 
 const renderFileInfoPage = async (req, res, next) => {
   const id = parseInt(req.params.id);
-  const sharedUrl = await db.sharedFileUrl.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      file: true,
-    },
-  });
-  if (!sharedUrl) {
-    next(new Error("Not found"));
-    return;
+  try {
+    const sharedUrl = await db.sharedFileUrl.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        file: true,
+      },
+    });
+    if (!sharedUrl) {
+      next(createHttpError(404, "File doesn't exists or it's not shared"));
+      return;
+    }
+    res.render("shared_file_info", {
+      file: sharedUrl.file,
+    });
+  } catch (err) {
+    next(err);
   }
-  res.render("shared_file_info", {
-    file: sharedUrl.file,
-  });
 };
 
 export { renderFolderPage, renderFileInfoPage };

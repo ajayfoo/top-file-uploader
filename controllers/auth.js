@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import "dotenv/config";
 import auth from "../middlewares/auth.js";
 import bcrypt from "bcrypt";
 import db from "../db.js";
@@ -64,30 +64,34 @@ const signUp = async (req, res, next) => {
   const { username, password } = req.body;
   const saltRounds = parseInt(process.env.SALT_ROUNDS);
   const passwordHash = await bcrypt.hash(password, saltRounds);
-  const newUser = await db.user.create({
-    data: {
-      username,
-      password: passwordHash,
-      folders: {
-        create: {
-          name: "Root",
+  try {
+    const newUser = await db.user.create({
+      data: {
+        username,
+        password: passwordHash,
+        folders: {
+          create: {
+            name: "Root",
+          },
         },
       },
-    },
-    include: {
-      folders: true,
-    },
-  });
-  const userForSession = {
-    id: newUser.id,
-    rootFolderId: newUser.folders[0].id,
-  };
-  req.login(userForSession, (err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("../../");
-  });
+      include: {
+        folders: true,
+      },
+    });
+    const userForSession = {
+      id: newUser.id,
+      rootFolderId: newUser.folders[0].id,
+    };
+    req.login(userForSession, (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("../../");
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const validaionAndSignUpMiddlewares = [
