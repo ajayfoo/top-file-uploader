@@ -11,68 +11,72 @@ const getRootFolderId = async (req, res) => {
   }
 };
 
-const renderFolderPage = async (req, res) => {
+const renderFolderPage = async (req, res, next) => {
   const { id: userId } = req.session.passport.user;
   const isRoot = req.params.id === undefined;
   const folderId = isRoot
     ? req.session.passport.user.rootFolderId
     : parseInt(req.params.id);
-  const [user, folder, parentFolder] = await Promise.all([
-    db.user.findUnique({
-      where: {
-        id: userId,
-      },
-      include: {
-        folders: {
-          where: {
-            parentId: folderId,
+  try {
+    const [user, folder, parentFolder] = await Promise.all([
+      db.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          folders: {
+            where: {
+              parentId: folderId,
+            },
+          },
+          files: {
+            where: {
+              folderId,
+            },
           },
         },
-        files: {
-          where: {
-            folderId,
+      }),
+      db.folder.findUnique({
+        where: {
+          ownerId: userId,
+          id: folderId,
+        },
+        include: {
+          sharedUrl: true,
+        },
+      }),
+      db.folder.findFirst({
+        where: {
+          ownerId: userId,
+          childrenFolder: {
+            some: {
+              id: folderId,
+            },
           },
         },
-      },
-    }),
-    db.folder.findUnique({
-      where: {
-        ownerId: userId,
-        id: folderId,
-      },
-      include: {
-        sharedUrl: true,
-      },
-    }),
-    db.folder.findFirst({
-      where: {
-        ownerId: userId,
-        childrenFolder: {
-          some: {
-            id: folderId,
-          },
+        select: {
+          id: true,
         },
-      },
-      select: {
-        id: true,
-      },
-    }),
-  ]);
-  const sharing = folder.sharedUrl
-    ? getDurations(folder.sharedUrl.expiresOn)
-    : null;
-  if (sharing) {
-    sharing.id = folder.sharedUrl.id;
+      }),
+    ]);
+    const sharing = folder.sharedUrl
+      ? getDurations(folder.sharedUrl.expiresOn)
+      : null;
+    if (sharing) {
+      sharing.id = folder.sharedUrl.id;
+    }
+    res.render("index", {
+      username: user.username,
+      folders: user.folders,
+      files: user.files,
+      currentFolder: { id: folderId, name: folder.name },
+      isRoot,
+      sharing,
+      parentId: parentFolder ? parentFolder.id : null,
+    });
+  } catch (err) {
+    next(err);
   }
-  res.render("index", {
-    username: user.username,
-    folders: user.folders,
-    files: user.files,
-    currentFolder: { id: folderId, name: folder.name },
-    isRoot,
-    sharing,
-    parentId: parentFolder ? parentFolder.id : null,
-  });
 };
 
 const createFolderWith = async (name, parentFolder, ownerId) => {
@@ -184,11 +188,27 @@ const recursivelyDeleteFolder = async (id, ownerId) => {
 
 const removeFolder = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
+  const { rootFolderId } = req.session.passport;
   const id = parseInt(req.params.id);
   try {
+    const folderToRemove = await db.folder.findUnique({
+      where: {
+        id,
+        ownerId,
+      },
+      select: {
+        parentId: true,
+      },
+    });
     await recursivelyDeleteSharedFolderUrl(id, ownerId);
     await recursivelyDeleteFolder(id, ownerId);
-    res.status(204).end();
+    console.log("user id " + id + " was deleted");
+    if (folderToRemove.parentId === rootFolderId) {
+      res.redirect(303, "/");
+    } else {
+      res.redirect(303, "/folders/" + folderToRemove.parentId);
+    }
+    res.status(200).end();
   } catch (err) {
     console.error(err);
     res.status(500).end();

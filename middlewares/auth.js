@@ -49,7 +49,7 @@ passport.deserializeUser(async (user, done) => {
       },
     });
     if (!targetUser) {
-      done(new Error("User not found"));
+      done(new Error("USER_NOT_FOUND"));
       return;
     }
     done(null, { id: targetUser.id, rootFolderId: targetUser.folders[0].id });

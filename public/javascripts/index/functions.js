@@ -72,10 +72,9 @@ const setupDeleteFolderButton = () => {
   const deleteFolderDialog = document.getElementById("delete-folder-dialog");
   if (deleteFolderButton) {
     const sendDeleteFolderRequest = async () => {
-      const response = await fetch(location.href, {
+      return await fetch(location.href, {
         method: "DELETE",
       });
-      return response.ok;
     };
     deleteFolderButton.addEventListener("click", () => {
       deleteFolderDialog.showModal();
@@ -84,9 +83,9 @@ const setupDeleteFolderButton = () => {
       if (document.activeElement.hasAttribute("formnovalidate")) return;
       e.preventDefault();
       try {
-        const done = await sendDeleteFolderRequest();
-        if (done) {
-          location.replace(location.origin);
+        const response = await sendDeleteFolderRequest();
+        if (response.ok && response.redirected) {
+          location.assign(response.url);
         } else {
           showFailedMessage("Something went wrong");
         }
