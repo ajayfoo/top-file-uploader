@@ -29,8 +29,8 @@ const onConfirmDeleteSubmit = async (e) => {
       method: "DELETE",
       signal: controller.signal,
     });
-    if (response.ok) {
-      location.assign(location.origin);
+    if (response.ok && response.redirected) {
+      location.assign(response.url);
     } else {
       showFailedMessage(failedMessage);
     }

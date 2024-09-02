@@ -7,27 +7,31 @@ const renderFileInfo = async (req, res, next) => {
   const { id: ownerId } = req.session.passport.user;
   const folderId = parseInt(req.params.folderId);
   const id = parseInt(req.params.id);
-  const file = await db.file.findUnique({
-    where: {
-      ownerId,
-      folderId,
-      id,
-    },
-    include: {
-      sharedUrl: true,
-    },
-  });
-  if (!file) {
-    next(new Error("File not found"));
-    return;
+  try {
+    const file = await db.file.findUnique({
+      where: {
+        ownerId,
+        folderId,
+        id,
+      },
+      include: {
+        sharedUrl: true,
+      },
+    });
+    if (!file) {
+      next(new Error("File not found"));
+      return;
+    }
+    const sharing = file.sharedUrl
+      ? getDurations(file.sharedUrl.expiresOn)
+      : null;
+    if (sharing) {
+      sharing.id = file.sharedUrl.id;
+    }
+    res.render("file_info", { file, folderId, sharing });
+  } catch (err) {
+    next(err);
   }
-  const sharing = file.sharedUrl
-    ? getDurations(file.sharedUrl.expiresOn)
-    : null;
-  if (sharing) {
-    sharing.id = file.sharedUrl.id;
-  }
-  res.render("file_info", { file, folderId, sharing });
 };
 
 const storage = multer.memoryStorage();
@@ -54,6 +58,7 @@ const fileUploadMiddlewares = [
 
 const removeFile = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
+  const { rootFolderId } = req.session.passport;
   const id = parseInt(req.params.id);
   const folderId = parseInt(req.params.folderId);
   try {
@@ -65,7 +70,11 @@ const removeFile = async (req, res) => {
         folderId,
       },
     });
-    res.status(204).end();
+    if (folderId === rootFolderId) {
+      res.redirect(303, "/");
+    } else {
+      res.redirect(303, "/folders/" + folderId);
+    }
   } catch (err) {
     console.error(err);
     res.status(500).end();

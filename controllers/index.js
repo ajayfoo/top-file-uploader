@@ -208,7 +208,6 @@ const removeFolder = async (req, res) => {
     } else {
       res.redirect(303, "/folders/" + folderToRemove.parentId);
     }
-    res.status(200).end();
   } catch (err) {
     console.error(err);
     res.status(500).end();
