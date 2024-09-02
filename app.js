@@ -39,7 +39,7 @@ app.listen(process.env.PORT, () => {
 
 app.use((err, req, res, next) => {
   if (err.message === "USER_NOT_FOUND") {
-    return res.clearCookie("connect.sid").end();
+    return res.clearCookie("connect.sid").redirect(303, "/").end();
   }
   if (res.headersSent) {
     return next(err);

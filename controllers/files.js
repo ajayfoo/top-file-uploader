@@ -2,6 +2,7 @@ import db from "../db.js";
 import multer from "multer";
 import { saveFiles, getDurations } from "../utils.js";
 import { deleteSharedFileUrlHavingFileId } from "./sharedUrls.js";
+import createHttpError from "http-errors";
 
 const renderFileInfo = async (req, res, next) => {
   const { id: ownerId } = req.session.passport.user;
@@ -19,7 +20,7 @@ const renderFileInfo = async (req, res, next) => {
       },
     });
     if (!file) {
-      next(new Error("File not found"));
+      next(createHttpError(404, "File not found"));
       return;
     }
     const sharing = file.sharedUrl
