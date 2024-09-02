@@ -1,5 +1,9 @@
 import { showFailedMessage, getDurationValues } from "../functions.js";
-import { durationSubfieldsObject, sharingCheckbox } from "./globals.js";
+import {
+  durationSubfieldsObject,
+  sharingCheckbox,
+  deleteFolderDialog,
+} from "./globals.js";
 
 const addFilesToFormData = (formData) => {
   const files = document.getElementById("files-to-upload").files;
@@ -18,22 +22,6 @@ const uploadFiles = (signal) => {
     method: "POST",
     body: formData,
     signal,
-  });
-};
-
-const setupAddMenu = () => {
-  const menuHeader = document.getElementById("add-menu-header");
-  const itemsEle = document.querySelector("#add-menu>.items");
-  const firstItem = document.querySelector("#add-menu>.items>:first-child");
-  let open = false;
-  menuHeader.addEventListener("click", () => {
-    if (open) {
-      itemsEle.classList.remove("visible");
-    } else {
-      itemsEle.classList.add("visible");
-      firstItem.focus();
-    }
-    open = !open;
   });
 };
 
@@ -67,33 +55,29 @@ const sendRenameFolderPutRequest = async (parentId, signal) => {
   return response;
 };
 
-const setupDeleteFolderButton = () => {
-  const deleteFolderButton = document.getElementById("delete-folder-button");
-  const deleteFolderDialog = document.getElementById("delete-folder-dialog");
-  if (deleteFolderButton) {
-    const sendDeleteFolderRequest = async () => {
-      return await fetch(location.href, {
-        method: "DELETE",
-      });
-    };
-    deleteFolderButton.addEventListener("click", () => {
-      deleteFolderDialog.showModal();
-    });
-    deleteFolderDialog.addEventListener("submit", async (e) => {
-      if (document.activeElement.hasAttribute("formnovalidate")) return;
-      e.preventDefault();
-      try {
-        const response = await sendDeleteFolderRequest();
-        if (response.ok && response.redirected) {
-          location.assign(response.url);
-        } else {
-          showFailedMessage("Something went wrong");
-        }
-      } catch (err) {
-        console.error(err);
-        showFailedMessage("Something went wrong");
-      }
-    });
+const sendDeleteFolderRequest = () => {
+  return fetch(location.href, {
+    method: "DELETE",
+  });
+};
+
+const showDeleteFolderModal = () => {
+  deleteFolderDialog.showModal();
+};
+
+const onSubmitDeleteFolderModal = async (e) => {
+  if (document.activeElement.hasAttribute("formnovalidate")) return;
+  e.preventDefault();
+  try {
+    const response = await sendDeleteFolderRequest();
+    if (response.ok && response.redirected) {
+      location.assign(response.url);
+    } else {
+      showFailedMessage("Something went wrong");
+    }
+  } catch (err) {
+    console.error(err);
+    showFailedMessage("Something went wrong");
   }
 };
 
@@ -133,10 +117,10 @@ const updateSharing = async (signal) => {
 };
 
 export {
-  setupAddMenu,
-  setupDeleteFolderButton,
   uploadFiles,
   sendCreateFolderPostRequest,
   updateSharing,
   sendRenameFolderPutRequest,
+  showDeleteFolderModal,
+  onSubmitDeleteFolderModal,
 };
