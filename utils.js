@@ -78,4 +78,11 @@ const getDurations = (endDate) => {
   };
 };
 
-export { saveFiles, getDurations };
+const isExpiredDate = (expiresOn) => {
+  const now = dayjs();
+  const formattedExpiresOn = dayjs(expiresOn);
+  const remainingTime = formattedExpiresOn.diff(now);
+  return remainingTime <= 0;
+};
+
+export { saveFiles, getDurations, isExpiredDate };
