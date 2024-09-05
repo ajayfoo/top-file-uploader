@@ -1,13 +1,13 @@
 import db from "../db.js";
 import {
   deleteSharedFileUrlHavingFileId,
-  recursivelyDeleteSharedFolderUrl,
+  deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired,
 } from "../controllers/sharedUrls.js";
 
 import { isExpiredDate } from "../utils.js";
 
 const deleteSharedFileUrlIfExpiredMiddleware = async (req, res, next) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
   const sharedUrl = await db.sharedFileUrl.findUnique({
     where: { id },
     include: { file: true },
@@ -37,7 +37,7 @@ const recursivelyDeleteSharedFolderUrlIfExpiredMiddleware = async (
     next();
     return;
   }
-  await recursivelyDeleteSharedFolderUrl(
+  await deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired(
     sharedUrl.folderId,
     sharedUrl.folder.ownerId,
   );

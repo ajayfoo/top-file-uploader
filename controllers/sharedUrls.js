@@ -2,6 +2,7 @@ import db from "../db.js";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import duration from "dayjs/plugin/duration.js";
+import { isExpiredDate } from "../utils.js";
 
 const upsertSharedUrlForFilesInFolder = async (
   folderId,
@@ -87,6 +88,45 @@ const recursivelyDeleteSharedFolderUrl = async (folderId, ownerId) => {
     },
   });
   await deleteSharedUrlForFilesInFolder(folderId, ownerId);
+};
+
+const deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired = async (
+  folderId,
+  ownerId,
+) => {
+  const folder = await db.folder.findUnique({
+    where: { id: folderId, ownerId },
+    include: {
+      childrenFolder: { include: { sharedUrl: true } },
+      files: { include: { sharedUrl: true } },
+    },
+  });
+  for (const childFolder of folder.childrenFolder) {
+    if (
+      childFolder.sharedUrl === null ||
+      !isExpiredDate(childFolder.sharedUrl.expiresOn)
+    )
+      continue;
+    await deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired(
+      childFolder.id,
+      ownerId,
+    );
+  }
+  for (const file of folder.files) {
+    if (file.sharedUrl === null || !isExpiredDate(file.sharedUrl.expiresOn))
+      continue;
+    await db.sharedFileUrl.delete({ where: { id: file.sharedUrl.id } });
+  }
+  await db.sharedFolderUrl.deleteMany({
+    where: {
+      folder: {
+        ownerId,
+        id: {
+          in: [folderId],
+        },
+      },
+    },
+  });
 };
 
 const deleteSharedFolderUrl = async (req, res) => {
@@ -188,4 +228,5 @@ export {
   upsertSharedFileUrl,
   deleteSharedFileUrl,
   deleteSharedFileUrlHavingFileId,
+  deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired,
 };

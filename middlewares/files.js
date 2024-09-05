@@ -3,7 +3,7 @@ import db from "../db.js";
 
 import { isExpiredDate } from "../utils.js";
 const deleteSharedFileUrlIfExpiredMiddleware = async (req, res, next) => {
-  const fileId = req.params.id;
+  const fileId = parseInt(req.params.id);
   const sharedUrl = await db.sharedFileUrl.findUnique({
     where: { fileId },
     include: { file: true },

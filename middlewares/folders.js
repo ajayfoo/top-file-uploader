@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { recursivelyDeleteSharedFolderUrl } from "../controllers/sharedUrls.js";
+import { deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired } from "../controllers/sharedUrls.js";
 
 import { isExpiredDate } from "../utils.js";
 
@@ -20,7 +20,7 @@ const recursivelyDeleteSharedFolderUrlIfExpiredMiddleware = async (
     next();
     return;
   }
-  await recursivelyDeleteSharedFolderUrl(
+  await deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired(
     sharedUrl.folderId,
     sharedUrl.folder.ownerId,
   );
