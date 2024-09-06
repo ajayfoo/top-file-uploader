@@ -16,13 +16,6 @@
     </p>
     <%- include('partials/header',{folderName:currentFolder.name,isRoot,sharing}) %>
     <div class="folders-files">
-      <div id="add-menu">
-        <button id="add-menu-header">Add</button>
-        <div class="items">
-          <button id="add-files-button">Add file(s)</button>
-          <button id="add-folder-button">Add folder</button>
-        </div>
-      </div>
       <div class="folders">
         <%for(const folder of folders){%>
         <%- include('partials/folder',{folder}) %>

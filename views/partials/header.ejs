@@ -1,15 +1,38 @@
 <header class="main-header">
-  <h1 class="folder-name"><%=folderName%></h1>
   <div class="action-buttons">
-    <button id="rename-folder-button">Rename</button>
-    <%if(!isRoot){%>
-    <button id="delete-folder-button">Delete</button>
-    <%}%>
-    <button id="sharing-folder-button">
-      <%=sharing?'Sharing':'Not Sharing'%>
-    </button>
-    <%if(sharing){%>
-    <button id="copy-shared-url-button" data-id="<%=sharing.id%>">Copy Link</button>
-    <%}%>
+    <div class="left">
+      <h1 class="folder-name"><%=folderName%></h1>
+      <button class="action-button" id="rename-folder-button" aria-label="rename">
+        <img class="action-icon" src="/images/rename.svg" alt="">
+      </button>
+      <%if(!isRoot){%>
+      <button class="action-button" id="delete-folder-button" aria-label="delete">
+        <img class="action-icon" src="/images/trash.svg" alt="">
+      </button>
+      <%}%>
+      <div class="sharing">
+        <button class="action-button" id="sharing-folder-button" aria-label="sharing">
+          <%=sharing?'Sharing':'Not Sharing'%>
+      <img class="action-icon" src="/images/share.svg" alt="">
+      </button>
+      <%if(sharing){%>
+      <button class="action-button" id="copy-shared-url-button" data-id="<%=sharing.id%>" aria-label="copy link">
+        <img class="action-icon" src="/images/link.svg" alt="">
+      </button>
+      <%}%>
+      </div>
+    </div>
+    <div class="center" id="add-menu">
+      <button class="action-button" id="add-menu-header" aria-label="add">
+        <img class="action-icon" src="/images/add.svg" alt="">
+      </button>
+      <div class="items">
+        <button id="add-files-button">Add file(s)</button>
+        <button id="add-folder-button">Add folder</button>
+      </div>
+    </div>
+    <button class="right action-button" aria-label="log out">
+      <img class="action-icon" src="/images/logout.svg" alt="">
+      Logout</button>
   </div>
 </header>

@@ -4,24 +4,59 @@
   font-weight: 300;
   font-size: var(--size-700);
 }
-.welcome-banner > .username {
-  font-weight: 700;
-}
 
-.main-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+.welcome-banner>.username {
+  font-weight: 700;
 }
 
 #add-menu {
   position: relative;
 }
-#add-menu > .items {
+
+#add-menu>.items {
   position: absolute;
   visibility: hidden;
 }
 
-#add-menu > .items.visible {
+#add-menu>.items.visible {
   visibility: visible;
+}
+
+.main-header>.action-buttons>.left {
+  display: flex;
+  justify-self: left;
+  align-items: center;
+}
+
+.main-header>.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+}
+
+.main-header>.action-buttons>.center {
+  justify-self: center;
+}
+
+.main-header>.action-buttons>.right {
+  justify-self: right;
+}
+
+.action-icon {
+  min-inline-size: 1em;
+  min-block-size: 1rem;
+}
+
+.action-button {
+  display: flex;
+  padding: 0;
+  border: none;
+  align-items: center;
+  background-color: unset;
+}
+
+.sharing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
