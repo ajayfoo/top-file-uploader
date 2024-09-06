@@ -12,19 +12,23 @@ const recursivelyDeleteSharedFolderUrlIfExpiredMiddleware = async (
   const folderId = isRoot
     ? req.session.passport.user.rootFolderId
     : parseInt(req.params.id);
-  const sharedUrl = await db.sharedFolderUrl.findUnique({
-    where: { folderId },
-    include: { folder: true },
-  });
-  if (sharedUrl === null || !isExpiredDate(sharedUrl.expiresOn)) {
+  try {
+    const sharedUrl = await db.sharedFolderUrl.findUnique({
+      where: { folderId },
+      include: { folder: true },
+    });
+    if (sharedUrl === null || !isExpiredDate(sharedUrl.expiresOn)) {
+      next();
+      return;
+    }
+    await deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired(
+      sharedUrl.folderId,
+      sharedUrl.folder.ownerId,
+    );
     next();
-    return;
+  } catch (err) {
+    next(err);
   }
-  await deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired(
-    sharedUrl.folderId,
-    sharedUrl.folder.ownerId,
-  );
-  next();
 };
 
 export { recursivelyDeleteSharedFolderUrlIfExpiredMiddleware };

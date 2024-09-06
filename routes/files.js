@@ -9,7 +9,7 @@ import { deleteSharedFileUrlIfExpiredMiddleware } from "../middlewares/files.js"
 
 const router = Router({ mergeParams: true });
 
-router.use("/:id", deleteSharedFileUrlIfExpiredMiddleware);
+router.all("/:id", deleteSharedFileUrlIfExpiredMiddleware);
 
 router.post("/", fileUploadMiddlewares);
 router.get("/:id", renderFileInfo);

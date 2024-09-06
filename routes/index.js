@@ -11,15 +11,15 @@ import { recursivelyDeleteSharedFolderUrlIfExpiredMiddleware } from "../middlewa
 
 const router = Router();
 
-router.get("/rootFolderId", getRootFolderId);
+router.all("/", recursivelyDeleteSharedFolderUrlIfExpiredMiddleware);
 
-router.use("/", recursivelyDeleteSharedFolderUrlIfExpiredMiddleware);
+router.get("/rootFolderId", getRootFolderId);
 router.get("/", renderFolderPage);
 router.get("/favicon.ico", (req, res) => {
   return res.status(200).end();
 });
 
-router.use("/folders/:id", recursivelyDeleteSharedFolderUrlIfExpiredMiddleware);
+router.all("/folders/:id", recursivelyDeleteSharedFolderUrlIfExpiredMiddleware);
 
 router.get("/folders/:id", renderFolderPage);
 router.post("/folders/:id", createFolder);

@@ -7,11 +7,11 @@ import {
 
 const router = Router();
 
-router.use(
+router.all(
   "/sharedFolders/:id",
   recursivelyDeleteSharedFolderUrlIfExpiredMiddleware,
 );
-router.use("/sharedFiles/:id", deleteSharedFileUrlIfExpiredMiddleware);
+router.all("/sharedFiles/:id", deleteSharedFileUrlIfExpiredMiddleware);
 
 router.get("/sharedFolders/:id", renderFolderPage);
 router.get("/sharedFiles/:id", renderFileInfoPage);

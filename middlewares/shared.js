@@ -8,19 +8,23 @@ import { isExpiredDate } from "../utils.js";
 
 const deleteSharedFileUrlIfExpiredMiddleware = async (req, res, next) => {
   const id = parseInt(req.params.id);
-  const sharedUrl = await db.sharedFileUrl.findUnique({
-    where: { id },
-    include: { file: true },
-  });
-  if (sharedUrl === null || !isExpiredDate(sharedUrl.expiresOn)) {
+  try {
+    const sharedUrl = await db.sharedFileUrl.findUnique({
+      where: { id },
+      include: { file: true },
+    });
+    if (sharedUrl === null || !isExpiredDate(sharedUrl.expiresOn)) {
+      next();
+      return;
+    }
+    await deleteSharedFileUrlHavingFileId(
+      sharedUrl.fileId,
+      sharedUrl.file.ownerId,
+    );
     next();
-    return;
+  } catch (err) {
+    next(err);
   }
-  await deleteSharedFileUrlHavingFileId(
-    sharedUrl.fileId,
-    sharedUrl.file.ownerId,
-  );
-  next();
 };
 
 const recursivelyDeleteSharedFolderUrlIfExpiredMiddleware = async (
@@ -29,19 +33,23 @@ const recursivelyDeleteSharedFolderUrlIfExpiredMiddleware = async (
   next,
 ) => {
   const id = parseInt(req.params.id);
-  const sharedUrl = await db.sharedFolderUrl.findUnique({
-    where: { id },
-    include: { folder: true },
-  });
-  if (sharedUrl === null || !isExpiredDate(sharedUrl.expiresOn)) {
+  try {
+    const sharedUrl = await db.sharedFolderUrl.findUnique({
+      where: { id },
+      include: { folder: true },
+    });
+    if (sharedUrl === null || !isExpiredDate(sharedUrl.expiresOn)) {
+      next();
+      return;
+    }
+    await deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired(
+      sharedUrl.folderId,
+      sharedUrl.folder.ownerId,
+    );
     next();
-    return;
+  } catch (err) {
+    next(err);
   }
-  await deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired(
-    sharedUrl.folderId,
-    sharedUrl.folder.ownerId,
-  );
-  next();
 };
 
 export {
