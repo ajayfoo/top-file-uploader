@@ -8,7 +8,7 @@ const recursivelyDeleteSharedFolderUrlIfExpiredMiddleware = async (
   res,
   next,
 ) => {
-  const isRoot = req.params.id === undefined;
+  const isRoot = req.params.id === undefined || req.params.id === "root";
   const folderId = isRoot
     ? req.session.passport.user.rootFolderId
     : parseInt(req.params.id);
