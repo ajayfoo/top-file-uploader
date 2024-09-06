@@ -5,6 +5,7 @@
   font-display: swap;
   src: url("/fonts/InterVariable.woff2") format("woff2");
 }
+
 @font-face {
   font-family: Inter;
   font-style: italic;
@@ -49,8 +50,15 @@
   --size-rev-400: clamp(0.88rem, 1rem - 0.24vw, 1rem);
   --size-rev-500: clamp(1.09rem, 1.33rem - 0.47vw, 1.33rem);
   --size-rev-600: clamp(1.37rem, 1.78rem - 0.8vw, 1.78rem);
+  --size-rev-700: clamp(1.71rem, 2.37rem - 1.29vw, 2.37rem);
+  --size-rev-800: clamp(2.14rem, 3.16rem - 1.99vw, 3.16rem);
 
   --fs-x-sm: clamp(0.7rem, 0.85rem - 0.2vw, 0.85rem);
+  --fs-sm: var(--size-rev-500);
+  --fs-lg: var(--size-rev-700);
+  --fs-x-lg: var(--size-rev-800);
+
+  --br-md: 2rem;
 }
 
 body,
@@ -62,6 +70,10 @@ h3,
 h4 {
   margin: 0;
   padding: 0;
+}
+
+main {
+  padding-inline: var(--size-300);
 }
 
 @media screen and (prefers-color-scheme: light) {
