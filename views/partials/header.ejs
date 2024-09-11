@@ -3,28 +3,30 @@
     <div class="left">
       <h1 class="folder-name"><%=folderName%></h1>
       <button class="action-button" id="rename-folder-button" aria-label="rename">
-        <img class="action-icon" src="/images/rename.svg" alt="">
+        <img class="icon" src="/images/rename.svg" alt="">
       </button>
       <%if(!isRoot){%>
       <button class="action-button" id="delete-folder-button" aria-label="delete">
-        <img class="action-icon" src="/images/trash.svg" alt="">
+        <img class="icon" src="/images/trash.svg" alt="">
       </button>
       <%}%>
       <div class="sharing">
         <button class="action-button" id="sharing-folder-button" aria-label="sharing">
-          <%=sharing?'Sharing':'Not Sharing'%>
-      <img class="action-icon" src="/images/share.svg" alt="">
+          <span class="text">
+            <%=sharing?'Sharing':'Not Sharing'%>
+          </span>
+      <img class="icon" src="/images/share.svg" alt="">
       </button>
       <%if(sharing){%>
       <button class="action-button" id="copy-shared-url-button" data-id="<%=sharing.id%>" aria-label="copy link">
-        <img class="action-icon" src="/images/link.svg" alt="">
+        <img class="icon" src="/images/link.svg" alt="">
       </button>
       <%}%>
       </div>
     </div>
     <div class="center" id="add-menu">
       <button class="action-button" id="add-menu-header" aria-label="add">
-        <img class="action-icon" src="/images/add.svg" alt="">
+        <img class="icon" src="/images/add.svg" alt="">
       </button>
       <div class="items">
         <button id="add-files-button">Add file(s)</button>
@@ -32,7 +34,10 @@
       </div>
     </div>
     <button class="right action-button" aria-label="log out">
-      <img class="action-icon" src="/images/logout.svg" alt="">
-      Logout</button>
+      <img class="icon" src="/images/logout.svg" alt="">
+      <span class="text">
+        Logout
+      </span>
+    </button>
   </div>
 </header>

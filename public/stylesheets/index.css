@@ -5,29 +5,30 @@
   font-size: var(--size-700);
 }
 
-.welcome-banner>.username {
+.welcome-banner > .username {
   font-weight: 700;
 }
 
 .folder-name {
   font-size: var(--fs-x-lg);
   margin-inline-end: var(--size-rev-200);
+  color: var(--primary);
 }
 
 #add-menu {
   position: relative;
 }
 
-#add-menu>.items {
+#add-menu > .items {
   position: absolute;
   visibility: hidden;
 }
 
-#add-menu>.items.visible {
+#add-menu > .items.visible {
   visibility: visible;
 }
 
-.main-header>.action-buttons {
+.main-header > .action-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
@@ -39,47 +40,60 @@
   border-radius: var(--br-md);
 }
 
-.main-header>.action-buttons>.left {
+.main-header > .action-buttons > .left {
   display: flex;
   justify-self: left;
   align-items: center;
   gap: var(--size-rev-200);
 }
 
-.main-header>.action-buttons>.center {
+.main-header > .action-buttons > .center {
   justify-self: center;
 }
 
-.main-header>.action-buttons>.right {
+.main-header > .action-buttons > .right {
   justify-self: right;
 }
 
-.action-icon {
-  min-inline-size: 1em;
-  min-block-size: 1rem;
+.action-button > .icon {
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+@media screen and (prefers-color-scheme: light) {
+  .action-button > .icon {
+    filter: brightness(0) saturate(100%) invert(8%) sepia(26%) saturate(4534%)
+      hue-rotate(263deg) brightness(107%) contrast(106%);
+  }
 }
 
 .action-button {
   display: flex;
-  padding: 0;
+  padding: var(--size-100);
   border: none;
+  border-radius: var(--size-100);
   align-items: center;
-  background-color: unset;
+  background-color: var(--primary-container);
+  color: var(--on-primary-container);
   font-size: var(--fs-sm);
+}
+.action-button:hover {
+  cursor: pointer;
+}
+.action-button > .text {
+  min-width: max-content;
 }
 
 .sharing {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
 }
 
 #sharing-folder-button {
-  padding-inline-end: var(--size-rev-200);
-  border-inline-end: 0.1em solid;
   gap: var(--size-rev-100);
 }
 
 #copy-shared-url-button {
+  padding-inline-start: var(--size-rev-200);
   margin-inline-start: var(--size-rev-200);
 }
