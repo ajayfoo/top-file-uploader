@@ -53,10 +53,12 @@
   --size-rev-700: clamp(1.71rem, 2.37rem - 1.29vw, 2.37rem);
   --size-rev-800: clamp(2.14rem, 3.16rem - 1.99vw, 3.16rem);
 
-  --fs-x-sm: clamp(0.7rem, 0.85rem - 0.2vw, 0.85rem);
-  --fs-sm: var(--size-rev-500);
-  --fs-lg: var(--size-rev-700);
-  --fs-x-lg: var(--size-rev-800);
+  --fs-xx-sm: clamp(0.7rem, 0.85rem - 0.2vw, 0.85rem);
+  --fs-x-sm: var(--size-400);
+  --fs-sm: var(--size-500);
+  --fs-md: var(--size-600);
+  --fs-lg: var(--size-700);
+  --fs-x-lg: var(--size-800);
 
   --br-md: 2rem;
 }
@@ -70,6 +72,10 @@ h3,
 h4 {
   margin: 0;
   padding: 0;
+}
+
+button {
+  font-family: inherit;
 }
 
 main {

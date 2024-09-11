@@ -87,7 +87,7 @@ section.field input.invalid + .error,
 }
 
 section.field .error {
-  font-size: var(--fs-x-sm);
+  font-size: var(--fs-xx-sm);
   color: var(--error);
   display: flex;
   align-items: center;
