@@ -21,6 +21,15 @@ import {
   showProgressDialog,
 } from "../functions.js";
 
+const toggleFolderLeftActionButtons = () => {
+  const leftActionButtons = document.getElementById(
+    "folder-left-action-buttons",
+  );
+  const isVisible =
+    getComputedStyle(leftActionButtons).visibility === "visible";
+  leftActionButtons.style.visibility = isVisible ? "hidden" : "visible";
+};
+
 const showAddFilesModal = () => {
   addFileDialog.showModal();
 };
@@ -136,6 +145,7 @@ const writeSharedUrlToClipboard = async () => {
 };
 
 export {
+  toggleFolderLeftActionButtons,
   showAddFilesModal,
   onAddFilesSubmit,
   showAddFolderModal,

@@ -13,6 +13,7 @@ import {
   durationSubfieldsObject,
   deleteFolderButton,
   deleteFolderDialog,
+  currentFolderNameHeadingButton,
 } from "./globals.js";
 import { setCustomValidityForDurationField } from "../functions.js";
 import {
@@ -28,10 +29,15 @@ import {
   showAddFolderModal,
   showRenameFolderModal,
   showSharingFolderModal,
+  toggleFolderLeftActionButtons,
   writeSharedUrlToClipboard,
 } from "./eventListeners.js";
 
 const attachEventListeners = () => {
+  currentFolderNameHeadingButton.addEventListener(
+    "click",
+    toggleFolderLeftActionButtons,
+  );
   addFilesButton.addEventListener("click", showAddFilesModal);
   addFileDialog.addEventListener("submit", onAddFilesSubmit);
 

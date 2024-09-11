@@ -1,3 +1,6 @@
+const currentFolderNameHeadingButton = document.getElementById(
+  "current-folder-name-heading",
+);
 const addFilesButton = document.getElementById("add-files-button");
 const addFileDialog = document.getElementById("add-files-dialog");
 const addFolderButton = document.getElementById("add-folder-button");
@@ -23,6 +26,7 @@ const sharingFolderBtn = document.getElementById("sharing-folder-button");
 const copySharedUrlBtn = document.getElementById("copy-shared-url-button");
 
 export {
+  currentFolderNameHeadingButton,
   addFilesButton,
   addFileDialog,
   addFolderButton,

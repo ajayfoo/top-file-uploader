@@ -10,9 +10,15 @@
 }
 
 .folder-name {
-  font-size: var(--fs-x-lg);
+  display: flex;
   margin-inline-end: var(--size-rev-200);
+}
+.folder-name > button {
+  background-color: unset;
+  padding: 0;
+  border: none;
   color: var(--primary);
+  font-size: var(--fs-md);
 }
 
 #add-menu {
@@ -40,7 +46,10 @@
   border-radius: var(--br-md);
 }
 
-.main-header > .action-buttons > .left {
+.action-buttons > .menu-wrapper {
+  display: flex;
+}
+.action-buttons > .menu-wrapper > .left {
   display: flex;
   justify-self: left;
   align-items: center;
@@ -82,6 +91,7 @@
 }
 .action-button > .text {
   min-width: max-content;
+  font-size: var(--fs-x-sm);
 }
 
 .sharing {
@@ -93,7 +103,21 @@
   gap: var(--size-rev-100);
 }
 
-#copy-shared-url-button {
-  padding-inline-start: var(--size-rev-200);
-  margin-inline-start: var(--size-rev-200);
+@media screen and (max-width: 490px) {
+  .menu-wrapper {
+    position: relative;
+  }
+  .action-buttons > .menu-wrapper > .left {
+    visibility: hidden;
+    z-index: 1;
+    position: absolute;
+    top: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--size-rev-200);
+  }
+  .action-button > .text {
+    display: unset;
+  }
 }
