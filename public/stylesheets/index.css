@@ -1,5 +1,9 @@
 @import url("/stylesheets/global.css");
 
+button {
+  cursor: pointer;
+}
+
 .welcome-banner {
   font-weight: 300;
   font-size: var(--size-700);
@@ -169,12 +173,15 @@ section.field > label {
 }
 section.field > input {
   padding: var(--size-rev-100) var(--size-rev-200);
-  font-size: inherit;
-  font-family: inherit;
   border-radius: var(--br-x-sm);
   background-color: var(--secondary-container);
   color: var(--on-secondary-container);
   border: var(--size-25) solid var(--secondary);
+}
+section.field > input,
+section.sub-field > input {
+  font-size: inherit;
+  font-family: inherit;
 }
 .form-buttons {
   display: flex;
@@ -192,10 +199,73 @@ section.field > input {
   padding: var(--size-rev-100) var(--size-rev-200);
 }
 
+#share-folder-dialog > form > .field:first-child {
+  display: flex;
+  margin-block-end: var(--size-100);
+}
+#share-folder-dialog > form > .field:first-child > label {
+  border: var(--size-25) solid var(--secondary);
+  color: var(--secondary);
+  border-radius: var(--br-x-sm);
+  padding: var(--size-rev-100) var(--size-rev-200);
+}
+#share-folder-dialog
+  > form
+  > .field:first-child
+  > input[type="checkbox"]:focus
+  + label {
+  outline: var(--size-25) solid var(--outline);
+}
+
+#share-folder-dialog > form > .field:first-child > input[type="checkbox"] {
+  position: absolute;
+  appearance: none;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+#share-folder-dialog
+  > form
+  > .field:first-child
+  > input[type="checkbox"]:checked
+  + label {
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+}
+#share-folder-dialog > form > .field.duration {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-rev-100) var(--size-rev-300);
+  justify-content: space-around;
+  font-family: inherit;
+  font-size: inherit;
+}
+#share-folder-dialog > form > .field.duration > .sub-field:last-child {
+  justify-self: center;
+}
+.sub-field > input[type="number"]::-webkit-outer-spin-button,
+.sub-field > input[type="number"]::-webkit-inner-spin-button {
+  opacity: 1;
+}
+
+.sub-field > input {
+  max-inline-size: 4ch;
+  text-align: end;
+  border: none;
+  border-radius: var(--br-x-sm);
+  padding: var(--size-rev-100) var(--size-rev-200);
+  background-color: var(--secondary-container);
+  color: var(--on-secondary-container);
+}
 @media screen and (min-width: 769px) {
   .upload-area {
     min-inline-size: calc(var(--size-900) * 5);
     min-block-size: calc(var(--size-900) * 2);
+  }
+}
+@media screen and (max-width: 530px) {
+  #share-folder-dialog > form > .field.duration {
+    column-gap: var(--size-rev-100);
   }
 }
 @media screen and (max-width: 590px) {

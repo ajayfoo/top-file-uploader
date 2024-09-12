@@ -2,6 +2,6 @@
 const id="share-"+unit;
 %>
 <section class="sub-field">
-  <input type="number" required min="0" step="1" name="<%=unit%>" id="<%=id%>" value="<%=sharing?`${sharing[unit]}`:0%>">
+  <input type="number" inputmode="numeric" required min="0" step="1" name="<%=unit%>" id="<%=id%>" value="<%=sharing?`${sharing[unit]}`:0%>">
   <label for="<%=id%>"><%=displayName%></label>
 </section>
