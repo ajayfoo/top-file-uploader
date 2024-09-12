@@ -31,6 +31,7 @@
   box-sizing: border-box;
   font-size: 16px;
   color-scheme: light dark;
+  --size-25: clamp(0.1rem, 0.14rem + 0.2vw, 0.14rem);
   --size-50: clamp(0.19rem, 0.24rem + 0.6vw, 0.3rem);
   --size-100: clamp(0.38rem, 0.44rem + 0.12vw, 0.48rem);
   --size-200: clamp(0.54rem, 0.59rem + 0.16vw, 0.64rem);

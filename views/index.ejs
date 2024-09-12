@@ -29,8 +29,13 @@
   <div class="dialogs">
     <dialog id="add-files-dialog">
       <form method="dialog">
-        <label for="files-to-upload">Files</label>
-        <input type="file" required multiple name="files" id="files-to-upload" />
+        <section class="field">
+        <label for="files-to-upload">Add new files</label>
+        <label for="files-to-upload" class="upload-area">
+          <img src="/images/upload.svg" alt="">
+        </label>
+        <input type="file" required multiple name="files" class="none" id="files-to-upload" />
+        </section>
         <div class="form-buttons">
         <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
           Submit
