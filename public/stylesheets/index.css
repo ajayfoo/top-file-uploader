@@ -139,12 +139,15 @@ button {
   border: var(--size-25) dashed var(--secondary);
   border-radius: var(--br-x-sm);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   max-inline-size: clamp(44ch, 40vw + 2rem, 70ch);
   background-color: var(--secondary-container);
+  padding: var(--size-rev-100) var(--size-rev-200);
 }
+
 .upload-area > img {
   max-inline-size: var(--size-900);
   max-block-size: var(--size-900);

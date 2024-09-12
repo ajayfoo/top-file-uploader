@@ -53,6 +53,13 @@ const onAddFilesSubmit = async (e) => {
   }
 };
 
+const updateSelectedFilesCount = (e) => {
+  const filesCountEle = document.getElementById(
+    "number-of-files-ready-to-upload",
+  );
+  filesCountEle.textContent = e.target.files.length;
+};
+
 const showAddFolderModal = () => {
   addFolderDialog.showModal();
 };
@@ -145,6 +152,7 @@ const writeSharedUrlToClipboard = async () => {
 };
 
 export {
+  updateSelectedFilesCount,
   toggleFolderLeftActionButtons,
   showAddFilesModal,
   onAddFilesSubmit,

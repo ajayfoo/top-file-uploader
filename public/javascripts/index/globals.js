@@ -3,6 +3,7 @@ const currentFolderNameHeadingButton = document.getElementById(
 );
 const addFilesButton = document.getElementById("add-files-button");
 const addFileDialog = document.getElementById("add-files-dialog");
+const filesToUploadInput = document.getElementById("files-to-upload");
 const addFolderButton = document.getElementById("add-folder-button");
 const addFolderDialog = document.getElementById("add-folder-dialog");
 const renameFolderButton = document.getElementById("rename-folder-button");
@@ -27,6 +28,7 @@ const copySharedUrlBtn = document.getElementById("copy-shared-url-button");
 
 export {
   currentFolderNameHeadingButton,
+  filesToUploadInput,
   addFilesButton,
   addFileDialog,
   addFolderButton,

@@ -1,4 +1,5 @@
 import {
+  filesToUploadInput,
   addFilesButton,
   addFileDialog,
   addFolderButton,
@@ -30,6 +31,7 @@ import {
   showRenameFolderModal,
   showSharingFolderModal,
   toggleFolderLeftActionButtons,
+  updateSelectedFilesCount,
   writeSharedUrlToClipboard,
 } from "./eventListeners.js";
 
@@ -40,6 +42,7 @@ const attachEventListeners = () => {
   );
   addFilesButton.addEventListener("click", showAddFilesModal);
   addFileDialog.addEventListener("submit", onAddFilesSubmit);
+  filesToUploadInput.addEventListener("change", updateSelectedFilesCount);
 
   addFolderButton.addEventListener("click", showAddFolderModal);
   addFolderDialog.addEventListener("submit", onAddFolderSubmit);
