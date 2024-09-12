@@ -149,6 +149,17 @@ button {
   max-inline-size: var(--size-900);
   max-block-size: var(--size-900);
 }
+input#files-to-upload {
+  appearance: none;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+input#files-to-upload:focus + label {
+  outline: var(--size-25) solid var(--outline);
+}
 
 .dialogs > dialog {
   border: none;

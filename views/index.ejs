@@ -31,10 +31,10 @@
       <form method="dialog">
         <section class="field">
         <label for="files-to-upload">Add new files</label>
+        <input type="file" required multiple name="files" id="files-to-upload" />
         <label for="files-to-upload" class="upload-area">
           <img src="/images/upload.svg" alt="">
         </label>
-        <input type="file" required multiple name="files" class="none" id="files-to-upload" />
         </section>
         <div class="form-buttons">
         <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
