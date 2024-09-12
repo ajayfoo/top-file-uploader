@@ -71,15 +71,9 @@ const setupAddMenu = () => {
   const menuHeader = document.getElementById("add-menu-header");
   const itemsEle = document.querySelector("#add-menu>.items");
   const firstItem = document.querySelector("#add-menu>.items>:first-child");
-  let open = false;
   menuHeader.addEventListener("click", () => {
-    if (open) {
-      itemsEle.classList.remove("visible");
-    } else {
-      itemsEle.classList.add("visible");
-      firstItem.focus();
-    }
-    open = !open;
+    itemsEle.classList.toggle("visible");
+    firstItem.focus();
   });
 };
 
