@@ -1,9 +1,13 @@
 <dialog id="<%=dialogId%>">
   <form method="dialog">
-    <label for="<%=inputId%>">Name</label>
     <input type="hidden" name="parentId" value="<%=parentId%>">
-    <input required name="name" id="<%=inputId%>" />
-    <button>Submit</button>
-    <button formnovalidate>Close</button>
+    <section class="field">
+      <label for="<%=inputId%>">Name</label>
+      <input required name="name" id="<%=inputId%>" />
+    </section>
+    <div class="form-buttons">
+      <button>Submit</button>
+      <button formnovalidate>Close</button>
+    </div>
   </form>
 </dialog>

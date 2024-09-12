@@ -13,6 +13,7 @@
   display: flex;
   margin-inline-end: var(--size-rev-200);
 }
+
 .folder-name > button {
   padding: 0 var(--size-100);
   border: none;
@@ -20,6 +21,10 @@
   background-color: var(--primary);
   color: var(--on-primary);
   font-size: var(--fs-md);
+  white-space: nowrap;
+  max-inline-size: 10ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #add-menu {
@@ -119,11 +124,58 @@
   gap: var(--size-rev-100);
 }
 
-@media screen and (max-width: 490px) {
+.dialogs > dialog {
+  border: none;
+  border-radius: var(--br-sm);
+  background-color: var(--surface-container-high);
+  color: var(--on-surface);
+}
+.dialogs > dialog::backdrop {
+  background-color: rgb(0 0 0 / 0.3);
+}
+
+.dialogs > dialog > form > p {
+  max-inline-size: clamp(44ch, 40vw + 2rem, 70ch);
+}
+section.field {
+  display: grid;
+  gap: var(--size-50);
+}
+
+section.field > label {
+  color: var(--tertiary);
+}
+section.field > input {
+  border: none;
+  padding: var(--size-rev-100) var(--size-rev-200);
+  font-size: inherit;
+  font-family: inherit;
+  border-radius: var(--br-x-sm);
+  background-color: var(--tertiary-container);
+  color: var(--on-tertiary-container);
+}
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  gap: var(--size-500);
+  margin-block-start: var(--size-500);
+}
+.form-buttons > button {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  border-radius: var(--br-x-sm);
+  font-size: inherit;
+  font-family: inherit;
+  padding: var(--size-rev-100) var(--size-rev-200);
+}
+
+@media screen and (max-width: 590px) {
   .menu-wrapper {
     position: relative;
   }
   .action-buttons > .menu-wrapper > .left {
+    margin-block-start: var(--size-rev-200);
     visibility: hidden;
     z-index: 1;
     position: absolute;
@@ -135,5 +187,8 @@
   }
   .action-button > .text {
     display: unset;
+  }
+  .folder-name > button {
+    max-inline-size: 6ch;
   }
 }

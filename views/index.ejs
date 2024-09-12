@@ -31,21 +31,27 @@
       <form method="dialog">
         <label for="files-to-upload">Files</label>
         <input type="file" required multiple name="files" id="files-to-upload" />
+        <div class="form-buttons">
         <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
           Submit
         </button>
         <button formnovalidate>Close</button>
+        </div>
         </form>
         </dialog>
         <dialog id="add-folder-dialog">
           <form method="dialog">
+            <section class="field">
             <label for="folder-name">Name</label>
             <input required name="name" id="folder-name" />
+            </section>
             <input type="hidden" name="parentId" value="<%=currentFolder.id%>">
-        <button formmethod="post" formaction="/folders">
-          Submit
-        </button>
-        <button formnovalidate>Close</button>
+        <div class="form-buttons">
+          <button formmethod="post" formaction="/folders">
+            Submit
+          </button>
+          <button formnovalidate>Close</button>
+        </div>
         </form>
         </dialog>
         <%- include('partials/rename_dialog',{
@@ -57,10 +63,12 @@
         <dialog id="delete-folder-dialog">
           <form method="dialog">
             <p>Are you want to delete folder <strong><%=currentFolder.name%></strong> and all its content(s)?</p>
-            <button>
-              Submit
-            </button>
-            <button formnovalidate>Close</button>
+            <div class="form-buttons">
+              <button>
+                Submit
+              </button>
+              <button formnovalidate>Close</button>
+            </div>
           </form>
         </dialog>
         <%}%>
