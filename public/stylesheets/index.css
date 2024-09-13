@@ -13,12 +13,12 @@ button {
   font-weight: 700;
 }
 
-.folder-name {
+.current-folder-name {
   display: flex;
   margin-inline-end: var(--size-rev-200);
 }
 
-.folder-name > button {
+.current-folder-name > button {
   padding: 0 var(--size-100);
   border: none;
   border-radius: var(--size-100);
@@ -102,6 +102,10 @@ button {
   .upload-area > img {
     filter: brightness(0) saturate(100%) invert(10%) sepia(21%) saturate(997%)
       hue-rotate(243deg) brightness(95%) contrast(98%);
+  }
+  .folder-icon {
+    filter: brightness(0) saturate(100%) invert(35%) sepia(11%) saturate(722%)
+      hue-rotate(247deg) brightness(97%) contrast(87%);
   }
 }
 
@@ -271,6 +275,42 @@ section.sub-field > input {
   background-color: var(--secondary-container);
   color: var(--on-secondary-container);
 }
+
+.folders-area > h2,
+.files-area > h2 {
+  margin-block-end: var(--size-100);
+}
+.folders-area > .folders,
+.folders-area > .files {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: var(--size-300);
+  margin-block-end: var(--size-100);
+}
+.folders-area > .folders > .folder,
+.folders-area > .files > .file {
+  padding: var(--size-100) var(--size-300);
+  border-radius: var(--br-sm);
+}
+.folders-area > .folders > .folder:hover {
+  background-color: var(--surface-container-high);
+}
+
+.folders-area > .folders > .folder > a,
+.folders-area > .files > .file > a {
+  text-decoration: none;
+  color: var(--secondary);
+}
+.folder-name,
+.file-name {
+  white-space: nowrap;
+  max-inline-size: 10ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  font-weight: 400;
+}
+
 @media screen and (min-width: 769px) {
   .upload-area {
     min-inline-size: calc(var(--size-900) * 5);
@@ -300,7 +340,7 @@ section.sub-field > input {
   .action-button > .text {
     display: unset;
   }
-  .folder-name > button {
+  .current-folder-name > button {
     max-inline-size: 6ch;
   }
 }

@@ -16,14 +16,26 @@
     </p>
     <%- include('partials/header',{folderName:currentFolder.name,isRoot,sharing}) %>
     <div class="folders-files">
-      <div class="folders">
-        <%for(const folder of folders){%>
+      <section class="folders-area">
+        <% if(folders.length!==0) {%>
+        <h2>Folders</h2>
+        <%}%>
+        <article class="folders">
+          <%for(const folder of folders){%>
         <%- include('partials/folder',{folder}) %>
         <%}%>
+      </article>
+      </section>
+      <section class="files-area">
+        <% if(files.length!==0) {%>
+        <h2>Files</h2>
+        <%}%>
+      <article class="files">
         <%for(const file of files){%>
         <%- include('partials/file',{file,folderId:currentFolder.id}) %>
         <%}%>
-      </div>
+      </article>
+      </section>
     </div>
   </main>
   <div class="dialogs">
@@ -89,7 +101,7 @@
         <%- include('partials/failed_message_dialog') %>
         <%- include('partials/progress_dialog') %>
         <%- include('partials/logout_dialog') %>
-      </div>
+    </div>
 </body>
 
 </html>
