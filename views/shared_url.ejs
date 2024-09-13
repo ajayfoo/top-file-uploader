@@ -28,10 +28,15 @@
     <div class="files">
       <%for(const file of files){%>
       <div class="file">
+        <%if(file.sharedUrl){%>
         <a href="<%=`/sharedFiles/${file.sharedUrl.id}`%>"><%=file.name%></a>
+        <%}else{%>
+        <p><%=file.name%></p>
+        <%}%>
       </div>
       <%}%>
-        </div>
-    </section>
+      </div>
+  </section>
 </body>
+
 </html>
