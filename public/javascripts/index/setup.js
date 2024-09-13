@@ -15,6 +15,8 @@ import {
   deleteFolderButton,
   deleteFolderDialog,
   currentFolderNameHeadingButton,
+  logoutButton,
+  logoutDialog,
 } from "./globals.js";
 import { setCustomValidityForDurationField } from "../functions.js";
 import {
@@ -24,10 +26,12 @@ import {
 import {
   onAddFilesSubmit,
   onAddFolderSubmit,
+  onLogoutFormSubmit,
   onRenameCurrentFolderSubmit,
   onSharingFolderSubmit,
   showAddFilesModal,
   showAddFolderModal,
+  showLogoutDialog,
   showRenameFolderModal,
   showSharingFolderModal,
   toggleFolderLeftActionButtons,
@@ -68,6 +72,8 @@ const attachEventListeners = () => {
   sharingFolderDialog.addEventListener("submit", onSharingFolderSubmit);
 
   copySharedUrlBtn?.addEventListener("click", writeSharedUrlToClipboard);
+  logoutButton.addEventListener("click", showLogoutDialog);
+  logoutDialog.addEventListener("submit", onLogoutFormSubmit);
 };
 
 const setupAddMenu = () => {

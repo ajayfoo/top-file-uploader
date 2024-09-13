@@ -25,6 +25,8 @@ const sharingFolderDialog = document.getElementById("share-folder-dialog");
 const sharingForm = sharingFolderDialog.querySelector("form");
 const sharingFolderBtn = document.getElementById("sharing-folder-button");
 const copySharedUrlBtn = document.getElementById("copy-shared-url-button");
+const logoutButton = document.getElementById("logout-button");
+const logoutDialog = document.getElementById("logout-dialog");
 
 export {
   currentFolderNameHeadingButton,
@@ -44,4 +46,6 @@ export {
   sharingForm,
   sharingFolderBtn,
   copySharedUrlBtn,
+  logoutButton,
+  logoutDialog,
 };

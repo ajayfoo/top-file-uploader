@@ -6,6 +6,7 @@ import {
   copySharedUrlBtn,
   sharingCheckbox,
   durationSubfieldsObject,
+  logoutDialog,
 } from "./globals.js";
 import {
   uploadFiles,
@@ -151,6 +152,28 @@ const writeSharedUrlToClipboard = async () => {
   }
 };
 
+const showLogoutDialog = () => {
+  logoutDialog.showModal();
+};
+
+const onLogoutFormSubmit = async (e) => {
+  const logoutUrl = "/auth/logout";
+  if (document.activeElement.getAttribute("formaction") !== logoutUrl) return;
+  e.preventDefault();
+  try {
+    const response = await fetch(logoutUrl, {
+      method: "POST",
+    });
+    if (response.ok && response.redirected) {
+      location.replace("/");
+    } else {
+      showFailedMessage("Failed to logout");
+    }
+  } catch {
+    showFailedMessage("Failed to logout");
+  }
+};
+
 export {
   updateSelectedFilesCount,
   toggleFolderLeftActionButtons,
@@ -163,4 +186,6 @@ export {
   showSharingFolderModal,
   onSharingFolderSubmit,
   writeSharedUrlToClipboard,
+  showLogoutDialog,
+  onLogoutFormSubmit,
 };
