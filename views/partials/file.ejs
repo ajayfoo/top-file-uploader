@@ -1,3 +1,48 @@
-<section class="file">
-  <h2><a href=<%=`/folders/${folderId}/files/${file.id}`%>><%=file.name%></a></h2>
+<% 
+const getNormalizedFileType=(mimeType)=>{
+  const type=mimeType.slice(0,mimeType.indexOf('/'));
+  if(type==='image')return type;
+  const subType=mimeType.slice(mimeType.indexOf('/')+1);
+  if(subType==='pdf')return subType;
+  if(type==='video')return type;
+  return mimeType;
+}
+
+const iconSrcForMimeType=(mimeType)=>{
+  const fileType=getNormalizedFileType(mimeType);
+  let iconSrc='/images/';
+  switch (fileType) {
+    case 'image':{
+      iconSrc += 'image-file.svg';
+      break;
+    }
+    case 'video':{
+      iconSrc += 'video-file.svg';
+      break;
+    }
+    case 'pdf':{
+      iconSrc += 'pdf-file.svg'
+      break;
+    }
+    default:{
+      iconSrc += 'unknown-file.svg'
+      break;
+    }
+  }
+  return iconSrc;
+}
+%>
+
+<span style="display: none;">
+  <%=Object.keys(file)%>
+  <%=file.mimeType%>
+</span>
+
+<section title="<%=file.name%>" class="file">
+  <a href=<%=`/folders/${folderId}/files/${file.id}`%>>
+    <img class="file-icon" src="<%= iconSrcForMimeType(file.mimeType) %>" alt="">
+    <h3 class="file-name">
+      <%=file.name%>
+    </h3>
+  </a>
 </section>
