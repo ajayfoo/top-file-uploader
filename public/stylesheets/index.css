@@ -1,11 +1,11 @@
 @import url("/stylesheets/global.css");
 
+body {
+  color: var(--on-surface);
+  background-color: var(--surface);
+}
 button {
   cursor: pointer;
-}
-
-main {
-  color: var(--on-surface);
 }
 
 .welcome-banner {

@@ -1,7 +1,7 @@
 import db from "../db.js";
 import multer from "multer";
 import path from "node:path";
-import { saveFiles, getDurations } from "../utils.js";
+import { saveFiles, getDurations, getDisplayDateTime } from "../utils.js";
 import { deleteSharedFileUrlHavingFileId } from "./sharedUrls.js";
 import createHttpError from "http-errors";
 
@@ -30,7 +30,8 @@ const renderFileInfo = async (req, res, next) => {
     if (sharing) {
       sharing.id = file.sharedUrl.id;
     }
-    res.render("file_info", { file, folderId, sharing });
+    const uploadedAt = getDisplayDateTime(file.uploadedAt);
+    res.render("file_info", { file, folderId, sharing, uploadedAt });
   } catch (err) {
     next(err);
   }

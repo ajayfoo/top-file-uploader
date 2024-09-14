@@ -48,29 +48,25 @@ const getFormattedFileInfo = async (file) => {
 };
 
 const saveFiles = async (files, ownerId, folderId) => {
-  try {
-    const valueArray = await Promise.all(
-      files.map(async (f) => {
-        console.log(Object.keys(f));
-        const i = await getFormattedFileInfo(f);
-        return [i.name, i.mimeType, i.size, i.displaySize, ownerId, folderId];
-      }),
-    );
-    const fileIds = await db.$queryRaw`
+  const valueArray = await Promise.all(
+    files.map(async (f) => {
+      console.log(Object.keys(f));
+      const i = await getFormattedFileInfo(f);
+      return [i.name, i.mimeType, i.size, i.displaySize, ownerId, folderId];
+    }),
+  );
+  const fileIds = await db.$queryRaw`
   INSERT INTO "File" (name,"mimeType",size,"displaySize","ownerId","folderId") VALUES ${Prisma.join(
     valueArray.map((row) => Prisma.sql`(${Prisma.join(row)})`),
   )} RETURNING id`;
-    await Promise.all(
-      valueArray.map(async (f, i) => {
-        const id = fileIds[i].id;
-        const buffer = files[i].buffer;
-        fs.writeFile(path.join("uploads", id.toString()), buffer);
-      }),
-    );
-    console.log(fileIds);
-  } catch (err) {
-    console.error(err);
-  }
+  await Promise.all(
+    valueArray.map(async (f, i) => {
+      const id = fileIds[i].id;
+      const buffer = files[i].buffer;
+      fs.writeFile(path.join("uploads", id.toString()), buffer);
+    }),
+  );
+  console.log(fileIds);
 };
 
 const getDurations = (endDate) => {
@@ -95,4 +91,9 @@ const isExpiredDate = (expiresOn) => {
   return remainingTime <= 0;
 };
 
-export { saveFiles, getDurations, isExpiredDate };
+const getDisplayDateTime = (dateTime) => {
+  const displayDateTime = dayjs(dateTime).format("DD/MM/YYYY hh:mm:ss A");
+  return displayDateTime;
+};
+
+export { saveFiles, getDurations, isExpiredDate, getDisplayDateTime };
