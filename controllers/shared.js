@@ -1,4 +1,5 @@
 import createHttpError from "http-errors";
+import { getDisplayDateTime } from "../utils.js";
 import db from "../db.js";
 
 const renderFolderPage = async (req, res, next) => {
@@ -56,8 +57,10 @@ const renderFileInfoPage = async (req, res, next) => {
       next(createHttpError(404, "File doesn't exists or it's not shared"));
       return;
     }
+    const uploadedAt = getDisplayDateTime(sharedUrl.file.uploadedAt);
     res.render("shared_file_info", {
       file: sharedUrl.file,
+      uploadedAt,
     });
   } catch (err) {
     next(err);
