@@ -1,4 +1,5 @@
 import createHttpError from "http-errors";
+import path from "node:path";
 import { getDisplayDateTime } from "../utils.js";
 import db from "../db.js";
 
@@ -59,6 +60,7 @@ const renderFileInfoPage = async (req, res, next) => {
     }
     const uploadedAt = getDisplayDateTime(sharedUrl.file.uploadedAt);
     res.render("shared_file_info", {
+      id: id,
       file: sharedUrl.file,
       uploadedAt,
     });
@@ -67,4 +69,32 @@ const renderFileInfoPage = async (req, res, next) => {
   }
 };
 
-export { renderFolderPage, renderFileInfoPage };
+const getFile = async (req, res, next) => {
+  const id = parseInt(req.params.id);
+  try {
+    const sharedUrl = await db.sharedFileUrl.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        file: true,
+      },
+    });
+    if (!sharedUrl) {
+      next(createHttpError(404, "File doesn't exists or it's not shared"));
+      return;
+    }
+    res.download(
+      path.join("uploads", sharedUrl.file.id.toString()),
+      sharedUrl.file.name,
+      (err) => {
+        if (!err) return;
+        next(err);
+      },
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { renderFolderPage, renderFileInfoPage, getFile };
