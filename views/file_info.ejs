@@ -14,28 +14,28 @@
     <li>Type: <%=file.mimeType ?? 'Unknown'%></li>
     <li>Size: <%=file.displaySize%></li>
     <li>Uploaded At: <%=file.uploadedAt%></li>
-    <button type="button" id="rename-file">Rename</button>
-    <button type="button" id="delete-file">Delete</button>
-    <button type="button" id="sharing-file-button">
-      <%=sharing?'Sharing':'Not Sharing'%>
-    </button>
-    <%if(sharing){%>
-    <button id="copy-shared-url-button" data-id="<%=sharing.id%>">Copy Link</button>
-    <%}%>
   </ol>
+  <a href=<%=`/folders/${folderId}/files/${file.id}/blob`%>>Download</a>
+  <button type="button" id="rename-file">Rename</button>
+  <button type="button" id="delete-file">Delete</button>
+  <button type="button" id="sharing-file-button">
+    <%=sharing?'Sharing':'Not Sharing'%> </button>
+  <%if(sharing){%>
+  <button id="copy-shared-url-button" data-id="<%=sharing.id%>">Copy Link</button>
+  <%}%>
   <div class="dialogs">
     <%- include('partials/rename_dialog',{dialogId:'rename-file-dialog',inputId:'current-file-name',parentId:folderId}) %>
-    <dialog id="confirm-delete-file-dialog">
-      <form method="dialog">
-        <p>Are you sure you want to delete this file?</p>
-        <button formnovalidate>Cancel</button>
-        <button>Yes</button>
-      </form>
-    </dialog>
-    <%- include('partials/sharing_dialog',{sharing,forFolder:false,fileId: file.id}) %>
-    <%- include('partials/failed_message_dialog') %>
-    <%- include('partials/progress_dialog') %>
-    </div>
+  <dialog id="confirm-delete-file-dialog">
+    <form method="dialog">
+      <p>Are you sure you want to delete this file?</p>
+      <button formnovalidate>Cancel</button>
+      <button>Yes</button>
+    </form>
+  </dialog>
+  <%- include('partials/sharing_dialog',{sharing,forFolder:false,fileId: file.id}) %>
+  <%- include('partials/failed_message_dialog') %>
+  <%- include('partials/progress_dialog') %>
+  </div>
 </body>
 
 </html>

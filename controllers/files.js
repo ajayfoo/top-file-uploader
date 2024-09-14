@@ -1,5 +1,6 @@
 import db from "../db.js";
 import multer from "multer";
+import path from "node:path";
 import { saveFiles, getDurations } from "../utils.js";
 import { deleteSharedFileUrlHavingFileId } from "./sharedUrls.js";
 import createHttpError from "http-errors";
@@ -105,4 +106,34 @@ const renameFile = async (req, res) => {
   }
 };
 
-export { renderFileInfo, fileUploadMiddlewares, removeFile, renameFile };
+const getFile = async (req, res, next) => {
+  const { id: ownerId } = req.session.passport.user;
+  const folderId = parseInt(req.params.folderId);
+  const id = parseInt(req.params.id);
+  try {
+    const fileInfo = await db.file.findUnique({
+      where: {
+        id,
+        ownerId,
+        folderId,
+      },
+      select: {
+        name: true,
+      },
+    });
+    res.download(path.join("uploads", id.toString()), fileInfo.name, (err) => {
+      if (!err) return;
+      next(err);
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export {
+  renderFileInfo,
+  fileUploadMiddlewares,
+  removeFile,
+  renameFile,
+  getFile,
+};

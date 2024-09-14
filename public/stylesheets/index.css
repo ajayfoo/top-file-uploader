@@ -4,6 +4,10 @@ button {
   cursor: pointer;
 }
 
+main {
+  color: var(--on-surface);
+}
+
 .welcome-banner {
   font-weight: 300;
   font-size: var(--size-700);
