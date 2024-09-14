@@ -22,7 +22,7 @@
         <%}%>
         <article class="folders">
           <%for(const folder of folders){%>
-        <%- include('partials/folder',{folder}) %>
+        <%- include('partials/folder',{folder,forSharedPage:false}) %>
         <%}%>
       </article>
       </section>
@@ -32,7 +32,7 @@
         <%}%>
       <article class="files">
         <%for(const file of files){%>
-        <%- include('partials/file',{file,folderId:currentFolder.id}) %>
+        <%- include('partials/file',{file,folderId:currentFolder.id,forSharedPage:false}) %>
         <%}%>
       </article>
       </section>

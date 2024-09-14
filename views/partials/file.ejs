@@ -39,10 +39,24 @@ const iconSrcForMimeType=(mimeType)=>{
 </span>
 
 <section title="<%=file.name%>" class="file">
+  <%if(!forSharedPage){%>
   <a href=<%=`/folders/${folderId}/files/${file.id}`%>>
     <img class="file-icon" src="<%= iconSrcForMimeType(file.mimeType) %>" alt="">
     <h3 class="file-name">
       <%=file.name%>
     </h3>
   </a>
+  <%}else if(forSharedPage && file.sharedUrl){%>
+  <a href=<%='/sharedFiles/'+file.sharedUrl.id%>>
+    <img class="file-icon" src="<%= iconSrcForMimeType(file.mimeType) %>" alt="">
+    <h3 class="file-name">
+      <%=file.name%>
+    </h3>
+  </a>
+  <%}else{%>
+  <img class="file-icon" src="<%= iconSrcForMimeType(file.mimeType) %>" alt="">
+  <h3 class="file-name">
+    <%=file.name%>
+  </h3>
+  <%}%>
 </section>

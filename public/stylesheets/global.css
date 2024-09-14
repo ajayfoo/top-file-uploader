@@ -193,3 +193,8 @@ main {
     --surface-container-highest: rgb(57 51 57);
   }
 }
+
+body {
+  color: var(--on-surface);
+  background-color: var(--surface);
+}

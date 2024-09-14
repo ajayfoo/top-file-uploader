@@ -1,8 +1,25 @@
+<% 
+const url=forSharedPage?'/sharedFolders/'+folder.sharedUrl.id:'/folders/'+folder.id
+%>
 <section title="<%=folder.name%>" class="folder">
-  <a href=<%="/folders/"+folder.id%>>
+  <%if(!forSharedPage){%>
+  <a href=<%='/folders/'+folder.id%>>
     <img class="folder-icon" src="/images/folder.svg" alt="">
     <h3 class="folder-name">
       <%=folder.name%>
     </h3>
   </a>
+  <%}else if(forSharedPage && folder.sharedUrl){%>
+  <a href=<%='/sharedFolders/'+folder.sharedUrl.id%>>
+    <img class="folder-icon" src="/images/folder.svg" alt="">
+    <h3 class="folder-name">
+      <%=folder.name%>
+    </h3>
+  </a>
+  <%}else{%>
+  <img class="folder-icon" src="/images/folder.svg" alt="">
+  <h3 class="folder-name">
+    <%=folder.name%>
+  </h3>
+  <%}%>
 </section>

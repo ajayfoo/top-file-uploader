@@ -5,38 +5,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%=name%></title>
+  <link rel="stylesheet" href="/stylesheets/shared_url.css">
 </head>
 
 <body>
-  <h1><%=name%></h1>
-  <section>
-    <h2>Folders</h2>
-    <div class="folders">
-      <%for(const folder of folders){%>
-      <div class="folder">
-        <%if(folder.sharedUrl){%>
-        <a href="<%=`/sharedFolders/${folder.sharedUrl.id}`%>"><%=folder.name%></a>
-        <%}else{%>
-        <p><%=folder.name%></p>
+  <main>
+    <h1><%=currentFolder.name%></h1>
+    <div class="folders-files">
+      <section class="folders-area">
+        <% if(folders.length!==0) {%>
+        <h2>Folders</h2>
         <%}%>
-      </div>
-      <%}%>
-      </div>
-  </section>
-  <section>
-    <h2>Files</h2>
-    <div class="files">
-      <%for(const file of files){%>
-      <div class="file">
-        <%if(file.sharedUrl){%>
-        <a href="<%=`/sharedFiles/${file.sharedUrl.id}`%>"><%=file.name%></a>
-        <%}else{%>
-        <p><%=file.name%></p>
+        <article class="folders">
+          <%for(const folder of folders){%>
+        <%- include('partials/folder',{folder,forSharedPage:true}) %>
         <%}%>
-      </div>
-      <%}%>
-      </div>
-  </section>
+      </article>
+      </section>
+      <section class="files-area">
+        <% if(files.length!==0) {%>
+        <h2>Files</h2>
+        <%}%>
+      <article class="files">
+        <%for(const file of files){%>
+        <%- include('partials/file',{file,folderId:currentFolder.id, forSharedPage:true}) %>
+        <%}%>
+      </article>
+      </section>
+    </div>
+  </main>
 </body>
 
 </html>
