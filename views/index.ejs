@@ -53,7 +53,7 @@
         </section>
         <div class="form-buttons">
         <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
-          Submit
+          Add
         </button>
         <button formnovalidate>Close</button>
         </div>
@@ -68,7 +68,7 @@
             <input type="hidden" name="parentId" value="<%=currentFolder.id%>">
         <div class="form-buttons">
           <button formmethod="post" formaction="/folders">
-            Submit
+            Add
           </button>
           <button formnovalidate>Close</button>
         </div>
@@ -85,7 +85,7 @@
             <p>Are you want to delete folder <strong><%=currentFolder.name%></strong> and all its content(s)?</p>
             <div class="form-buttons">
               <button>
-                Submit
+                Yes
               </button>
               <button formnovalidate>Close</button>
             </div>

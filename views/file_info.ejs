@@ -51,8 +51,12 @@
     <dialog id="confirm-delete-file-dialog">
       <form method="dialog">
         <p>Are you sure you want to delete this file?</p>
-        <button formnovalidate>Cancel</button>
-        <button>Yes</button>
+        <div class="form-buttons">
+          <button>
+            Yes
+          </button>
+          <button formnovalidate>Close</button>
+        </div>
       </form>
     </dialog>
     <%- include('partials/sharing_dialog',{sharing,forFolder:false,fileId: file.id}) %>
