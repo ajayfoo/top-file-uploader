@@ -35,7 +35,7 @@
         </span>
       </button>
       <%if(sharing){%>
-      <button id="copy-shared-url-button" data-id="<%=sharing.id%>">
+      <button id="copy-shared-url-button" data-shared-url=<%=`/sharedFiles/${sharing.id}`%>>
         <img class="button-icon" src="/images/link.svg" alt="">
         <span class="text">Copy Link</span>
       </button>

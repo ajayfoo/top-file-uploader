@@ -1,5 +1,6 @@
 import {
   confirmDeleteFileDialog,
+  copyLinkButton,
   durationSubfieldsObject,
   renameFileDialog,
   sharingCheckbox,
@@ -106,9 +107,8 @@ const onSharingSubmit = async (e) => {
   }
 };
 
-const writeSharedUrlToClipboard = async (e) => {
-  const url = new URL("sharedFiles/" + e.target.dataset.id, location.origin)
-    .href;
+const writeSharedUrlToClipboard = async () => {
+  const url = location.origin + copyLinkButton.dataset.sharedUrl;
   try {
     await navigator.clipboard.writeText(url);
   } catch {
