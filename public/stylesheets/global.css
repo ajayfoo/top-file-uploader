@@ -198,3 +198,9 @@ body {
   color: var(--on-surface);
   background-color: var(--surface);
 }
+button {
+  transition: transform 200ms;
+}
+button:active {
+  transform: scale(1.1);
+}

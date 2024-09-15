@@ -28,7 +28,13 @@ const toggleFolderLeftActionButtons = () => {
   );
   const isVisible =
     getComputedStyle(leftActionButtons).visibility === "visible";
-  leftActionButtons.style.visibility = isVisible ? "hidden" : "visible";
+  if (isVisible) {
+    leftActionButtons.style.visibility = "hidden";
+    leftActionButtons.classList.remove("visible");
+  } else {
+    leftActionButtons.style.visibility = "visible";
+    leftActionButtons.classList.add("visible");
+  }
 };
 
 const showAddFilesModal = () => {
