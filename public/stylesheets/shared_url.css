@@ -1,50 +1,7 @@
 @import url("/stylesheets/global.css");
+@import url("/stylesheets/file-folder-styles.css");
 
-@media screen and (prefers-color-scheme: light) {
-  .folder-icon,
-  .file-icon {
-    filter: brightness(0) saturate(100%) invert(35%) sepia(11%) saturate(722%)
-      hue-rotate(247deg) brightness(97%) contrast(87%);
-  }
-}
-
-.folders-area > h2,
-.files-area > h2 {
-  margin-block-end: var(--size-100);
-}
-.folders-area > .folders,
-.files-area > .files {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: var(--size-300);
-  margin-block-end: var(--size-100);
-}
-.folders-area > .folders > .folder,
-.files-area > .files > .file {
-  padding: var(--size-100) var(--size-300);
-  border-radius: var(--br-sm);
-}
-.folders-area > .folders > .folder:hover {
-  background-color: var(--surface-container-high);
-}
-
-.folders-area > .folders > .folder > a,
-.files-area > .files > .file > a {
-  text-decoration: none;
-}
-.folder-name,
-.file-name {
-  white-space: nowrap;
-  max-inline-size: 10ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  font-weight: 400;
-  color: var(--on-surface);
-}
-
-.folder-icon,
-.file-icon {
-  aspect-ratio: 1/1;
-  object-fit: contain;
+.current-folder-name {
+  color: var(--primary);
+  margin-block: var(--size-300);
 }
