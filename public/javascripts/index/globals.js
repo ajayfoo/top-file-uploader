@@ -20,8 +20,8 @@ const durationSubfieldsObject = {
   years: document.getElementById("share-years"),
 };
 const durationSubfields = Object.values(durationSubfieldsObject);
-const sharingCheckbox = document.getElementById("share-folder-checkbox");
-const sharingFolderDialog = document.getElementById("share-folder-dialog");
+const sharingCheckbox = document.getElementById("enable-sharing-checkbox");
+const sharingFolderDialog = document.getElementById("share-dialog");
 const sharingForm = sharingFolderDialog.querySelector("form");
 const sharingFolderBtn = document.getElementById("sharing-folder-button");
 const copySharedUrlBtn = document.getElementById("copy-shared-url-button");

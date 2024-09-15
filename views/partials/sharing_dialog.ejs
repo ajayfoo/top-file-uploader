@@ -1,14 +1,8 @@
-<%
-const entity=forFolder?'folder':'file';
-const dialogId=`share-${entity}-dialog`;
-const checkboxId=`share-${entity}-checkbox`;
-%>
-
-<dialog id="<%=dialogId%>">
+<dialog id="share-dialog">
   <form method="dialog">
     <section class="field">
-      <input type="checkbox" name="share" id="<%=checkboxId%>" <%=sharing?'checked':''%>>
-      <label for="<%=checkboxId%>">Enable Sharing</label>
+      <input type="checkbox" name="share" id="enable-sharing-checkbox" <%=sharing?'checked':''%>>
+      <label for="enable-sharing-checkbox">Enable Sharing</label>
     </section>
     <section class="field duration">
       <%- include('duration_subfield',{unit:'minutes',displayName:'Min',sharing}) %>

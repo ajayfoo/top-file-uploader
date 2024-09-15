@@ -214,17 +214,17 @@ section.sub-field > input {
   padding: var(--size-rev-100) var(--size-rev-200);
 }
 
-#share-folder-dialog > form > .field:first-child {
+#share-dialog > form > .field:first-child {
   display: flex;
   margin-block-end: var(--size-100);
 }
-#share-folder-dialog > form > .field:first-child > label {
+#share-dialog > form > .field:first-child > label {
   border: var(--size-25) solid var(--secondary);
   color: var(--secondary);
   border-radius: var(--br-x-sm);
   padding: var(--size-rev-100) var(--size-rev-200);
 }
-#share-folder-dialog
+#share-dialog
   > form
   > .field:first-child
   > input[type="checkbox"]:focus
@@ -232,14 +232,14 @@ section.sub-field > input {
   outline: var(--size-25) solid var(--outline);
 }
 
-#share-folder-dialog > form > .field:first-child > input[type="checkbox"] {
+#share-dialog > form > .field:first-child > input[type="checkbox"] {
   position: absolute;
   appearance: none;
   padding: 0;
   margin: 0;
   border: 0;
 }
-#share-folder-dialog
+#share-dialog
   > form
   > .field:first-child
   > input[type="checkbox"]:checked
@@ -247,7 +247,7 @@ section.sub-field > input {
   background-color: var(--secondary);
   color: var(--on-secondary);
 }
-#share-folder-dialog > form > .field.duration {
+#share-dialog > form > .field.duration {
   display: flex;
   flex-wrap: wrap;
   gap: var(--size-rev-100) var(--size-rev-300);
@@ -255,7 +255,7 @@ section.sub-field > input {
   font-family: inherit;
   font-size: inherit;
 }
-#share-folder-dialog > form > .field.duration > .sub-field:last-child {
+#share-dialog > form > .field.duration > .sub-field:last-child {
   justify-self: center;
 }
 .sub-field > input[type="number"]::-webkit-outer-spin-button,
@@ -280,7 +280,7 @@ section.sub-field > input {
   }
 }
 @media screen and (max-width: 530px) {
-  #share-folder-dialog > form > .field.duration {
+  #share-dialog > form > .field.duration {
     column-gap: var(--size-rev-100);
   }
 }

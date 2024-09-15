@@ -4,7 +4,7 @@ const confirmDeleteFileDialog = document.getElementById(
 const deleteFileBtn = document.getElementById("delete-file");
 const renameFileDialog = document.getElementById("rename-file-dialog");
 const renameFileBtn = document.getElementById("rename-file");
-const sharingDialog = document.getElementById("share-file-dialog");
+const sharingDialog = document.getElementById("share-dialog");
 const sharingButton = document.getElementById("sharing-file-button");
 const sharingForm = sharingDialog.querySelector("form");
 const durationSubfieldsObject = {
@@ -15,7 +15,7 @@ const durationSubfieldsObject = {
   years: document.getElementById("share-years"),
 };
 const durationSubfields = Object.values(durationSubfieldsObject);
-const sharingCheckbox = document.getElementById("share-file-checkbox");
+const sharingCheckbox = document.getElementById("enable-sharing-checkbox");
 const copyLinkButton = document.getElementById("copy-shared-url-button");
 
 export {
