@@ -1,7 +1,7 @@
 import "dotenv/config";
 import auth from "../middlewares/auth.js";
 import bcrypt from "bcrypt";
-import db from "../db.js";
+import { db } from "../db.js";
 import { body, validationResult } from "express-validator";
 import { usernameIsAvailable } from "./username.js";
 

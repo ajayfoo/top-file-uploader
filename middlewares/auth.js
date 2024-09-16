@@ -1,7 +1,7 @@
 import passport from "passport";
 import bcrypt from "bcrypt";
 import { Strategy as LocalStrategy } from "passport-local";
-import db from "../db.js";
+import { db } from "../db.js";
 
 const localStrategy = new LocalStrategy(async (username, password, done) => {
   try {

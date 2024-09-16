@@ -1,4 +1,4 @@
-import db from "../db.js";
+import { db } from "../db.js";
 import multer from "multer";
 import path from "node:path";
 import { saveFiles, getDurations, getDisplayDateTime } from "../utils.js";

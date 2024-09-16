@@ -1,4 +1,4 @@
-import db from "../db.js";
+import { db } from "../db.js";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import duration from "dayjs/plugin/duration.js";

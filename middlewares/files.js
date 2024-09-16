@@ -1,5 +1,5 @@
 import { deleteSharedFileUrlHavingFileId } from "../controllers/sharedUrls.js";
-import db from "../db.js";
+import { db } from "../db.js";
 
 import { isExpiredDate } from "../utils.js";
 const deleteSharedFileUrlIfExpiredMiddleware = async (req, res, next) => {

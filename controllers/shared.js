@@ -1,7 +1,7 @@
 import createHttpError from "http-errors";
 import path from "node:path";
 import { getDisplayDateTime } from "../utils.js";
-import db from "../db.js";
+import { db } from "../db.js";
 
 const renderFolderPage = async (req, res, next) => {
   const id = parseInt(req.params.id);

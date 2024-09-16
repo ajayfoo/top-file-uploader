@@ -1,6 +1,6 @@
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import session from "express-session";
-import db from "../db.js";
+import { db } from "../db.js";
 
 const sessionStore = new PrismaSessionStore(db, {
   checkPeriod: 1000 * 60 * 60 * 24,

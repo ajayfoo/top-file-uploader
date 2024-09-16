@@ -1,12 +1,11 @@
 import { fileTypeFromBuffer } from "file-type";
-import fs from "node:fs/promises";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import duration from "dayjs/plugin/duration.js";
 import mime from "mime/lite";
-import db from "./db.js";
+import { db, fileDb } from "./db.js";
 import { Prisma } from "@prisma/client";
-import path from "node:path";
+import { decode } from "base64-arraybuffer";
 
 const getSizeUnits = (e) => {
   switch (e) {
@@ -60,13 +59,18 @@ const saveFiles = async (files, ownerId, folderId) => {
     valueArray.map((row) => Prisma.sql`(${Prisma.join(row)})`),
   )} RETURNING id`;
   await Promise.all(
-    valueArray.map(async (f, i) => {
-      const id = fileIds[i].id;
-      const buffer = files[i].buffer;
-      fs.writeFile(path.join("uploads", id.toString()), buffer);
+    fileIds.map(async ({ id }, i) => {
+      const fileBase64 = decode(files[i].buffer.toString("base64"));
+      const { error } = await fileDb.storage
+        .from("main")
+        .upload(id.toString(), fileBase64, {
+          contentType: files[i].mimetype,
+        });
+      if (error) {
+        throw error;
+      }
     }),
   );
-  console.log(fileIds);
 };
 
 const getDurations = (endDate) => {

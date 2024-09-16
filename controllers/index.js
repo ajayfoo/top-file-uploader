@@ -1,5 +1,5 @@
 import { getDurations } from "../utils.js";
-import db from "../db.js";
+import { db } from "../db.js";
 import { recursivelyDeleteSharedFolderUrl } from "./sharedUrls.js";
 import createHttpError from "http-errors";
 

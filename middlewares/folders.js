@@ -1,4 +1,4 @@
-import db from "../db.js";
+import { db } from "../db.js";
 import { deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired } from "../controllers/sharedUrls.js";
 
 import { isExpiredDate } from "../utils.js";
