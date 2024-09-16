@@ -7,12 +7,14 @@ import {
   sharingCheckbox,
   durationSubfieldsObject,
   logoutDialog,
+  filesToUploadInput,
 } from "./globals.js";
 import {
   uploadFiles,
   sendCreateFolderPostRequest,
   updateSharing,
   sendRenameFolderPutRequest,
+  hasFilesAbove50MB,
 } from "./functions.js";
 
 import {
@@ -44,6 +46,13 @@ const showAddFilesModal = () => {
 const onAddFilesSubmit = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
+  if (hasFilesAbove50MB()) {
+    filesToUploadInput.value = "";
+    const changeEvent = new Event("change");
+    filesToUploadInput.dispatchEvent(changeEvent);
+    showFailedMessage("File size cannot exceed 50MB");
+    return;
+  }
   const controller = new AbortController();
   showProgressDialog(controller);
   try {

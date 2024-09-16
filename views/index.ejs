@@ -52,55 +52,55 @@
         </label>
         </section>
         <div class="form-buttons">
-        <button formenctype="multipart/form-data" formmethod="post" formaction="/files">
-          Add
+        <button formenctype="multipart/form-data" formmethod="post" formaction=<%=`/folders/${currentFolder.id}/files`%>>
+        Add
         </button>
         <button formnovalidate>Close</button>
-        </div>
-        </form>
-        </dialog>
-        <dialog id="add-folder-dialog">
-          <form method="dialog">
-            <section class="field">
-            <label for="folder-name">Name</label>
-            <input required name="name" id="folder-name" />
-            </section>
-            <input type="hidden" name="parentId" value="<%=currentFolder.id%>">
+    </div>
+    </form>
+    </dialog>
+    <dialog id="add-folder-dialog">
+      <form method="dialog">
+        <section class="field">
+          <label for="folder-name">Name</label>
+          <input required name="name" id="folder-name" />
+        </section>
+        <input type="hidden" name="parentId" value="<%=currentFolder.id%>">
         <div class="form-buttons">
           <button formmethod="post" formaction="/folders">
             Add
           </button>
           <button formnovalidate>Close</button>
         </div>
-        </form>
-        </dialog>
-        <%- include('partials/rename_dialog',{
+      </form>
+    </dialog>
+    <%- include('partials/rename_dialog',{
           dialogId:'rename-current-folder-dialog',
           inputId:'current-folder-name',
           parentId})
           %>
-        <%if(!isRoot){%>
-        <dialog id="delete-folder-dialog">
-          <form method="dialog">
-            <p>Are you want to delete folder <strong><%=currentFolder.name%></strong> and all its content(s)?</p>
-            <div class="form-buttons">
-              <button>
-                Yes
-              </button>
-              <button formnovalidate>Close</button>
-            </div>
-          </form>
-        </dialog>
-        <%}%>
+    <%if(!isRoot){%>
+    <dialog id="delete-folder-dialog">
+      <form method="dialog">
+        <p>Are you want to delete folder <strong><%=currentFolder.name%></strong> and all its content(s)?</p>
+        <div class="form-buttons">
+          <button>
+            Yes
+          </button>
+          <button formnovalidate>Close</button>
+        </div>
+      </form>
+    </dialog>
+    <%}%>
         <dialog id="resolve-upload-file-conflict-dialog">
           <form method="dialog">
             <button>Cancel</button>
           </form>
         </dialog>
         <%- include('partials/sharing_dialog',{sharing,forFolder:true}) %>
-        <%- include('partials/failed_message_dialog') %>
-        <%- include('partials/progress_dialog') %>
-        <%- include('partials/logout_dialog') %>
+    <%- include('partials/failed_message_dialog') %>
+    <%- include('partials/progress_dialog') %>
+    <%- include('partials/logout_dialog') %>
     </div>
 </body>
 

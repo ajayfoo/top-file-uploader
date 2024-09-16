@@ -8,18 +8,30 @@ import {
   durationSubfieldsObject,
   sharingCheckbox,
   deleteFolderDialog,
+  filesToUploadInput,
 } from "./globals.js";
 
-const addFilesToFormData = (formData) => {
-  const files = document.getElementById("files-to-upload").files;
+const hasFilesAbove50MB = () => {
+  const files = filesToUploadInput.files;
+  for (const file of files) {
+    if (file.size > 52_428_800) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const getPopulatedFormData = () => {
+  const formData = new FormData();
+  const files = filesToUploadInput.files;
   for (const file of files) {
     formData.append("files", file, file.name);
   }
+  return formData;
 };
 
 const uploadFiles = (signal) => {
-  const formData = new FormData();
-  addFilesToFormData(formData);
+  const formData = getPopulatedFormData();
   const urlPart1 =
     location.pathname === "/" ? "/folders/root" : location.pathname;
   const url = urlPart1 + "/files";
@@ -60,9 +72,10 @@ const sendRenameFolderPutRequest = async (parentId, signal) => {
   return response;
 };
 
-const sendDeleteFolderRequest = () => {
+const sendDeleteFolderRequest = (signal) => {
   return fetch(location.href, {
     method: "DELETE",
+    signal,
   });
 };
 
@@ -74,8 +87,9 @@ const onSubmitDeleteFolderModal = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
   try {
-    showProgressDialog("Please wait");
-    const response = await sendDeleteFolderRequest();
+    const controller = new AbortController();
+    showProgressDialog(controller);
+    const response = await sendDeleteFolderRequest(controller.signal);
     if (response.ok && response.redirected) {
       location.assign(response.url);
     } else {
@@ -125,6 +139,7 @@ const updateSharing = async (signal) => {
 };
 
 export {
+  hasFilesAbove50MB,
   uploadFiles,
   sendCreateFolderPostRequest,
   updateSharing,

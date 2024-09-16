@@ -46,6 +46,7 @@ const attachEventListeners = () => {
   );
   addFilesButton.addEventListener("click", showAddFilesModal);
   addFileDialog.addEventListener("submit", onAddFilesSubmit);
+  filesToUploadInput.addEventListener("input", updateSelectedFilesCount);
   filesToUploadInput.addEventListener("change", updateSelectedFilesCount);
 
   addFolderButton.addEventListener("click", showAddFolderModal);

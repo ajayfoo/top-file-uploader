@@ -36,12 +36,25 @@ const renderFileInfo = async (req, res, next) => {
   }
 };
 
+const hasFilesAbove50MB = (files) => {
+  for (const file of files) {
+    if (file.size > 52_428_800) {
+      return true;
+    }
+  }
+  return false;
+};
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 const fileUploadMiddlewares = [
   upload.array("files"),
-  async (req, res) => {
+  async (req, res, next) => {
+    if (hasFilesAbove50MB(req.files)) {
+      next(createHttpError(403, "File size cannot exceed 50MB"));
+      return;
+    }
     const { id: ownerId } = req.session.passport.user;
     let folderId = null;
     if (req.params.folderId === "root") {
