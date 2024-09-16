@@ -13,11 +13,11 @@ const getRootFolderId = async (req, res) => {
 };
 
 const renderFolderPage = async (req, res, next) => {
-  const { id: userId } = req.session.passport.user;
-  const isRoot = req.params.id === undefined;
-  const folderId = isRoot
-    ? req.session.passport.user.rootFolderId
-    : parseInt(req.params.id);
+  const { id: userId, rootFolderId } = req.session.passport.user;
+  const folderIdFromParams = parseInt(req.params.id);
+  const isRoot =
+    isNaN(folderIdFromParams) || rootFolderId === folderIdFromParams;
+  const folderId = isRoot ? rootFolderId : folderIdFromParams;
   try {
     const [user, folder, parentFolder] = await Promise.all([
       db.user.findUnique({
@@ -190,9 +190,12 @@ const recursivelyDeleteFolder = async (id, ownerId) => {
 };
 
 const removeFolder = async (req, res) => {
-  const { id: ownerId } = req.session.passport.user;
-  const { rootFolderId } = req.session.passport;
+  const { id: ownerId, rootFolderId } = req.session.passport.user;
   const id = parseInt(req.params.id);
+  if (id === rootFolderId) {
+    res.status(403).end();
+    return;
+  }
   try {
     const folderToRemove = await db.folder.findUnique({
       where: {
