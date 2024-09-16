@@ -9,6 +9,37 @@ dialog[open] {
   animation: drop-in 200ms ease-out forwards;
 }
 
+#failed-message-dialog {
+  background-color: var(--error-container);
+  color: var(--on-error-container);
+}
+#failed-message-dialog .form-buttons > button {
+  background-color: var(--error);
+  color: var(--on-error);
+}
+#failed-message-dialog > form > .info {
+  display: flex;
+  align-items: center;
+  gap: var(--size-300);
+}
+
+#failed-message-dialog > form > .info > img {
+  inline-size: 2rem;
+  block-size: 2rem;
+}
+@media screen and (prefers-color-scheme: dark) {
+  #failed-message-dialog > form > .info > img {
+    filter: brightness(0) saturate(100%) invert(88%) sepia(6%) saturate(986%)
+      hue-rotate(316deg) brightness(98%) contrast(106%);
+  }
+}
+@media screen and (prefers-color-scheme: light) {
+  #failed-message-dialog > form > .info > img {
+    filter: brightness(0) saturate(100%) invert(5%) sepia(57%) saturate(5917%)
+      hue-rotate(347deg) brightness(97%) contrast(107%);
+  }
+}
+
 #failed-message-dialog[open],
 #progress-dialog[open] {
   visibility: visible;
