@@ -1,6 +1,5 @@
-import { db } from "../db.js";
+import { db, fileDb } from "../db.js";
 import multer from "multer";
-import path from "node:path";
 import { saveFiles, getDurations, getDisplayDateTime } from "../utils.js";
 import { deleteSharedFileUrlHavingFileId } from "./sharedUrls.js";
 import createHttpError from "http-errors";
@@ -73,6 +72,7 @@ const removeFile = async (req, res) => {
         folderId,
       },
     });
+    await fileDb.storage.from("main").remove([id.toString()]);
     if (folderId === rootFolderId) {
       res.redirect(303, "/");
     } else {
@@ -122,10 +122,20 @@ const getFile = async (req, res, next) => {
         name: true,
       },
     });
-    res.download(path.join("uploads", id.toString()), fileInfo.name, (err) => {
-      if (!err) return;
-      next(err);
+    const { data, error } = await fileDb.storage
+      .from("main")
+      .download(id.toString());
+    if (error) {
+      throw error;
+    }
+    res.set({
+      "Cache-Control": "no-cache",
+      "Content-Type": data.type,
+      "Content-Length": data.size,
+      "Content-Disposition": "attachment; filename=" + fileInfo.name,
     });
+    const arrayBuffer = await data.arrayBuffer();
+    res.send(Buffer.from(arrayBuffer));
   } catch (err) {
     next(err);
   }
