@@ -1,0 +1,27 @@
+@import url("/stylesheets/global.css");
+body {
+  min-block-size: 100vh;
+  display: grid;
+  place-items: center;
+}
+main {
+  font-size: var(--fs-md);
+  background-color: var(--error-container);
+  color: var(--on-error-container);
+  padding: var(--size-500);
+  border-radius: var(--br-md);
+  display: grid;
+  place-items: center;
+  gap: var(--size-500);
+}
+
+main > a {
+  border-radius: var(--br-sm);
+  padding: var(--size-50) var(--size-500);
+  background-color: var(--error);
+  color: var(--on-error);
+}
+
+main > a:hover {
+  text-decoration: none;
+}

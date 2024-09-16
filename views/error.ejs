@@ -5,16 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%=error.statusCode%></title>
+  <link rel="stylesheet" href="/stylesheets/error.css">
 </head>
 
 <body>
-  <p>
-    <% 
-     const message=error.statusCode+': '+error.message 
-    %>
-    <%=message%>
-  </p>
-  <a href="/">Go To Home</a>
+  <main>
+    <p>
+      <%= error.message %>
+    </p>
+    <a href="/">Go To Home</a>
+  </main>
 </body>
 
 </html>

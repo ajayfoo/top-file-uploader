@@ -7,6 +7,7 @@ import sharedRouter from "./routes/shared.js";
 import sharedUrlsRouter from "./routes/sharedUrls.js";
 import auth from "./middlewares/auth.js";
 import { checkUsernameAvailability } from "./controllers/username.js";
+import createHttpError from "http-errors";
 
 const app = express();
 
@@ -33,8 +34,8 @@ app.use((req, res, next) => {
 app.use("/", indexRouter);
 app.use("/", sharedUrlsRouter);
 
-app.listen(process.env.PORT, () => {
-  console.log("Listening on PORT: " + process.env.PORT);
+app.use(function (req, res, next) {
+  next(createHttpError(404, "Page not found"));
 });
 
 app.use((err, req, res, next) => {
@@ -44,6 +45,14 @@ app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
   }
-  res.status(500);
+  console.error(err);
+  res.status(err.statusCode);
+  if (!err.statusCode) {
+    res.status(500);
+  }
   res.render("error", { error: err });
+});
+
+app.listen(process.env.PORT, () => {
+  console.log("Listening on PORT: " + process.env.PORT);
 });
