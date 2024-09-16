@@ -1,4 +1,9 @@
-import { showFailedMessage, getDurationValues } from "../functions.js";
+import {
+  showFailedMessage,
+  getDurationValues,
+  showProgressDialog,
+  closeProgressDialog,
+} from "../functions.js";
 import {
   durationSubfieldsObject,
   sharingCheckbox,
@@ -69,6 +74,7 @@ const onSubmitDeleteFolderModal = async (e) => {
   if (document.activeElement.hasAttribute("formnovalidate")) return;
   e.preventDefault();
   try {
+    showProgressDialog("Please wait");
     const response = await sendDeleteFolderRequest();
     if (response.ok && response.redirected) {
       location.assign(response.url);
@@ -78,6 +84,8 @@ const onSubmitDeleteFolderModal = async (e) => {
   } catch (err) {
     console.error(err);
     showFailedMessage("Something went wrong");
+  } finally {
+    closeProgressDialog();
   }
 };
 

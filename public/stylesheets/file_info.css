@@ -1,6 +1,10 @@
 @import url("/stylesheets/global.css");
 @import url("/stylesheets/common-dialog-styles.css");
 
+button:hover {
+  cursor: pointer;
+}
+
 main {
   display: grid;
   justify-content: center;

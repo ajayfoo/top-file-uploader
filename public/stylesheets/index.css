@@ -137,6 +137,7 @@ button {
 
 .main-header > .action-buttons > .right {
   justify-self: right;
+  gap: var(--size-rev-100);
 }
 
 .action-button > .icon {
