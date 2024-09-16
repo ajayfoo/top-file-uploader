@@ -78,10 +78,10 @@ const attachEventListeners = () => {
 
 const setupAddMenu = () => {
   const menuHeader = document.getElementById("add-menu-header");
-  const itemsEle = document.querySelector("#add-menu>.items");
+  const addMenu = document.getElementById("add-menu");
   const firstItem = document.querySelector("#add-menu>.items>:first-child");
   menuHeader.addEventListener("click", () => {
-    itemsEle.classList.toggle("visible");
+    addMenu.classList.toggle("open");
     firstItem.focus();
   });
 };

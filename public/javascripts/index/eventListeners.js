@@ -30,10 +30,10 @@ const toggleFolderLeftActionButtons = () => {
     getComputedStyle(leftActionButtons).visibility === "visible";
   if (isVisible) {
     leftActionButtons.style.visibility = "hidden";
-    leftActionButtons.classList.remove("visible");
+    leftActionButtons.classList.remove("open");
   } else {
     leftActionButtons.style.visibility = "visible";
-    leftActionButtons.classList.add("visible");
+    leftActionButtons.classList.add("open");
   }
 };
 

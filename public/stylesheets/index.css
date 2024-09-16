@@ -15,19 +15,19 @@ button {
   font-weight: 700;
 }
 
-#folder-left-action-buttons.visible > #rename-folder-button {
+#folder-left-action-buttons.open > #rename-folder-button {
   animation: appear 500ms backwards;
   animation-delay: 50ms;
 }
-#folder-left-action-buttons.visible > #delete-folder-button {
+#folder-left-action-buttons.open > #delete-folder-button {
   animation: appear 500ms backwards;
   animation-delay: 100ms;
 }
-#folder-left-action-buttons.visible > #sharing-folder-button {
+#folder-left-action-buttons.open > #sharing-folder-button {
   animation: appear 500ms backwards;
   animation-delay: 150ms;
 }
-#folder-left-action-buttons.visible > #copy-shared-url-button {
+#folder-left-action-buttons.open > #copy-shared-url-button {
   animation: appear 500ms backwards;
   animation-delay: 200ms;
 }
@@ -61,6 +61,30 @@ button {
   text-overflow: ellipsis;
 }
 
+@keyframes drop-down {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+#add-menu.open #add-files-button {
+  animation: drop-down 500ms backwards;
+  animation-delay: 50ms;
+}
+#add-menu.open #add-folder-button {
+  animation: drop-down 500ms backwards;
+  animation-delay: 100ms;
+}
+
+#add-menu.open > .items {
+  visibility: visible;
+}
+
 #add-menu {
   position: relative;
 }
@@ -83,10 +107,6 @@ button {
   border-radius: var(--size-100);
   font-size: var(--fs-x-sm);
   margin-block-start: var(--size-100);
-}
-
-#add-menu > .items.visible {
-  visibility: visible;
 }
 
 .main-header > .action-buttons {
