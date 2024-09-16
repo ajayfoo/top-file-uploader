@@ -5,33 +5,31 @@ dialog {
 }
 
 dialog[open] {
+  visibility: visible;
   animation: drop-in 200ms ease-out forwards;
 }
 
 #failed-message-dialog[open],
 #progress-dialog[open] {
+  visibility: visible;
   animation: fade-in 500ms ease-out forwards;
   transform: translateY(calc(50vh - 50%));
 }
 
 @keyframes drop-in {
   from {
-    visibility: hidden;
     transform: translateY(-100%);
   }
   to {
-    visibility: visible;
     transform: translateY(calc(50vh - 50%));
   }
 }
 
 @keyframes fade-in {
   from {
-    visibility: hidden;
     opacity: 0;
   }
   to {
-    visibility: visible;
     opacity: 1;
   }
 }
