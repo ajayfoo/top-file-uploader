@@ -108,7 +108,10 @@ button {
   font-size: var(--fs-x-sm);
   margin-block-start: var(--size-100);
 }
-
+.main-header {
+  position: sticky;
+  top: var(--size-100);
+}
 .main-header > .action-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
