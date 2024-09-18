@@ -9,7 +9,7 @@ const renderSignUpPage = (req, res) => {
   res.render("signup", { errors: {} });
 };
 
-const validateSignUpFormFields = [
+const validationMiddlewaresForSignUpFormFields = [
   body("username")
     .trim()
     .notEmpty()
@@ -95,7 +95,7 @@ const signUp = async (req, res, next) => {
 };
 
 const validaionAndSignUpMiddlewares = [
-  ...validateSignUpFormFields,
+  ...validationMiddlewaresForSignUpFormFields,
   handleSignUpFromValidationErrors,
   signUp,
 ];

@@ -2,6 +2,7 @@ import { getDurations } from "../utils.js";
 import { db } from "../db.js";
 import { recursivelyDeleteSharedFolderUrl } from "./sharedUrls.js";
 import createHttpError from "http-errors";
+import { body, validationResult } from "express-validator";
 
 const getRootFolderId = async (req, res) => {
   const { rootFolderId: id } = req.session.passport.user;
@@ -107,6 +108,20 @@ const createFolderWith = (name, parentFolder, ownerId) =>
     },
   });
 
+const folderNameValidationMiddlewares = [
+  body("name").trim().notEmpty().withMessage("Folder name must not be empty"),
+];
+
+const sendValdationErrorsIfAny = (req, res, next) => {
+  const result = validationResult(req);
+  if (result.isEmpty()) {
+    next();
+    return;
+  }
+  const firstErrorMsg = result.array()[0].msg;
+  res.status(400).send(firstErrorMsg);
+};
+
 const createFolder = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   let parentId = null;
@@ -129,6 +144,12 @@ const createFolder = async (req, res) => {
   }
 };
 
+const createFolderAndValidationMiddlewares = [
+  ...folderNameValidationMiddlewares,
+  sendValdationErrorsIfAny,
+  createFolder,
+];
+
 const renameFolder = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   let id = null;
@@ -137,7 +158,7 @@ const renameFolder = async (req, res) => {
   } else {
     id = parseInt(req.params.id);
   }
-  const { newName: name } = req.body;
+  const { name } = req.body;
   try {
     await db.folder.update({
       where: {
@@ -154,6 +175,12 @@ const renameFolder = async (req, res) => {
     res.status(500).end();
   }
 };
+
+const renameFolderAndValidationMiddlewares = [
+  ...folderNameValidationMiddlewares,
+  sendValdationErrorsIfAny,
+  renameFolder,
+];
 
 const recursivelyDeleteFolder = async (id, ownerId) => {
   const [childFolders, childFiles] = await Promise.all([
@@ -226,7 +253,7 @@ const removeFolder = async (req, res) => {
 export {
   getRootFolderId,
   renderFolderPage,
-  createFolder,
-  renameFolder,
+  createFolderAndValidationMiddlewares,
+  renameFolderAndValidationMiddlewares,
   removeFolder,
 };

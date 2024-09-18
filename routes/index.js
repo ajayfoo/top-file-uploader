@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
-  createFolder,
-  renameFolder,
   removeFolder,
   renderFolderPage,
   getRootFolderId,
+  createFolderAndValidationMiddlewares,
+  renameFolderAndValidationMiddlewares,
 } from "../controllers/index.js";
 import filesRouter from "./files.js";
 import { recursivelyDeleteSharedFolderUrlIfExpiredMiddleware } from "../middlewares/folders.js";
@@ -22,8 +22,8 @@ router.get("/favicon.ico", (req, res) => {
 router.all("/folders/:id", recursivelyDeleteSharedFolderUrlIfExpiredMiddleware);
 
 router.get("/folders/:id", renderFolderPage);
-router.post("/folders/:id", createFolder);
-router.patch("/folders/:id", renameFolder);
+router.post("/folders/:id", createFolderAndValidationMiddlewares);
+router.patch("/folders/:id", renameFolderAndValidationMiddlewares);
 router.delete("/folders/:id", removeFolder);
 
 router.use("/folders/:folderId/files", filesRouter);

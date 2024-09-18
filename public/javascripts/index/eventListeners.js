@@ -90,7 +90,8 @@ const onAddFolderSubmit = async (e) => {
     if (response.ok) {
       location.reload();
     } else {
-      showFailedMessage("Something went wrong");
+      const msg = await response.text();
+      showFailedMessage(msg || "Something went wrong");
     }
   } catch {
     showFailedMessage("Something went wrong");
@@ -118,7 +119,8 @@ const onRenameCurrentFolderSubmit = async (e) => {
     if (response.ok) {
       location.reload();
     } else {
-      showFailedMessage("Something went wrong");
+      const msg = await response.text();
+      showFailedMessage(msg || "Something went wrong");
     }
   } catch {
     showFailedMessage("Something went wrong");

@@ -59,14 +59,14 @@ const sendCreateFolderPostRequest = (signal) => {
 };
 
 const sendRenameFolderPutRequest = async (parentId, signal) => {
-  const newName = document.getElementById("current-folder-name").value;
+  const name = document.getElementById("current-folder-name").value;
   const url = location.pathname === "/" ? "/folders/root" : location.pathname;
   const response = await fetch(url, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ parentId, newName }),
+    body: JSON.stringify({ parentId, name }),
     signal,
   });
   return response;
