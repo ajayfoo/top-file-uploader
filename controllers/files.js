@@ -3,6 +3,7 @@ import multer from "multer";
 import { saveFiles, getDurations, getDisplayDateTime } from "../utils.js";
 import { deleteSharedFileUrlHavingFileId } from "./sharedUrls.js";
 import createHttpError from "http-errors";
+import { body, validationResult } from "express-validator";
 
 const renderFileInfo = async (req, res, next) => {
   const { id: ownerId } = req.session.passport.user;
@@ -97,6 +98,20 @@ const removeFile = async (req, res) => {
   }
 };
 
+const fileNameValidationMiddlewares = [
+  body("name").trim().notEmpty().withMessage("File name must not be empty"),
+];
+
+const sendValdationErrorsIfAny = (req, res, next) => {
+  const result = validationResult(req);
+  if (result.isEmpty()) {
+    next();
+    return;
+  }
+  const firstErrorMsg = result.array()[0].msg;
+  res.status(400).send(firstErrorMsg);
+};
+
 const renameFile = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   const folderId = parseInt(req.params.folderId);
@@ -119,6 +134,12 @@ const renameFile = async (req, res) => {
     res.status(500).end();
   }
 };
+
+const renameFileAndValidationMiddlewares = [
+  ...fileNameValidationMiddlewares,
+  sendValdationErrorsIfAny,
+  renameFile,
+];
 
 const getFile = async (req, res, next) => {
   const { id: ownerId } = req.session.passport.user;
@@ -158,6 +179,6 @@ export {
   renderFileInfo,
   fileUploadMiddlewares,
   removeFile,
-  renameFile,
+  renameFileAndValidationMiddlewares,
   getFile,
 };

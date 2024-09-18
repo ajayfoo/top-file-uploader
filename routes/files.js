@@ -3,8 +3,8 @@ import {
   fileUploadMiddlewares,
   renderFileInfo,
   removeFile,
-  renameFile,
   getFile,
+  renameFileAndValidationMiddlewares,
 } from "../controllers/files.js";
 import { deleteSharedFileUrlIfExpiredMiddleware } from "../middlewares/files.js";
 
@@ -15,7 +15,7 @@ router.all("/:id", deleteSharedFileUrlIfExpiredMiddleware);
 router.post("/", fileUploadMiddlewares);
 router.get("/:id", renderFileInfo);
 router.delete("/:id", removeFile);
-router.patch("/:id", renameFile);
+router.patch("/:id", renameFileAndValidationMiddlewares);
 router.get("/:id/blob", getFile);
 
 export default router;

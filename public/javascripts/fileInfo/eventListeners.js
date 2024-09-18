@@ -68,7 +68,8 @@ const onRenameSubmit = async (e) => {
     if (response.ok) {
       location.reload();
     } else {
-      showFailedMessage(failedMessage);
+      const msg = await response.text();
+      showFailedMessage(msg || "Something went wrong");
     }
   } catch {
     showFailedMessage(failedMessage);
