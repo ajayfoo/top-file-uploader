@@ -143,14 +143,15 @@ const onSharingFolderSubmit = async (e) => {
   const controller = new AbortController();
   showProgressDialog(controller);
   try {
-    const done = await updateSharing(controller.signal);
-    if (done) {
+    const response = await updateSharing(controller.signal);
+    if (response.ok) {
       location.reload();
     } else {
-      showFailedMessage("Failed to add shared url");
+      const errorMsg = await response.text();
+      showFailedMessage(errorMsg || "Failed to update sharing");
     }
   } catch {
-    showFailedMessage("Failed to add shared url");
+    showFailedMessage("Failed to update sharing");
   } finally {
     sharingFolderDialog.close();
     closeProgressDialog();

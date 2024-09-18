@@ -1,17 +1,20 @@
 import { Router } from "express";
 import {
-  upsertSharedFolderUrl,
-  deleteSharedFolderUrl,
-  upsertSharedFileUrl,
-  deleteSharedFileUrl,
+  upsertSharedFolderUrlAndValidationMiddlewares,
+  deleteSharedFolderUrlAndValidationMiddlewares,
+  upsertSharedFileUrlAndValidationMiddlewares,
+  deleteSharedFileUrlAndValidationMiddlewares,
 } from "../controllers/sharedUrls.js";
 
 const router = Router();
 
-router.put("/sharedFolderUrls", upsertSharedFolderUrl);
-router.delete("/sharedFolderUrls", deleteSharedFolderUrl);
+router.put("/sharedFolderUrls", upsertSharedFolderUrlAndValidationMiddlewares);
+router.delete(
+  "/sharedFolderUrls",
+  deleteSharedFolderUrlAndValidationMiddlewares,
+);
 
-router.put("/sharedFileUrls", upsertSharedFileUrl);
-router.delete("/sharedFileUrls", deleteSharedFileUrl);
+router.put("/sharedFileUrls", upsertSharedFileUrlAndValidationMiddlewares);
+router.delete("/sharedFileUrls", deleteSharedFileUrlAndValidationMiddlewares);
 
 export default router;

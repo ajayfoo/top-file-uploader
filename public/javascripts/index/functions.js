@@ -120,7 +120,7 @@ const updateSharing = async (signal) => {
       }),
       signal,
     });
-    return response.ok;
+    return response;
   }
   const durationValues = getDurationValues(durationSubfieldsObject);
   const response = await fetch(url, {
@@ -135,7 +135,7 @@ const updateSharing = async (signal) => {
     }),
     signal,
   });
-  return response.ok;
+  return response;
 };
 
 export {

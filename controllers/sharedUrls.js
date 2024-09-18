@@ -3,6 +3,87 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import duration from "dayjs/plugin/duration.js";
 import { isExpiredDate } from "../utils.js";
+import { body, validationResult } from "express-validator";
+
+const folderIdValidationMiddlwares = [
+  body("folderId").notEmpty().withMessage("Folder ID must not be empty"),
+];
+const sharedUrlValidationMiddlwares = [
+  body("minutes")
+    .trim()
+    .notEmpty()
+    .withMessage("Minutes cannot be empty")
+    .isInt({ min: 0 })
+    .withMessage("Minutes must be a non -ve integer"),
+  body("hours")
+    .trim()
+    .notEmpty()
+    .withMessage("Hours cannot be empty")
+    .isInt({ min: 0 })
+    .withMessage("Minutes must be a non -ve integer"),
+  body("days")
+    .trim()
+    .notEmpty()
+    .withMessage("Days cannot be empty")
+    .isInt({ min: 0 })
+    .withMessage("Minutes must be a non -ve integer"),
+  body("months")
+    .trim()
+    .notEmpty()
+    .withMessage("Months cannot be empty")
+    .isInt({ min: 0 })
+    .withMessage("Minutes must be a non -ve integer"),
+  body("years")
+    .trim()
+    .notEmpty()
+    .withMessage("Years cannot be empty")
+    .isInt({ min: 0 })
+    .withMessage("Minutes must be a non -ve integer"),
+  body()
+    .custom((name, { req }) => {
+      const { minutes, hours, days, months, years } = req.body;
+      const totalDuration = [minutes, hours, days, months, years]
+        .map((e) => parseInt(e))
+        .reduce((acc, curr) => acc + curr, 0);
+      console.log(totalDuration);
+      return totalDuration > 0;
+    })
+    .withMessage("Sharing duration must be at least one minute"),
+];
+
+const sendValdationErrorsIfAny = (req, res, next) => {
+  const result = validationResult(req);
+  if (result.isEmpty()) {
+    next();
+    return;
+  }
+  const errorMsg = result
+    .array()
+    .reduce((acc, curr) => acc + ", " + curr.msg, "");
+  res.status(400).send(errorMsg);
+};
+
+const upsertSharedFolderUrl = async (req, res) => {
+  const { id: ownerId } = req.session.passport.user;
+  const folderId = parseInt(
+    req.body.folderId || req.session.passport.user.rootFolderId,
+  );
+  const sharingDuration = getSharingDuration(req);
+  const expiresOn = dayjs.extend(utc).utc().add(sharingDuration).format();
+  try {
+    await recursivelyUpsertSharedFolderUrl(folderId, expiresOn, ownerId);
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+};
+
+const upsertSharedFolderUrlAndValidationMiddlewares = [
+  ...sharedUrlValidationMiddlwares,
+  sendValdationErrorsIfAny,
+  upsertSharedFolderUrl,
+];
 
 const upsertSharedUrlForFilesInFolder = async (
   folderId,
@@ -132,7 +213,7 @@ const deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired = async (
 const deleteSharedFolderUrl = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
   const folderId = parseInt(
-    req.params.id ?? req.session.passport.user.rootFolderId,
+    req.body.folderId || req.session.passport.user.rootFolderId,
   );
   try {
     await recursivelyDeleteSharedFolderUrl(folderId, ownerId);
@@ -143,28 +224,18 @@ const deleteSharedFolderUrl = async (req, res) => {
   }
 };
 
+const deleteSharedFolderUrlAndValidationMiddlewares = [
+  ...folderIdValidationMiddlwares,
+  sendValdationErrorsIfAny,
+  deleteSharedFolderUrl,
+];
+
 const getSharingDuration = (req) => {
   const { minutes, hours, days, months, years } = req.body;
   const sharingDuration = dayjs
     .extend(duration)
     .duration({ minutes, hours, days, months, years });
   return sharingDuration;
-};
-
-const upsertSharedFolderUrl = async (req, res) => {
-  const { id: ownerId } = req.session.passport.user;
-  const folderId = parseInt(
-    req.body.folderId || req.session.passport.user.rootFolderId,
-  );
-  const sharingDuration = getSharingDuration(req);
-  const expiresOn = dayjs.extend(utc).utc().add(sharingDuration).format();
-  try {
-    await recursivelyUpsertSharedFolderUrl(folderId, expiresOn, ownerId);
-    res.status(204).end();
-  } catch (err) {
-    console.error(err);
-    res.status(500).end();
-  }
 };
 
 const upsertSharedFileUrl = async (req, res) => {
@@ -197,6 +268,12 @@ const upsertSharedFileUrl = async (req, res) => {
   }
 };
 
+const upsertSharedFileUrlAndValidationMiddlewares = [
+  ...sharedUrlValidationMiddlwares,
+  sendValdationErrorsIfAny,
+  upsertSharedFileUrl,
+];
+
 const deleteSharedFileUrlHavingFileId = (fileId, ownerId) =>
   db.sharedFileUrl.deleteMany({
     where: {
@@ -208,6 +285,10 @@ const deleteSharedFileUrlHavingFileId = (fileId, ownerId) =>
       },
     },
   });
+
+const fileIdValidationMiddlwares = [
+  body("fileId").notEmpty().withMessage("File ID must not be empty"),
+];
 
 const deleteSharedFileUrl = async (req, res) => {
   const { id: ownerId } = req.session.passport.user;
@@ -221,12 +302,18 @@ const deleteSharedFileUrl = async (req, res) => {
   }
 };
 
+const deleteSharedFileUrlAndValidationMiddlewares = [
+  ...fileIdValidationMiddlwares,
+  sendValdationErrorsIfAny,
+  deleteSharedFileUrl,
+];
+
 export {
   recursivelyDeleteSharedFolderUrl,
-  upsertSharedFolderUrl,
-  deleteSharedFolderUrl,
-  upsertSharedFileUrl,
-  deleteSharedFileUrl,
+  upsertSharedFolderUrlAndValidationMiddlewares,
+  deleteSharedFolderUrlAndValidationMiddlewares,
+  upsertSharedFileUrlAndValidationMiddlewares,
+  deleteSharedFileUrlAndValidationMiddlewares,
   deleteSharedFileUrlHavingFileId,
   deleteSharedFolderUrlAndItsChildrenIfTheyAreExpired,
 };
