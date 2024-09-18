@@ -99,7 +99,11 @@ const removeFile = async (req, res) => {
 };
 
 const fileNameValidationMiddlewares = [
-  body("name").trim().notEmpty().withMessage("File name must not be empty"),
+  body("name")
+    .trim()
+    .notEmpty()
+    .escape()
+    .withMessage("File name must not be empty"),
 ];
 
 const sendValdationErrorsIfAny = (req, res, next) => {

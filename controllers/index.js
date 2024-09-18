@@ -109,7 +109,11 @@ const createFolderWith = (name, parentFolder, ownerId) =>
   });
 
 const folderNameValidationMiddlewares = [
-  body("name").trim().notEmpty().withMessage("Folder name must not be empty"),
+  body("name")
+    .trim()
+    .notEmpty()
+    .escape()
+    .withMessage("Folder name must not be empty"),
 ];
 
 const sendValdationErrorsIfAny = (req, res, next) => {
