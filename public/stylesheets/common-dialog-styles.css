@@ -6,6 +6,7 @@ dialog {
 
 dialog[open] {
   visibility: visible;
+  transform: translateY(calc(50vh - 50%));
   animation: drop-in 200ms ease-out forwards;
 }
 
@@ -171,4 +172,12 @@ section.sub-field > input {
   padding: var(--size-rev-100) var(--size-rev-200);
   background-color: var(--secondary-container);
   color: var(--on-secondary-container);
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  dialog[open],
+  #failed-message-dialog[open],
+  #progress-dialog[open] {
+    animation: unset;
+  }
 }

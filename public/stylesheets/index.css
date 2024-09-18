@@ -261,3 +261,14 @@ input#files-to-upload:focus + label {
     }
   }
 }
+
+@media screen and (prefers-reduced-motion: reduce) {
+  #folder-left-action-buttons.open > #rename-folder-button,
+  #folder-left-action-buttons.open > #delete-folder-button,
+  #folder-left-action-buttons.open > #sharing-folder-button,
+  #folder-left-action-buttons.open > #copy-shared-url-button,
+  #add-menu.open #add-files-button,
+  #add-menu.open #add-folder-button {
+    animation: unset;
+  }
+}
