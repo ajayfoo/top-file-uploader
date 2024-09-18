@@ -75,9 +75,11 @@
       </form>
     </dialog>
     <%- include('partials/rename_dialog',{
-          dialogId:'rename-current-folder-dialog',
-          inputId:'current-folder-name',
-          parentId})
+          dialogId: 'rename-current-folder-dialog',
+          inputId: 'current-folder-name',
+          parentId,
+          initialValue: currentFolder.name
+        })
           %>
     <%if(!isRoot){%>
     <dialog id="delete-folder-dialog">
@@ -98,6 +100,7 @@
           </form>
         </dialog>
         <%- include('partials/sharing_dialog',{sharing,forFolder:true}) %>
+    <%- include('partials/folder_info_dialog',{folderName: currentFolder.name}) %>
     <%- include('partials/failed_message_dialog') %>
     <%- include('partials/progress_dialog') %>
     <%- include('partials/logout_dialog') %>

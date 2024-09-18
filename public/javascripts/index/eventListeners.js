@@ -8,6 +8,7 @@ import {
   durationSubfieldsObject,
   logoutDialog,
   filesToUploadInput,
+  folderInfoDialog,
 } from "./globals.js";
 import {
   uploadFiles,
@@ -67,6 +68,10 @@ const onAddFilesSubmit = async (e) => {
   } finally {
     closeProgressDialog();
   }
+};
+
+const showFolderInfoModal = () => {
+  folderInfoDialog.showModal();
 };
 
 const updateSelectedFilesCount = (e) => {
@@ -199,6 +204,7 @@ export {
   onAddFilesSubmit,
   showAddFolderModal,
   onAddFolderSubmit,
+  showFolderInfoModal,
   showRenameFolderModal,
   onRenameCurrentFolderSubmit,
   showSharingFolderModal,

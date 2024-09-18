@@ -47,7 +47,13 @@
       </a>
   </main>
   <div class="dialogs">
-    <%- include('partials/rename_dialog',{dialogId:'rename-file-dialog',inputId:'current-file-name',parentId:folderId}) %>
+    <%- include('partials/rename_dialog',{
+      dialogId:'rename-file-dialog',
+      inputId:'current-file-name',
+      parentId:folderId,
+      initialValue: file.name
+    })
+    %>
     <dialog id="confirm-delete-file-dialog">
       <form method="dialog">
         <p>Are you sure you want to delete this file?</p>

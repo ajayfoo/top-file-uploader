@@ -15,21 +15,30 @@ button {
   font-weight: 700;
 }
 
-#folder-left-action-buttons.open > #rename-folder-button {
+#folder-info-dialog .info-of-folder-name {
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+#folder-left-action-buttons.open > #show-folder-info-button {
   animation: appear 500ms backwards;
   animation-delay: 50ms;
 }
-#folder-left-action-buttons.open > #delete-folder-button {
+#folder-left-action-buttons.open > #rename-folder-button {
   animation: appear 500ms backwards;
   animation-delay: 100ms;
 }
-#folder-left-action-buttons.open > #sharing-folder-button {
+#folder-left-action-buttons.open > #delete-folder-button {
   animation: appear 500ms backwards;
   animation-delay: 150ms;
 }
-#folder-left-action-buttons.open > #copy-shared-url-button {
+#folder-left-action-buttons.open > #sharing-folder-button {
   animation: appear 500ms backwards;
   animation-delay: 200ms;
+}
+#folder-left-action-buttons.open > #copy-shared-url-button {
+  animation: appear 500ms backwards;
+  animation-delay: 250ms;
 }
 
 @keyframes appear {
@@ -263,6 +272,7 @@ input#files-to-upload:focus + label {
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
+  #folder-left-action-buttons.open > #show-folder-info-button,
   #folder-left-action-buttons.open > #rename-folder-button,
   #folder-left-action-buttons.open > #delete-folder-button,
   #folder-left-action-buttons.open > #sharing-folder-button,

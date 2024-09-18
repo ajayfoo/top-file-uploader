@@ -6,6 +6,9 @@ const addFileDialog = document.getElementById("add-files-dialog");
 const filesToUploadInput = document.getElementById("files-to-upload");
 const addFolderButton = document.getElementById("add-folder-button");
 const addFolderDialog = document.getElementById("add-folder-dialog");
+
+const showFolderInfoButton = document.getElementById("show-folder-info-button");
+const folderInfoDialog = document.getElementById("folder-info-dialog");
 const renameFolderButton = document.getElementById("rename-folder-button");
 const renameCurrentFolderDialog = document.getElementById(
   "rename-current-folder-dialog",
@@ -35,6 +38,8 @@ export {
   addFileDialog,
   addFolderButton,
   addFolderDialog,
+  showFolderInfoButton,
+  folderInfoDialog,
   renameFolderButton,
   renameCurrentFolderDialog,
   deleteFolderButton,

@@ -17,6 +17,7 @@ import {
   currentFolderNameHeadingButton,
   logoutButton,
   logoutDialog,
+  showFolderInfoButton,
 } from "./globals.js";
 import { setCustomValidityForDurationField } from "../functions.js";
 import {
@@ -31,6 +32,7 @@ import {
   onSharingFolderSubmit,
   showAddFilesModal,
   showAddFolderModal,
+  showFolderInfoModal,
   showLogoutDialog,
   showRenameFolderModal,
   showSharingFolderModal,
@@ -52,6 +54,7 @@ const attachEventListeners = () => {
   addFolderButton.addEventListener("click", showAddFolderModal);
   addFolderDialog.addEventListener("submit", onAddFolderSubmit);
 
+  showFolderInfoButton.addEventListener("click", showFolderInfoModal);
   renameFolderButton.addEventListener("click", showRenameFolderModal);
   renameCurrentFolderDialog.addEventListener(
     "submit",
