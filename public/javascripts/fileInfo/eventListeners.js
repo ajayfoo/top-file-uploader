@@ -32,13 +32,15 @@ const onConfirmDeleteSubmit = async (e) => {
     });
     if (response.ok && response.redirected) {
       location.assign(response.url);
+      confirmDeleteFileDialog.close();
     } else {
       showFailedMessage(failedMessage);
     }
-  } catch {
-    showFailedMessage(failedMessage);
+  } catch (err) {
+    if (err.name !== "AbortError") {
+      showFailedMessage(failedMessage);
+    }
   } finally {
-    confirmDeleteFileDialog.close();
     closeProgressDialog();
   }
 };
@@ -67,15 +69,17 @@ const onRenameSubmit = async (e) => {
     });
     if (response.ok) {
       location.reload();
+      renameFileDialog.close();
     } else {
       const msg = await response.text();
       showFailedMessage(msg || "Something went wrong");
     }
-  } catch {
-    showFailedMessage(failedMessage);
+  } catch (err) {
+    if (err.name !== "AbortError") {
+      showFailedMessage(failedMessage);
+    }
   } finally {
     closeProgressDialog();
-    renameFileDialog.close();
   }
 };
 
@@ -96,15 +100,16 @@ const onSharingSubmit = async (e) => {
     const done = await updateSharing(controller.signal);
     if (done) {
       location.reload();
+      sharingDialog.close();
     } else {
       showFailedMessage("Failed to add shared url");
     }
   } catch (err) {
-    console.error(err);
-    showFailedMessage("Failed to add shared url");
+    if (err.name !== "AbortError") {
+      showFailedMessage("Something went wrong");
+    }
   } finally {
     closeProgressDialog();
-    sharingDialog.close();
   }
 };
 

@@ -14,7 +14,7 @@ main {
 }
 .file-name {
   text-overflow: clip;
-  max-width: 100vw;
+  max-width: 70vw;
   overflow-wrap: break-word;
 }
 .file-info {

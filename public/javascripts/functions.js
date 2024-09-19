@@ -44,6 +44,7 @@ const showProgressDialog = (controller) => {
     controller.abort();
   };
   progressDialog.addEventListener("cancel", cancelTask, { once: true });
+  progressDialog.addEventListener("submit", cancelTask, { once: true });
   progressDialog.showModal();
 };
 

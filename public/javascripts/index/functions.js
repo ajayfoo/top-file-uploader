@@ -96,8 +96,9 @@ const onSubmitDeleteFolderModal = async (e) => {
       showFailedMessage("Something went wrong");
     }
   } catch (err) {
-    console.error(err);
-    showFailedMessage("Something went wrong");
+    if (err.name !== "AbortError") {
+      showFailedMessage("Something went wrong");
+    }
   } finally {
     closeProgressDialog();
   }

@@ -63,8 +63,10 @@ const onAddFilesSubmit = async (e) => {
     } else {
       showFailedMessage("Something went wrong");
     }
-  } catch {
-    showFailedMessage("Something went wrong");
+  } catch (err) {
+    if (err.name !== "AbortError") {
+      showFailedMessage("Something went wrong");
+    }
   } finally {
     closeProgressDialog();
   }
@@ -98,8 +100,10 @@ const onAddFolderSubmit = async (e) => {
       const msg = await response.text();
       showFailedMessage(msg || "Something went wrong");
     }
-  } catch {
-    showFailedMessage("Something went wrong");
+  } catch (err) {
+    if (err.name !== "AbortError") {
+      showFailedMessage("Something went wrong");
+    }
   } finally {
     closeProgressDialog();
   }
@@ -127,8 +131,10 @@ const onRenameCurrentFolderSubmit = async (e) => {
       const msg = await response.text();
       showFailedMessage(msg || "Something went wrong");
     }
-  } catch {
-    showFailedMessage("Something went wrong");
+  } catch (err) {
+    if (err.name !== "AbortError") {
+      showFailedMessage("Something went wrong");
+    }
   } finally {
     closeProgressDialog();
   }
@@ -151,14 +157,16 @@ const onSharingFolderSubmit = async (e) => {
     const response = await updateSharing(controller.signal);
     if (response.ok) {
       location.reload();
+      sharingFolderDialog.close();
     } else {
       const errorMsg = await response.text();
       showFailedMessage(errorMsg || "Failed to update sharing");
     }
-  } catch {
-    showFailedMessage("Failed to update sharing");
+  } catch (err) {
+    if (err.name !== "AbortError") {
+      showFailedMessage("Something went wrong");
+    }
   } finally {
-    sharingFolderDialog.close();
     closeProgressDialog();
   }
 };
