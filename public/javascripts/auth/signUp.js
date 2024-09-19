@@ -63,7 +63,7 @@ const populateInputMap = () => {
   });
   inputMap.get(passwordEle).messages = {
     patternMismatch:
-      "Must contain at least one uppercase and lowercase letter, number and special symbol",
+      "Must contain at least one uppercase and lowercase letter, number and symbols(@,$,!,%,*,? or &)",
   };
   inputMap.get(confirmPasswordEle).messages;
 };
