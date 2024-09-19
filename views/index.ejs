@@ -11,9 +11,11 @@
 
 <body>
   <main>
+    <%if(isRoot){%>
     <p class="welcome-banner">
       Welcome, <span class="username"><%=username%></span>!
     </p>
+    <%}%>
     <%- include('partials/header',{folderName:currentFolder.name,isRoot,sharing}) %>
     <div class="folders-files">
       <section class="folders-area">
