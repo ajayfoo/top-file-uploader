@@ -31,7 +31,7 @@ const onConfirmDeleteSubmit = async (e) => {
       signal: controller.signal,
     });
     if (response.ok && response.redirected) {
-      location.assign(response.url);
+      location.replace(response.url);
       confirmDeleteFileDialog.close();
     } else {
       showFailedMessage(failedMessage);

@@ -91,7 +91,7 @@ const onSubmitDeleteFolderModal = async (e) => {
     showProgressDialog(controller);
     const response = await sendDeleteFolderRequest(controller.signal);
     if (response.ok && response.redirected) {
-      location.assign(response.url);
+      location.replace(response.url);
     } else {
       showFailedMessage("Something went wrong");
     }

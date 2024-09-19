@@ -9,6 +9,13 @@ import {
 
 const router = Router();
 
+router.use(["/signup", "/login"], (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.redirect("../../");
+  } else {
+    next();
+  }
+});
 router.get("/signup", renderSignUpPage);
 router.post("/signup", validaionAndSignUpMiddlewares);
 router.get("/login", renderLoginPage);

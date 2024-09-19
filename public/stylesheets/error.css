@@ -18,10 +18,11 @@ main {
 main > a {
   border-radius: var(--br-sm);
   padding: var(--size-50) var(--size-500);
-  background-color: var(--error);
-  color: var(--on-error);
+  color: var(--on-error-container);
 }
 
 main > a:hover {
   text-decoration: none;
+  background-color: var(--error);
+  color: var(--on-error);
 }
