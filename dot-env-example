@@ -2,3 +2,5 @@ PORT=3000
 DATABASE_URL="postgresql://[username]:[password]@[hostname]/[dbname]"
 SALT_ROUNDS=12
 EXPRESS_SESSION_SECRET="[some secret code]"
+SUPABASE_URL="<supabase project url retrieved from Supabase Dashboard > [Your project] > Project Settings > Configuration > API > PROJECT URL"
+SUPABASE_KEY="<supabase key retrieved from Supabase Dashboard > [Your project] > Project Settings > Configuration > API > PROJECT API Keys"
